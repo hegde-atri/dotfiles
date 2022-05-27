@@ -1,0 +1,36 @@
+#! /bin/sh
+
+# autostart
+pgrep -x sxhkd > /dev/null || sxhkd -c ~/.config/bspwm/sxhkd/sxhkdrc &
+xrandr --output DP-4 --mode 1920x1080 --rate 144.00
+picom -b
+/usr/bin/dunst &
+~/.fehbg
+# bash ~/.config/polybar/launch.sh --blocks 
+
+# Java WM fix
+export _JAVA_AWT_WM_NONREPARENTING=1
+export AWT_TOOLKIT=MToolkit
+wmname LG3D
+
+# workspaces
+bspc monitor -d           
+
+bspc config border_width         2
+bspc config window_gap          12
+
+bspc config split_ratio          0.6
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+bspc rule -a Gimp desktop='^8' state=floating follow=on
+bspc rule -a Chromium desktop='^2'
+bspc rule -a mplayer2 state=floating
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+bspc rule -a Bitwarden desktop='^5'
+bspc rule -a Spotify desktop='^8'
+bspc rule -a Discord desktop='^9'
+bspc rule -a Firefox desktop='^1'
+bspc rule -a Thunderbird desktop='^4'
+
