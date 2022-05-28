@@ -25,6 +25,7 @@ alias yay='paru'
 # alias cat='bat'
 alias install='sudo pacman -S'
 alias pi='ssh mizuuu@192.168.1.3'
+alias mic='pactl set-source-volume alsa_input.usb-0c76_USB_PnP_Audio_Device-00.mono-fallback 55000'
 
 alias gs='git status'
 alias ga='git add -A .'
