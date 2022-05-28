@@ -17,4 +17,5 @@ git clone --depth-=1 https://gitlab.com/linux_things/dotfiles.git ~/.dotfiles
 ## Credits
 
 - Rofi config is a modifed + themed version of rofi themes by adi1090x on [github](https://github.com/adi1090x/rofi).
+- mpv config is from Tsuba's config on [github](https://github.com/Tsubajashi/mpv-settings).
 
