@@ -12,13 +12,16 @@ super + @space
 
 # rofi stuff
 super + e
-	~/.config/rofi/bin/applet_powermenu
+    ~/.config/rofi/bin/menu_apps
+
+super + r
+	~/.config/rofi/bin/menu_powermenu
 
 super + u
 	firefox
 
 super + i
-	~/.config/rofi/bin/applet_apps
+	~/.config/rofi/bin/menu_quicklinks
 
 
 # screenshot	
