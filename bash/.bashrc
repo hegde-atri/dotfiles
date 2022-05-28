@@ -35,4 +35,3 @@ alias dot='cd ~/.dotfiles'
 alias sx='vim ~/.config/bspwm/sxhkd/sxhkdrc'
 alias bsp='vim ~/.config/bspwm/bspwmrc'
 alias poly='vim ~/.config/polybar/config.ini'
-
