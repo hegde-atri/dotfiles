@@ -16,6 +16,8 @@ PATH=$PATH:/home/mizuuu/.local/bin
 alias ll='exa --icons -l'
 alias la='exa --icons -la'
 
+alias clip='xclip -selection clipboard'
+
 alias update='paru'
 alias yay='paru'
 # alias cat='bat'
@@ -32,5 +34,5 @@ alias bsh='vim ~/.bashrc'
 alias dot='cd ~/.dotfiles'
 alias sx='vim ~/.config/bspwm/sxhkd/sxhkdrc'
 alias bsp='vim ~/.config/bspwm/bspwmrc'
-alias poly='vim ~/.config/polybor/config.ini'
+alias poly='vim ~/.config/polybar/config.ini'
 

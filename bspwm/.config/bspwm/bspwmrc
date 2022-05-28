@@ -1,12 +1,16 @@
 #! /bin/sh
 
 # autostart
+
 pgrep -x sxhkd > /dev/null || sxhkd -c ~/.config/bspwm/sxhkd/sxhkdrc &
 xrandr --output DP-4 --mode 1920x1080 --rate 144.00
 picom -b
 /usr/bin/dunst &
 ~/.fehbg
-# bash ~/.config/polybar/launch.sh --blocks 
+source /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+eval $(gnome-keyring-daemon --start)
+export SSH_AUTH_SOCK
+polybar &
 
 # Java WM fix
 export _JAVA_AWT_WM_NONREPARENTING=1
