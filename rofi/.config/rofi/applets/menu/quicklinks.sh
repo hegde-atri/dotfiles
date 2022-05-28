@@ -50,7 +50,7 @@ case $chosen in
         $app https://www.twitter.com &
         ;;
     $github)
-        $app https://www.github.com &
+        $app https://www.github.com/hegde-atri &
         ;;
     $mail)
         $app https://www.outlook.com &
