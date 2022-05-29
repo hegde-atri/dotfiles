@@ -13,7 +13,11 @@ PATH=$PATH:/home/mizuuu/.local/bin
 
 eval "$(starship init bash)"
 
+# source wal colors.
+source ~/.cache/wal/colors.sh
 
+# export envar with alpha set.
+export color0_alpha="#22${color0/'#'}"
 
 alias ll='exa --icons -l'
 alias la='exa --icons -la'
@@ -26,6 +30,7 @@ alias yay='paru'
 alias install='sudo pacman -S'
 alias pi='ssh mizuuu@192.168.1.3'
 alias mic='pactl set-source-volume alsa_input.usb-0c76_USB_PnP_Audio_Device-00.mono-fallback 55000'
+alias setbg='wal -i'
 
 alias gs='git status'
 alias ga='git add -A .'
