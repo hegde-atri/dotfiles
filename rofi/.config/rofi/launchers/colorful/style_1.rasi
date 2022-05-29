@@ -17,8 +17,8 @@ configuration {
 	sidebar-mode: 					false;
 }
 
-@import "colors.rasi"
-
+/* @import "colors.rasi" */
+@import "~/.cache/wal/colors-rofi-dark"
 window {
     transparency:                   "real";
     background-color:               @bg;
