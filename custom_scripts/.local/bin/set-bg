@@ -1,0 +1,4 @@
+#!/bin/sh
+
+path="$(find ~/wallpapers -type f | grep -v .git | shuf -n 1)"
+wal -i $path
