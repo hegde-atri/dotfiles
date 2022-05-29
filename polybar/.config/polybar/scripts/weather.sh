@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Credits to https://github.com/GuidoFe/weather-polybar-plugin
+
 # SETTINGS vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 # API settings ________________________________________________________________
