@@ -30,7 +30,10 @@ alias yay='paru'
 alias install='sudo pacman -S'
 alias pi='ssh mizuuu@192.168.1.3'
 alias mic='pactl set-source-volume alsa_input.usb-0c76_USB_PnP_Audio_Device-00.mono-fallback 55000'
-#alias setbg='wal -o ~/.config/dunst/reload_pywal_dunst.sh -i'
+# alias setbg='wal -o ~/.config/dunst/reload_pywal_dunst.sh -i' superseded by custom script
+
+alias yt-song="yt-dlp -f 'ba' -x --audio-format mp3 -o '%(title)s.%(ext)s'"
+alias yt-audio="yt-dlp -f 'ba' -x --audio-format mp3"
 
 alias gs='git status'
 alias ga='git add -A .'

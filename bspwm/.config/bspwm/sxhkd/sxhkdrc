@@ -6,6 +6,11 @@
 super + Return
 	kitty
 
+# change to random bg
+
+super + w
+    ~/.local/bin/set-bg
+
 # program launcher
 super + @space
 	~/.config/rofi/launchers/colorful/launcher.sh
