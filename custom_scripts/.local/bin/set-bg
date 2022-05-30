@@ -1,5 +1,15 @@
 #!/bin/sh
 
-path="$(find ~/wallpapers -type f | grep -v .git | shuf -n 1)"
-wal -i $path
+folder=$1
+path=~/wallpapers/$1
+
+if [ "$folder" == "-h" ] ; then
+    echo "First argument must be a folder within ~/wallpapers"
+elif [ ! -d "$path" ] ; then
+    echo "invalid folder!"
+    exit
+fi
+
+img="$(find $path -type f | grep -v .git | shuf -n 1)"
+wal -i $img
 pywalfox update
