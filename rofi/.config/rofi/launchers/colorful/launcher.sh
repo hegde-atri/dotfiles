@@ -32,20 +32,22 @@ COLORS=('#EC7875' '#61C766' '#FDD835' '#42A5F5' '#BA68C8' '#4DD0E1' '#00B19F' \
 ACCENT="${COLORS[$(( $RANDOM % 14 ))]}ff"
 
 # overwrite colors file
-cat > $dir/colors.rasi <<- EOF
-	/* colors */
-
-	* {
-	  al:  $ALPHA;
-	  bg:  #282a36;
-	  se:  $SELECT;
-	  fg:  #f8f8f2;
-	  ac:  #bd93f9;
-	}
-EOF
+#cat > $dir/colors.rasi <<- EOF
+#	/* colors */
+#
+#	* {
+#	  al:  $ALPHA;
+#	  bg:  #282a36;
+#	  se:  $SELECT;
+#	  fg:  #f8f8f2;
+#	  ac:  #bd93f9;
+#	}
+#EOF
 
 # comment these lines to disable random style
 #themes=($(ls -p --hide="launcher.sh" --hide="colors.rasi" $dir))
 #theme="${themes[$(( $RANDOM % 12 ))]}"
 
 rofi -no-lazy-grab -show drun -modi drun -theme $dir/"$theme"
+#rofi -no-lazy-grab -show drun -modi drun -theme ~/.cache/wal/colors-rofi-light.rasi
+

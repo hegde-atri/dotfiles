@@ -17,8 +17,8 @@ configuration {
 	sidebar-mode: 					false;
 }
 
-/* @import "colors.rasi" */
-@import "~/.cache/wal/colors-rofi-dark"
+@import "~/.cache/wal/rofi-launcher-colors.rasi"
+
 window {
     transparency:                   "real";
     background-color:               @bg;
@@ -117,3 +117,4 @@ element selected {
     border-radius:                  12px;
     border-color:                  	@bg;
 }
+
