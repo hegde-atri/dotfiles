@@ -5,6 +5,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# ble.sh
+[[ $- == *i* ]] && source /home/mizuuu/.local/share/blesh/ble.sh --noattach
+
 alias ls='exa --icons'
 PS1='[\u@\h \W]\$ '
 
@@ -50,3 +53,8 @@ alias poly='vim ~/.config/polybar/config.ini'
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+neofetch
+
+# source ~/.local/share/blesh/ble.sh
+[[ ${BLE_VERSION-} ]] && ble-attach
