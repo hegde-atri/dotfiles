@@ -4,7 +4,7 @@
 
 pgrep -x sxhkd > /dev/null || sxhkd -c ~/.config/bspwm/sxhkd/sxhkdrc &
 xrandr --output DP-4 --mode 1920x1080 --rate 144.00
-picom -b
+picom -b --experimental-backends
 /usr/bin/dunst &
 # ~/.fehbg
 wal -R
@@ -22,7 +22,7 @@ export AWT_TOOLKIT=MToolkit
 wmname LG3D
 
 # workspaces
-bspc monitor -d           
+bspc monitor -d 1 2 3 4 5 6 7 8 9 0 
 
 bspc config border_width         2
 bspc config window_gap           2
