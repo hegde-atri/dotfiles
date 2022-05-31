@@ -10,12 +10,20 @@ git clone --depth-=1 https://gitlab.com/linux_things/dotfiles.git ~/.dotfiles
 ```
 *if not you may need to change stow's target and home dir*
 
+For background blur to work, make sure you run picom with the experimental backends flag(like in the bspwmrc file).
+
 ## Dependencies
 
-- The bspwm/sxhkd config relies on rofi config
+- The bspwm/sxhkd config relies on rofi config, and also custom scripts.
+- custom scripts relies on pywal, pywalfox and also zathura-pywal.
+- ranger config requires ueberzug.
 
 ## Credits
 
 - Rofi config is a modifed + themed version of rofi themes by adi1090x on [github](https://github.com/adi1090x/rofi).
 - mpv config is from Tsuba's config on [github](https://github.com/Tsubajashi/mpv-settings).
 - Firefox config is using [firefox-csshacks](https://github.com/MrOtherGuy/firefox-csshacks.git) by MrOtherGuy on github.
+
+## Repository
+
+This repository is on both [github](https://github.com/hegde-atri/.dotfiles) and also gitlab [gitlab](https://github.com/linux_things). You will also find my wallpapers in gitlab.
