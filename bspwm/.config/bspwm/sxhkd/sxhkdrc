@@ -6,6 +6,10 @@
 super + Return
 	kitty
 
+# dictionary
+super + d
+    ~/.local/bin/dictionary
+
 # change to random bg
 
 super + w

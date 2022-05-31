@@ -12,4 +12,5 @@ fi
 
 img="$(find $path -type f | grep -v .git | shuf -n 1)"
 wal -i $img
+# zathura-pywal -a 0.8
 pywalfox update
