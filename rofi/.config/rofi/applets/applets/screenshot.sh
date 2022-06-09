@@ -41,7 +41,7 @@ case $chosen in
         ;;
     $window)
 		if [[ -f /usr/bin/scrot ]]; then
-			sleep 1; scrot -u '/tmp/%F_%T_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f'
+			flameshot gui
 		else
 			msg
 		fi

@@ -29,6 +29,8 @@ alias clip='xclip -selection clipboard'
 
 alias update='paru'
 alias yay='paru'
+alias vim='nvim'
+alias vv='nvim'
 # alias cat='bat'
 alias install='sudo pacman -S'
 alias pi='ssh mizuuu@192.168.1.3'

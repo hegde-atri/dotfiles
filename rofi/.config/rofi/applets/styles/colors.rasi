@@ -19,7 +19,8 @@
  *
  */
 
-/*@import "dracula.rasi"*/
+@import "dracula.rasi"
 
-@import "~/.cache/wal/colors-rofi-dark"
+
+/*@import "~/.cache/wal/colors-rofi-dark"*/
 
