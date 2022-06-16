@@ -15,6 +15,12 @@ super + d
 super + w
     ~/.local/bin/set-bg
 
+#browse wallpapers using waldl
+
+super + shift + w
+    ~/.local/bin/waldl
+
+
 # program launcher
 super + @space
 	~/.config/rofi/launchers/colorful/launcher.sh

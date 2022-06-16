@@ -60,3 +60,7 @@ neofetch
 
 # source ~/.local/share/blesh/ble.sh
 [[ ${BLE_VERSION-} ]] && ble-attach
+
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
