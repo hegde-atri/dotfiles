@@ -1,15 +1,19 @@
 # dotfiles
 
-Now I am using multiple configs since I am have started to use more VM's. I have therefore made a script that can deploy the required config, save a new config, or overrite an existing config. Make sure to run the firstrun.sh script to install prerequisites.
+Now I am using multiple configs since I am have started to use more VM's. I have therefore made a script to manage my configs.
+
 ~~These are my dotiles, used on Arch Linux as of now. It is part of my arch install plan, check it out [here](https://github.com/hegde-atri/arch-install).~~
 
 ## Usage
 
-I manage my dotfiles using [stow](https://www.gnu.org/software/stow/). You may find that some configs rely on other ones. I will try to list the dependencies below. To try out a config, first make a backup of existing config / config folder using something like `mv config config.backup`. Now clone the repo using the following command 
-```sh
-git clone --depth-=1 https://gitlab.com/linux_things/dotfiles.git ~/.dotfiles
-```
-*if not you may need to change stow's target and home dir*
+- First run the firstrun.sh script `./firstrun.sh`. This installs any required fonts and packages.
+- Then you can run the setup.sh script `./setup.sh`. You care displayed with options as when you run it.
+
+Feel free to use my script but in your own configs, but don't forget to credit me ;).
+
+*If you get an error make sure it has executible permissions `chmod +x <filename>`*
+
+~~I manage my dotfiles using [stow](https://www.gnu.org/software/stow/). You may find that some configs rely on other ones. I will try to list the dependencies below. To try out a config, first make a backup of existing config / config folder using something like `mv config config.backup`. Now clone the repo using the following command~~
 
 For background blur to work, make sure you run picom with the experimental backends flag(like in the bspwmrc file).
 
@@ -23,7 +27,7 @@ For background blur to work, make sure you run picom with the experimental backe
 ## Credits
 
 - If I have derived any custom scripts from already existing ones, credits mentioned in the file.
-- Rofi config is a modifed + themed version of rofi themes by adi1090x on [github](https://github.com/adi1090x/rofi).
+- one of the rofi configs is a modifed + themed version of rofi themes by adi1090x on [github](https://github.com/adi1090x/rofi).
 - mpv config is from Tsuba's config on [github](https://github.com/Tsubajashi/mpv-settings).
 - Firefox config is using [firefox-csshacks](https://github.com/MrOtherGuy/firefox-csshacks.git) by MrOtherGuy on github.
 
