@@ -1,6 +1,7 @@
 # dotfiles
 
-These are my dotiles, used on Arch Linux as of now. It is part of my arch install plan, check it out [here](https://github.com/hegde-atri/arch-install).
+Now I am using multiple configs since I am have started to use more VM's. I have therefore made a script that can deploy the required config, save a new config, or overrite an existing config. Make sure to run the firstrun.sh script to install prerequisites.
+~~These are my dotiles, used on Arch Linux as of now. It is part of my arch install plan, check it out [here](https://github.com/hegde-atri/arch-install).~~
 
 ## Usage
 
