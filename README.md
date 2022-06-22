@@ -1,6 +1,6 @@
 # dotfiles
 
-Please check out [https://hegdeatri.com/projects/arch-config/](https://hegdeatri.com/projects/arch-config/) for better usuage guide!
+Please check out [https://hegdeatri.com/projects/arch-config/](https://hegdeatri.com/projects/arch-config/) for better usage guide!
 
 
 ## Usage
