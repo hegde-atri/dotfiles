@@ -12,6 +12,6 @@ else
 fi
 
 echo -e "\n[2] Installing any dependencies..."
-sudo pacman --noconfirm -S stow grep
+sudo pacman --noconfirm -S stow grep ueberzug
 
 echo -e "\n[*]All done !"
