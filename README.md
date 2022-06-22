@@ -1,8 +1,7 @@
 # dotfiles
 
-Now I am using multiple configs since I am have started to use more VM's. I have therefore made a script to manage my configs.
+Please check out [https://hegdeatri.com/projects/arch-config/](https://hegdeatri.com/projects/arch-config/) for better usuage guide!
 
-~~These are my dotiles, used on Arch Linux as of now. It is part of my arch install plan, check it out [here](https://github.com/hegde-atri/arch-install).~~
 
 ## Usage
 
@@ -12,10 +11,6 @@ Now I am using multiple configs since I am have started to use more VM's. I have
 Feel free to use my script but in your own configs, but don't forget to credit me ;).
 
 *If you get an error make sure it has executible permissions `chmod +x <filename>`*
-
-~~I manage my dotfiles using [stow](https://www.gnu.org/software/stow/). You may find that some configs rely on other ones. I will try to list the dependencies below. To try out a config, first make a backup of existing config / config folder using something like `mv config config.backup`. Now clone the repo using the following command~~
-
-For background blur to work, make sure you run picom with the experimental backends flag(like in the bspwmrc file).
 
 ## Dependencies
 
@@ -31,6 +26,3 @@ For background blur to work, make sure you run picom with the experimental backe
 - mpv config is from Tsuba's config on [github](https://github.com/Tsubajashi/mpv-settings).
 - Firefox config is using [firefox-csshacks](https://github.com/MrOtherGuy/firefox-csshacks.git) by MrOtherGuy on github.
 
-## Repository
-
-This repository is on both [github](https://github.com/hegde-atri/.dotfiles) and also gitlab [gitlab](https://gitlab.com/linux_things). You will also find my wallpapers in gitlab.

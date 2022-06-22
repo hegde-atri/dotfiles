@@ -1,9 +1,9 @@
 #!/bin/bash
 
 dots_repo=$HOME/.source/dotfiles
+cd $dots_repo
 dots=$HOME/.dotfiles
-dir=`pwd`
-configs=`ls -d */ | grep -wv depends`
+configs=`ls -d */ | grep -Ev 'depends|global'`
 
 save_new_config(){
   print_configs
@@ -15,7 +15,7 @@ save_new_config(){
   echo "------------------------------------"
   echo " New config $new_config saved!"
   echo "------------------------------------"
-  configs=`ls -d $dots_repo | grep -wv depends`
+  configs=`ls -d $dots_repo/* | grep -Ev 'depends|global'`
 }
 
 save_config(){
@@ -45,11 +45,11 @@ load_config(){
   echo "|    !! Ctrl-C to cancel !!      |"
   echo "----------------------------------"
   sleep 3
-  echo "[*] Deleting existing dots..."
+  echo "[1] Deleting existing dots..."
   rm -rf $dots/*
-  echo "[*] Copying new dots..."
+  echo "[2] Copying new dots..."
   cp -r $dots_repo/$selected_config/* $dots/
-  echo "[*] Stowing new configs"
+  echo "[3] Stowing new configs"
   cd $dots
   stow *
   echo "[*] Config - $selected_config loaded!"
@@ -61,14 +61,29 @@ load_global_config(){
   echo "|    !! Ctrl-C to cancel !!      |"
   echo "----------------------------------"
   sleep 3
-  echo "[*] Deleting ~/.dots_global/"
+  echo "[1] Deleting ~/.dots_global/"
   rm -rf $HOME/.dots_global
-  echo "[*] Creating new ~/.dots_global/"
+  echo "[2] Creating new ~/.dots_global/"
   mkdir $HOME/.dots_global
-  echo "[*] Copying global dots to ~/.dots_global/"
-  mv $dots_repos/global $HOME/.dots_global
+  echo "[3] Copying global dots to ~/.dots_global/"
+  cp -r $dots_repo/global/* $HOME/.dots_global
+  echo "[4] Stowing new configs"
+  cd $HOME/.dots_global
+  stow * --adopt
   echo "[*] Done !"
+}
 
+save_global_config(){
+  echo "Deleting current global config in 3 seconds!"
+  echo "----------------------------------"
+  echo "|    !! Ctrl-C to cancel !!      |"
+  echo "----------------------------------"
+  sleep 3
+  echo "[1] Deleting $dots_repo/global/*"
+  rm -rf $dots_repo/global/*
+  echo "[2] Copying new global configs from ~/.dots_global/"
+  cp -r $HOME/.dots_global/* $dots_repo/global/
+  echo "[*] Done !"
 }
 
 print_configs(){
@@ -86,6 +101,7 @@ main(){
   echo "|   (!! replaces everything in target config!!)          |"
   echo "| [c] switch to config                                   |"
   echo "| [d] load global config                                 |"
+  echo "| [e] save global config                                 |"
   echo "----------------------------------------------------------"
   echo -n ">> "
   read choice
@@ -96,8 +112,10 @@ main(){
     save_config
   elif [ "$choice" == "c" ] ; then
     load_config
-  else
+  elif [ "$choice" == "d" ] ; then
     load_global_config
+  else
+    save_global_config
   fi
 }
 
