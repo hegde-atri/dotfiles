@@ -1,0 +1,4 @@
+
+2022/06/28 (10:24:24) | ===> btop++ v.1.2.7
+2022/06/28 (10:24:24) | WARNING: Got an invalid integer value for config name: net_download
+2022/06/28 (10:24:24) | WARNING: Got an invalid integer value for config name: net_upload
