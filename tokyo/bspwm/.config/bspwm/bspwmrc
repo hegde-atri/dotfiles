@@ -4,7 +4,7 @@
 
 pgrep -x sxhkd > /dev/null || sxhkd -c ~/.config/bspwm/sxhkd/sxhkdrc &
 xrandr --output DP-4 --mode 1920x1080 --rate 144.00
-#picom -b --experimental-backends
+picom -b --experimental-backends
 /usr/bin/dunst &
 ~/.fehbg
 #wal -R
