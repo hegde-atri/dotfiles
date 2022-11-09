@@ -5,51 +5,73 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-
-alias ls='exa --icons'
+alias ls='ls --color=auto'
 PS1='[\u@\h \W]\$ '
 
-PATH=$PATH:/home/mizuuu/.local/bin
-. "$HOME/.cargo/env"
+PATH=$PATH:/home/mizuuu/.local/bin:/home/mizuuu/.cargo/bin:/home/mizuuu/.emacs.d/bin
+
+alias ls='exa --icons'
+alias ll='exa --icons -l'
+alias la='exa --icons -a'
+alias lla='exa --icons -la'
+
+alias vpn='nmcli connection up client'
+alias clip='xclip -selection clipboard'
+alias presentmd='npx @marp-team/marp-cli@^2 --bespoke.transition --preview'
+alias present-compilePDF='marp --pdf --allow-local-files'
+
+alias hpAdapter='pactl set-default-sink alsa_output.usb-0c76_USB_PnP_Audio_Device-00.analog-stereo'
+
+alias update='paru'
+alias install='paru -S'
+alias uninstall='paru -R'
+
+alias vim='emacsclient -nc'
+alias startnetwork='sudo virsh net-start default'
+
+alias update-site='cd ~/repos/personal/hegdeatri-dot-com && zola build && rm -rf ~/repos/personal/hegdeatri-dot-com/mywebsite && mv public mywebsite && rsync -a ~/repos/personal/hegdeatri-dot-com/mywebsite mizuuu@hegdeatri.com:/var/www/ --delete'
+alias wrangler-deploy='npx wrangler pages publish dist'
+
+alias pico='picom -b --experimental-backends'
+alias pi='ssh mizuuu@10.27.27.103'
+alias gs='git status'
+alias ga='git add .'
+alias gaa='git add -A .'
+alias gc='git commit -m'
+alias gp='git push'
+
+alias bsh='nvim ~/.bashrc'
+alias bsp='nvim ~/.config/bspwm/bspwmrc'
+alias sx='nvim ~/.config/bspwm/sxhkdrc'
+#alias cd='echo "Nick is coolest"'
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 eval "$(starship init bash)"
 
-# export envar with alpha set.
-export color0_alpha="#22${color0/'#'}"
+#tmux new -A -s main
 
-alias ll='exa --icons -l'
-alias la='exa --icons -la'
+session_name="main"
 
-alias clip='xclip -selection clipboard'
+# 1. First you check if a tmux session exists with a given name.
+tmux has-session -t=$session_name 2> /dev/null
 
-alias update='paru'
-alias yay='paru'
-alias vim='nvim'
-alias vv='nvim'
-# alias cat='bat'
-alias install='sudo pacman -S'
-alias pi='ssh mizuuu@192.168.1.3'
-alias mic='pactl set-source-volume alsa_input.usb-0c76_USB_PnP_Audio_Device-00.mono-fallback 55000'
-# alias setbg='wal -o ~/.config/dunst/reload_pywal_dunst.sh -i' superseded by custom script
-# alias update-site='scp -r -i /mnt/hdd/Atri/ssh-keys/hegdeatri-dot-com /home/mizuuu/repos/hegdeatri-dot-com/public/* mizuuu@hegdeatri.com:/var/www/mywebsite/'
-alias update-site='rsync -a ~/Public/mywebsite mizuuu@hegdeatri.com:/var/www/ --delete'
-alias update-public='cp -r ~/repos/hegdeatri-dot-com/public/* ~/Public/mywebsite/'
+# 2. Create the session if it doesn't exists.
+if [[ $? -ne 0 ]]; then
+  TMUX='' tmux new-session -d -s "$session_name"
+fi
 
-alias yt-song="yt-dlp -f 'ba' -x --audio-format mp3 -o '%(title)s.%(ext)s'"
-alias yt-audio="yt-dlp -f 'ba' -x --audio-format mp3"
+# 3. Attach if outside of tmux, switch if you're in tmux.
+if [[ -z "$TMUX" ]]; then
+  tmux attach -t "$session_name"
+else
+  tmux switch-client -t "$session_name"
+fi
 
-alias gs='git status'
-alias ga='git add -A .'
-alias gc='git commit -m'
-alias gp='git push'
-alias push='git push'
-
-alias bsh='vim ~/.bashrc'
-alias dots='cd ~/.dotfiles'
-alias sx='vim ~/.config/bspwm/sxhkd/sxhkdrc'
-alias bsp='vim ~/.config/bspwm/bspwmrc'
-alias poly='vim ~/.config/polybar/config.ini'
-
-alias bonsai='cbonsai --life 40 --live --multiplier 5 --time 0.1 --infinite'
-
-colorscript random
+pfetch
