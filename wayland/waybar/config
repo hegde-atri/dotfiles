@@ -1,0 +1,27 @@
+// Copyright (C) 2020-2022 Aditya Shakya <adi1090x@gmail.com>
+//
+// Waybar config file
+{
+    "include": "~/.config/waybar/modules",
+    "name": "main-bar", 
+    "id": "main-bar", 	
+    "layer": "top",
+    "mode": "dock", 	
+    "exclusive": true, 	
+    "passthrough": false, 
+    "position": "top", 	
+    "height": 32, 		
+    "width": "", 		
+    "spacing": 6, 		
+    "margin": 0, 		
+    "margin-top": 0, 	
+    "margin-bottom": 0, 
+    "margin-left": 0, 	
+    "margin-right": 0, 	
+    "fixed-center": true, 
+    "ipc": true, 		
+ 
+    "modules-left": ["cpu", "memory", "disk"],
+    "modules-center": ["mpd"],
+    "modules-right": ["pulseaudio", "backlight", "network", "battery", "clock", "custom/power", "tray"],
+}
