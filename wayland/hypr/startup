@@ -1,7 +1,10 @@
 #!/bin/sh
+
+# --- GTK settings ---
 gsettings set org.gnome.desktop.interface gtk-theme 'Catppuccin-Mocha-Standard-Blue-Dark'
-
 gsettings set org.gnome.desktop.interface icon-theme 'Flatery-Dark'
-
 gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
 
+# --- EWW bar ---
+# eww daemon
+# eww open bar
