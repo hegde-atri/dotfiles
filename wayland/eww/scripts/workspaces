@@ -2,10 +2,10 @@
 
 # define colors
 #        red       peach     green     blue
-colors=("#f38ba8" "#fab387" "#a6e3a1" "#89b4fa")
+colors=("#ff79c6" "#fab387" "#a6e3a1" "#89b4fa")
 #        pink      yellow    teal      lavender
 dimmed=("#f5c2e7" "#f9e2af" "#94e2d5" "#b4befe")
-empty="#313244"
+empty="#44475a"
 
 # get initial focused workspace
 focusedws=$(hyprctl -j monitors | jaq -r '.[] | select(.focused == true) | .activeWorkspace.id')
@@ -86,3 +86,4 @@ socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - |
   esac
   generate
 done
+

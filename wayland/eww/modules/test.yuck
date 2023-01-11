@@ -1,0 +1,8 @@
+(defwidget test []
+(graph
+  :value 5
+  :time-range 5
+  :min 0
+  :max 10
+  :line-style "miter"
+  ))

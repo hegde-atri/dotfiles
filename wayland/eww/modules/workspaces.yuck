@@ -10,3 +10,4 @@
 					:class "ws icon"
 					:style "color: ${i.color};"
 					"●")))))
+

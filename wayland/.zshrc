@@ -16,7 +16,12 @@ bindkey  "^[[3~"  delete-char
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
+# -- Defaults --
+export EDITOR='nvim'
+
 # -- Aliases --
+alias logseq='logseq --enable-features=UseOzonePlatform --ozone-platform=wayland'
+alias l='exa --icons -l'
 alias ls='exa --icons'
 alias ll='exa --icons -l'
 alias la='exa --icons -a'
@@ -43,7 +48,7 @@ alias vpn='nmcli connection up client'
 alias clip='xclip -selection clipboard'
 alias presentmd='npx @marp-team/marp-cli@^2 --bespoke.transition --preview'
 alias present-compilePDF='marp --pdf --allow-local-files'
-
+alias ytmp3="yt-dlp -f 'ba' -x --audio-format mp3 -o '%(title)s.%(ext)s'"
 alias hpAdapter='pactl set-default-sink alsa_output.usb-0c76_USB_PnP_Audio_Device-00.analog-stereo'
 
 alias bsh='nvim ~/.bashrc'

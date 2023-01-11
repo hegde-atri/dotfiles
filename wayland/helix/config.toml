@@ -4,6 +4,11 @@ theme = "catppuccin_macchiato"
 line-number = "relative"
 cursorline = true
 color-modes = true
+mouse = false
+bufferline = "multiple"
+
+[keys.normal]
+
 
 [editor.cursor-shape]
 insert = "bar"
