@@ -11,7 +11,7 @@
     "passthrough": false, 
     "position": "top", 	
     "height": 32, 		
-    //"width": "", 		
+    "width": "", 		
     "spacing": 6, 		
     "margin": 0, 		
     "margin-top": 0, 	
@@ -19,9 +19,9 @@
     "margin-left": 0, 	
     "margin-right": 0, 	
     "fixed-center": true, 
-    // "ipc": true, 		
+    "ipc": true, 		
  
     "modules-left": ["cpu", "memory", "disk"],
-    "modules-center": ["mpd"],
+    "modules-center": ["workspaces"],
     "modules-right": ["pulseaudio", "backlight", "network", "battery", "clock", "custom/power", "tray"],
 }

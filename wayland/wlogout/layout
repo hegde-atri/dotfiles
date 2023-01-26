@@ -1,7 +1,7 @@
 {
     "label" : "suspend",
     "text" : "Suspend",
-    "action" : "~/.config/wlogout/actions --suspend",
+    "action" : "lockscreen && systemctl suspend",
     "keybind" : "u"
 }
 {
@@ -25,7 +25,7 @@
 {
     "label" : "reboot",
     "text" : "Reboot",
-    "action" : "~/.config/wlogout/actions --reboot",
+    "action" : "reboot",
     "keybind" : "r"
 }
 {

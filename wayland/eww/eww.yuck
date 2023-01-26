@@ -1,9 +1,27 @@
-; #--- Imports ---#
+(include "./modules/bluetooth.yuck")
+(include "./modules/bright.yuck")
+(include "./modules/clock.yuck")
+(include "./modules/music.yuck")
+(include "./modules/net.yuck")
+(include "./modules/sys.yuck")
 (include "./modules/variables.yuck")
+(include "./modules/volume.yuck")
 (include "./modules/workspaces.yuck")
-(include "./modules/test.yuck")
 
-; #--- Widgets ---#
+(include "./windows/calendar.yuck")
+(include "./windows/music.yuck")
+(include "./windows/notifications.yuck")
+(include "./windows/osd.yuck")
+(include "./windows/system-menu.yuck")
+
+(defwidget notif-toggle []
+  (button
+    :class "notif-toggle module"
+    :onclick "${EWW_CMD} open --toggle notifications";
+    {notif_icons.icon}))
+
+; clipboard 󰅌 󰅍 󰄷
+
 (defwidget left []
   (box
     :space-evenly false
@@ -14,13 +32,19 @@
   (box
     :space-evenly false
     :halign "end"
-    (test)))
+    (bright)
+    (volume-module)
+    (bluetooth)
+    (net)
+    (sys)
+    (clock_module)
+    (notif-toggle)))
 
 (defwidget center []
   (box
     :space-evenly false
     :halign "center"
-    ))
+    (music-module)))
 
 (defwidget bar []
   (centerbox
@@ -29,7 +53,6 @@
     (center)
     (right)))
 
-;#--- Bar ---#
 (defwindow bar
     :monitor 0
     :geometry (geometry :x "0%"
@@ -40,3 +63,14 @@
     :stacking "fg"
     :exclusive true
   (bar))
+
+    (defwindow bar1
+      :monitor 1
+      :geometry (geometry :x "0%"
+        :y "0%"
+        :width "100%"
+        :height "32px"
+        :anchor "top center")
+      :stacking "fg"
+      :exclusive true
+    (bar))
