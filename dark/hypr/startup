@@ -1,0 +1,33 @@
+#!/bin/sh
+# --- OTHER settings ---
+export SDL_VIDEODRIVER=wayland
+export _JAVA_AWT_WM_NONREPARENTING=1
+export QT_QPA_PLATFORM=wayland
+export GDK_BACKEND="wayland,x11"
+
+
+# --- GTK settings ---
+gsettings set org.gnome.desktop.interface gtk-theme 'Material-Black-Blueberry-3.38'
+gsettings set org.gnome.desktop.interface icon-theme 'Flatery-Dark'
+gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
+
+# --- gnome polkit ---
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+
+# --- Notification daemon ---
+mako &
+
+# --- Background ---
+swww init
+swww img ~/wallpapers/stable-diffusion/wallhaven-d662jl.jpg
+
+# --- EWW bar ---
+#eww daemon
+#eww open bar
+#eww open bar1
+waybar &
+
+# --- Open apps on startup ---
+firefox &
+kitty -e ncmpcpp
+

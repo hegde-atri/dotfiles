@@ -1,0 +1,46 @@
+* {
+    /* font-family: "JetBrains Mono"; */
+    font-size: 12px;
+}
+
+window#waybar {
+    background-color: black;
+    /* border-bottom: 2px solid white; */
+}
+
+@keyframes flash {
+    to {
+        color: black;
+    }
+}
+
+#pulseaudio.muted {
+	background-color: #313244;
+	color: #cdd6f4;
+}
+
+#battery.critical:not(.charging) {
+    background-color: red;
+    color: white;
+    animation-name: flash;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#backlight,
+#battery,
+#clock,
+#cpu,
+#disk,
+#mode,
+#memory,
+#mpd,
+#tray,
+#pulseaudio,
+#network {
+	border-radius: 4px;
+	margin: 6px 0px;
+	padding: 2px 8px;
+}
