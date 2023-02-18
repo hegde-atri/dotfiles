@@ -1,0 +1,49 @@
+#!/bin/sh
+# --- xdg-desktop-portal-hyprland ---
+sleep 1
+killall xdg-desktop-portal-hyprland
+killall xdg-desktop-portal-wlr
+killall xdg-desktop-portal
+/usr/libexec/xdg-desktop-portal-hyprland &
+sleep 2
+/usr/lib/xdg-desktop-portal &
+
+# --- OTHER settings ---
+export SDL_VIDEODRIVER=wayland
+export _JAVA_AWT_WM_NONREPARENTING=1
+export QT_QPA_PLATFORM=wayland
+export GDK_BACKEND="wayland,x11"
+
+# --- GTK settings ---
+# gsettings set org.gnome.desktop.interface gtk-theme 'Material-Black-Blueberry-3.38'
+gsettings set org.gnome.desktop.interface gtk-theme 'Kanagawa-B'
+gsettings set org.gnome.desktop.interface icon-theme 'Flatery-Dark'
+gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
+
+# --- gnome polkit ---
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+
+# --- Notification daemon ---
+mako &
+
+# --- Background ---
+swww init
+swww img ~/wallpapers/minimal/minimal-wave.png
+
+# --- EWW bar ---
+#eww daemon
+#eww open bar
+#eww open bar1
+waybar &
+
+# --- Open apps on startup ---
+firefox &
+kitty -e ncmpcpp
+
+# --- swayidle ---
+swayidle -w \
+	timeout 300 '~/.local/bin/lockscreen' \
+	before-sleep '~/.local/bin/lockscreen' &
+
+# -- gammastep ---
+gammastep &
