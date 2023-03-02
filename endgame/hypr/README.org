@@ -1,0 +1,3 @@
+#+title: Hyprland Config
+#+author: Atri Hegde
+#+description: My Hyprland WM configuration.
