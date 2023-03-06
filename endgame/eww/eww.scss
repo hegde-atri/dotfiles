@@ -1,0 +1,94 @@
+$bg: #282c34;
+$red: #e06c75;
+$error: #f38ba8;
+$warn: #e5c890;
+$success: #a6e3a1;
+
+* {
+    font-family: "MonoLisa Nerd Font";
+}
+
+.main_bar {
+    background-color: $bg;
+}
+
+.left_modules {
+    padding-left: 10px;
+}
+
+.right_modules{
+    padding-right: 10px;
+}
+
+.bat_mod, .ram_mod, .cpu_mod, .vpn_mod {
+    background-color: $bg;
+    margin: 0px 10px 0px 10px;
+}
+
+.bat, .ram, .cpu {
+    background-color: $bg;
+    border-radius: 5px;
+}
+
+// Clock
+.clock {
+    font-family: "Iosevka Aile";
+}
+
+/* Battery module */
+.bat {
+    color: #98c379;
+}
+
+.bat_icon {
+    min-height: 0;
+    min-width: 0;
+    //color: $bg;
+    font-size: 0;
+    margin: 5px;
+}
+
+/* RAM module */
+.ram {
+    color: #61afef;
+}
+
+.ram_icon {
+    min-height: 0;
+    min-width: 0;
+    color: $bg;
+    font-size: 0;
+    margin: 6px;
+}
+
+/* CPU module */
+.cpu {
+    color: #56b6c2;
+}
+
+.cpu_icon {
+    min-height: 0;
+    min-width: 0;
+    color: $bg;
+    //background-color: $bg;
+    font-size: 0;
+    margin: 5px;
+}
+
+// VPN module 
+.vpn_button {
+    background-color: $bg;
+}
+
+.vpn_inactive {
+    color: $warn;
+}
+
+.vpn_active {
+    color: $success;
+}
+
+
+/* Workspaces module */
+.active-workspace {
+}
