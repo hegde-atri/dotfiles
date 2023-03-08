@@ -1,4 +1,4 @@
-$bg: rgb(31, 31, 40);
+$bg: transparent;
 $red: #e06c75;
 $error: #f38ba8;
 $warn: #e5c890;
@@ -20,42 +20,30 @@ $cyan: #94e2d5;
     all: unset;
     font-family: "MonoLisa Nerd Font";
 }
+
 button {
     padding-right: 10px;
     padding-left: 10px;
     transition: all;
     transition-duration: 300ms;
 }
-button:hover {
-}
 
-.main_bar {
-    background-color: transparent;
-}
-
-.left_modules {
-    padding: 8px;
-    border-radius: 15px;
-    margin-left: 2px;
-    margin-top: 2px;
-}
-
-.right_modules{
-    padding: 8px;
-    border-radius: 15px;
-    margin-left: 2px;
-    margin-top: 2px;
-}
-
-.bat_mod, .ram_mod, .cpu_mod, .vpn_mod {
+.bat_mod, .ram_mod, .cpu_mod, .vpn_mod, .net_mod {
     margin: 0px 10px 0px 10px;
 }
 
-.bat, .ram, .cpu {
-    border-radius: 5px;
+.main_bar{
+    background-color: $bg;
 }
 
-// Clock
+.left_modules, .right_modules{
+    padding: 8px;
+    border-radius: 15px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+}
+
 .clock {
     font-family: "Iosevka Aile";
 }
@@ -71,35 +59,6 @@ button:hover {
     color: $warn;
 }
 
-/* Battery module */
-.bat {
-    color: rgb(152, 195, 121);
-    background-color: rgb(15, 80, 60);
-}
-
-.bat_icon {
-    min-height: 0;
-    min-width: 0;
-    color: transparent;
-    padding: 0px;
-    margin: 6px;
-}
-
-/* RAM module */
-.ram {
-    color: rgb(97, 175, 239);
-    background-color: rgb(30, 70, 90);
-}
-
-.ram_icon {
-    min-height: 0;
-    min-width: 0;
-    padding: 0px;
-    color: transparent;
-    margin: 6px;
-}
-
-/* CPU module */
 .cpu {
     color: rgb(86, 182, 194);
     background-color: rgb(10, 50, 80);
@@ -113,7 +72,35 @@ button:hover {
     margin: 6px;
 }
 
-// VPN module
+.ram {
+    color: rgb(97, 175, 239);
+    background-color: rgb(30, 70, 90);
+}
+
+.ram_icon {
+    min-height: 0;
+    min-width: 0;
+    padding: 0px;
+    color: transparent;
+    margin: 6px;
+}
+
+.bat {
+    color: rgb(152, 195, 121);
+    background-color: rgb(15, 80, 60);
+}
+
+.bat_icon {
+    min-height: 0;
+    min-width: 0;
+    color: transparent;
+    padding: 0px;
+    margin: 6px;
+}
+
+
+
+
 
 .vpn_button {
 }
@@ -126,8 +113,6 @@ button:hover {
     color: $success;
 }
 
-
-/* Workspaces module */
 .workspace {
 }
 .occupied {

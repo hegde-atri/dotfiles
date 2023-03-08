@@ -4,6 +4,7 @@
 
 * Table of Contents :TOC:
 - [[#requirements][Requirements]]
+- [[#global-css][Global CSS]]
 - [[#main-bars-and-widgets][Main bars and widgets]]
 - [[#clock-and-calendar][Clock and Calendar]]
   - [[#variables][Variables]]
@@ -17,17 +18,57 @@
   - [[#control-centre][Control Centre]]
 - [[#network-and-vpn][Network and VPN]]
 - [[#mpd][MPD]]
+- [[#spotify][Spotify]]
 - [[#workspaces][Workspaces]]
 - [[#scripts][Scripts]]
   - [[#memory][Memory]]
   - [[#network][Network]]
   - [[#vpn][VPN]]
+  - [[#music][Music]]
   - [[#hypr][Hypr]]
 
 * Requirements
 All the packages used/required.
 - =ripgrep=
 - =awk=
+* Global CSS
+
+Global css rules and variables.
+#+begin_src scss :tangle eww.scss
+$bg: transparent;
+$red: #e06c75;
+$error: #f38ba8;
+$warn: #e5c890;
+$success: #a6e3a1;
+
+$background-alt: #313244;
+$background-alt2: #1e1e2e;
+$foreground: #cdd6f4;
+$red-alt: #f38ba8;
+$yellow: #f9e2af;
+$orange: #fab387;
+$green: #a6e3a1;
+$blue: #89b4fa;
+$blue2: #74c7ec;
+$magenta: #cba6f7;
+$cyan: #94e2d5;
+
+,* {
+    all: unset;
+    font-family: "MonoLisa Nerd Font";
+}
+
+button {
+    padding-right: 10px;
+    padding-left: 10px;
+    transition: all;
+    transition-duration: 300ms;
+}
+
+.bat_mod, .ram_mod, .cpu_mod, .vpn_mod, .net_mod {
+    margin: 0px 10px 0px 10px;
+}
+#+end_src
 
 * Main bars and widgets
 Main windows, with their left, center and right modules.
@@ -84,7 +125,6 @@ The bar configuration.
   (box :space-evenly false
        :halign "start"
        :class "left_modules"
-       (workspaces)
   )
 )
 
@@ -107,6 +147,20 @@ The bar configuration.
        (clock_module)
   )
 )
+#+end_src
+
+#+begin_src scss :tangle eww.scss
+.main_bar{
+    background-color: $bg;
+}
+
+.left_modules, .right_modules{
+    padding: 8px;
+    border-radius: 15px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+}
 #+end_src
 
 * Clock and Calendar
@@ -158,6 +212,23 @@ The bar configuration.
 #+end_src
 ** Styling
 
+#+begin_src scss :tangle eww.scss
+.clock {
+    font-family: "Iosevka Aile";
+}
+
+.cal_label_day {
+    font-family: "Iosevka Aile";
+    padding-left: 10px;
+    color: $red;
+}
+
+.cal_label_month {
+    font-family: "Iosevka Aile";
+    color: $warn;
+}
+
+#+end_src
 * System
 ** CPU
 *** Widget
@@ -181,6 +252,20 @@ The bar configuration.
 #+end_src
 *** Styling
 
+#+begin_src scss :tangle eww.scss
+.cpu {
+    color: rgb(86, 182, 194);
+    background-color: rgb(10, 50, 80);
+}
+
+.cpu_icon {
+    min-height: 0;
+    min-width: 0;
+    color: transparent;
+    padding: 0px;
+    margin: 6px;
+}
+#+end_src
 ** RAM
 *** Widget
 #+begin_src lisp :tangle eww.yuck
@@ -202,6 +287,21 @@ The bar configuration.
 
 #+end_src
 *** Styling
+#+begin_src scss :tangle eww.scss
+.ram {
+    color: rgb(97, 175, 239);
+    background-color: rgb(30, 70, 90);
+}
+
+.ram_icon {
+    min-height: 0;
+    min-width: 0;
+    padding: 0px;
+    color: transparent;
+    margin: 6px;
+}
+
+#+end_src
 ** Battery
 *** Widget
 #+begin_src lisp :tangle eww.yuck
@@ -224,10 +324,30 @@ The bar configuration.
 
 #+end_src
 *** Styling
+#+begin_src scss :tangle eww.scss
+.bat {
+    color: rgb(152, 195, 121);
+    background-color: rgb(15, 80, 60);
+}
+
+.bat_icon {
+    min-height: 0;
+    min-width: 0;
+    color: transparent;
+    padding: 0px;
+    margin: 6px;
+}
+#+end_src
 ** Control Centre
 *** Window
 *** Widgets
 *** Styling
+#+begin_src scss :tangle eww.scss
+
+#+end_src
+#+begin_src scss :tangle eww.scss
+
+#+end_src
 * Network and VPN
 
 #+begin_src lisp :tangle eww.yuck
@@ -257,6 +377,20 @@ The bar configuration.
          vpn)))
 
 #+end_src
+
+#+begin_src scss :tangle eww.scss
+.vpn_button {
+}
+
+.vpn_inactive {
+    color: $warn;
+}
+
+.vpn_active {
+    color: $success;
+}
+#+end_src
+
 * MPD
 
 Temporary solution I stole while I get time to make my own
@@ -284,7 +418,7 @@ Temporary solution I stole while I get time to make my own
 					(button :class "song_btn_play" :onclick "~/.config/eww/scripts/music_info --toggle" song_status)
 					(button :class "song_btn_next" :onclick "~/.config/eww/scripts/music_info --next" ""))))))
 #+end_src
-
+* Spotify
 * Workspaces
 
 #+begin_src lisp :tangle eww.yuck
@@ -301,7 +435,6 @@ Temporary solution I stole while I get time to make my own
 (deflisten current_workspace :initial "2" "dash ~/.config/eww/scripts/hypr/get-active-workspace")
 (defwidget workspaces []
   (box :space-evenly true
-       :tooltip current_workspace
        (for workspace in workspaces
             (eventbox :class "workspace-entry ${workspace.id == current_workspace ? "active-workspace" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
                  (label :text "${workspace.id}")
@@ -310,6 +443,22 @@ Temporary solution I stole while I get time to make my own
   )
 )
 #+end_src
+
+#+begin_src scss :tangle eww.scss
+.workspace {
+}
+.occupied {
+    color: $foreground;
+}
+
+.empty{
+    color: $background-alt;
+}
+.active-workspace {
+    color: white;
+}
+#+end_src
+
 
 * Scripts
 ** Memory
@@ -332,7 +481,25 @@ elif [ "$1" = "percent" ]; then
 fi
 #+end_src
 ** Network
+*** TODO
+#+begin_src sh :mkdirp yes :tangle ./scripts/network :shebang "#!/bin/sh"
+name=$(nmcli c | rg '(wifi)|(ethernet)' | awk '{print ($1)}')
+
+#+end_src
 ** VPN
+
+#+begin_src sh :mkdirp yes :tangle ./scripts/vpn :shebang "#!/bin/sh"
+if [ "$1" = "label" ]; then
+    test -d /proc/sys/net/ipv4/conf/ppp0 && echo "󰖂 UoS" && exit
+    test -d /proc/sys/net/ipv4/conf/thinkpad && echo "󰖂 Home" && exit
+    echo " N/A" && exit
+elif [ "$1" = tooltip ]; then
+    test -d /proc/sys/net/ipv4/conf/ppp0 && echo "󰖂 Connected to UoS" && exit
+    test -d /proc/sys/net/ipv4/conf/thinkpad && echo "󰖂 Connected home" && exit
+    echo "Disconnected" && exit
+fi
+#+end_src
+** Music
 ** Hypr
 *** Window title
 

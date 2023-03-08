@@ -36,7 +36,6 @@
   (box :space-evenly false
        :halign "start"
        :class "left_modules"
-       (workspaces)
   )
 )
 
@@ -206,7 +205,6 @@
 (deflisten current_workspace :initial "2" "dash ~/.config/eww/scripts/hypr/get-active-workspace")
 (defwidget workspaces []
   (box :space-evenly true
-       :tooltip current_workspace
        (for workspace in workspaces
             (eventbox :class "workspace-entry ${workspace.id == current_workspace ? "active-workspace" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
                  (label :text "${workspace.id}")
