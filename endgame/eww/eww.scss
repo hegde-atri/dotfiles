@@ -1,32 +1,57 @@
-$bg: #282c34;
+$bg: rgb(31, 31, 40);
 $red: #e06c75;
 $error: #f38ba8;
 $warn: #e5c890;
 $success: #a6e3a1;
 
+$background-alt: #313244;
+$background-alt2: #1e1e2e;
+$foreground: #cdd6f4;
+$red-alt: #f38ba8;
+$yellow: #f9e2af;
+$orange: #fab387;
+$green: #a6e3a1;
+$blue: #89b4fa;
+$blue2: #74c7ec;
+$magenta: #cba6f7;
+$cyan: #94e2d5;
+
 * {
+    all: unset;
     font-family: "MonoLisa Nerd Font";
+}
+button {
+    padding-right: 10px;
+    padding-left: 10px;
+    transition: all;
+    transition-duration: 300ms;
+}
+button:hover {
 }
 
 .main_bar {
-    background-color: $bg;
+    background-color: transparent;
 }
 
 .left_modules {
-    padding-left: 10px;
+    padding: 8px;
+    border-radius: 15px;
+    margin-left: 2px;
+    margin-top: 2px;
 }
 
 .right_modules{
-    padding-right: 10px;
+    padding: 8px;
+    border-radius: 15px;
+    margin-left: 2px;
+    margin-top: 2px;
 }
 
 .bat_mod, .ram_mod, .cpu_mod, .vpn_mod {
-    background-color: $bg;
     margin: 0px 10px 0px 10px;
 }
 
 .bat, .ram, .cpu {
-    background-color: $bg;
     border-radius: 5px;
 }
 
@@ -35,49 +60,62 @@ $success: #a6e3a1;
     font-family: "Iosevka Aile";
 }
 
+.cal_label_day {
+    font-family: "Iosevka Aile";
+    padding-left: 10px;
+    color: $red;
+}
+
+.cal_label_month {
+    font-family: "Iosevka Aile";
+    color: $warn;
+}
+
 /* Battery module */
 .bat {
-    color: #98c379;
+    color: rgb(152, 195, 121);
+    background-color: rgb(15, 80, 60);
 }
 
 .bat_icon {
     min-height: 0;
     min-width: 0;
-    //color: $bg;
-    font-size: 0;
-    margin: 5px;
+    color: transparent;
+    padding: 0px;
+    margin: 6px;
 }
 
 /* RAM module */
 .ram {
-    color: #61afef;
+    color: rgb(97, 175, 239);
+    background-color: rgb(30, 70, 90);
 }
 
 .ram_icon {
     min-height: 0;
     min-width: 0;
-    color: $bg;
-    font-size: 0;
+    padding: 0px;
+    color: transparent;
     margin: 6px;
 }
 
 /* CPU module */
 .cpu {
-    color: #56b6c2;
+    color: rgb(86, 182, 194);
+    background-color: rgb(10, 50, 80);
 }
 
 .cpu_icon {
     min-height: 0;
     min-width: 0;
-    color: $bg;
-    //background-color: $bg;
-    font-size: 0;
-    margin: 5px;
+    color: transparent;
+    padding: 0px;
+    margin: 6px;
 }
 
-// VPN module 
+// VPN module
+
 .vpn_button {
-    background-color: $bg;
 }
 
 .vpn_inactive {
@@ -90,5 +128,15 @@ $success: #a6e3a1;
 
 
 /* Workspaces module */
+.workspace {
+}
+.occupied {
+    color: $foreground;
+}
+
+.empty{
+    color: $background-alt;
+}
 .active-workspace {
+    color: white;
 }

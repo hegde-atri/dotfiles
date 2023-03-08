@@ -1,5 +1,4 @@
 #!/bin/sh
-
 total="$(free --mega | rg Mem: | awk '{print $2}')"
 free="$(free --mega | rg Mem: | awk '{print $4}')"
 avail="$(free --mega | rg Mem: | awk '{print $7}')"
