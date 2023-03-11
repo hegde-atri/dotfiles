@@ -14,6 +14,8 @@
 - [[#system][System]]
   - [[#cpu][CPU]]
   - [[#ram][RAM]]
+  - [[#volume][Volume]]
+  - [[#brightness][Brightness]]
   - [[#battery][Battery]]
   - [[#control-centre][Control Centre]]
 - [[#network-and-vpn][Network and VPN]]
@@ -22,6 +24,7 @@
 - [[#workspaces][Workspaces]]
 - [[#scripts][Scripts]]
   - [[#memory][Memory]]
+  - [[#volume-1][Volume]]
   - [[#network][Network]]
   - [[#vpn][VPN]]
   - [[#music][Music]]
@@ -31,6 +34,7 @@
 All the packages used/required.
 - =ripgrep=
 - =awk=
+- =alsa-utils=, to provide =amixer=
 * Global CSS
 
 Global css rules and variables.
@@ -141,11 +145,17 @@ The bar configuration.
        :space-evenly false
        :class "right_modules"
        (vpn_module)
+       (sep)
+       (volume_module)
+       (sep)
        (cpu_module)
        (ram_module)
        (battery_module)
        (clock_module)
   )
+)
+(defwidget sep []
+  (label :class "sep" :text "|")
 )
 #+end_src
 
@@ -154,12 +164,17 @@ The bar configuration.
     background-color: $bg;
 }
 
-.left_modules, .right_modules{
+.left_modules, .right_modules, .center_modules{
+    background-color: rgba(0, 0, 0, 0.3);
     padding: 8px;
     border-radius: 15px;
     margin-left: 2px;
     margin-right: 2px;
     margin-top: 2px;
+}
+
+.sep {
+    color: rgb(90, 90, 90);
 }
 #+end_src
 
@@ -302,8 +317,71 @@ The bar configuration.
 }
 
 #+end_src
+** Volume
+
+#+begin_src lisp :tangle eww.yuck
+(defvar vol_reveal false)
+(defpoll vol_percent :interval "1s" "~/.config/eww/scripts/volume")
+(defpoll mic_percent :interval "1s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+
+(defwidget volume_module []
+  (eventbox :onhover "${EWW_CMD} update vol_reveal=true"
+            :onhoverlost "${EWW_CMD} update vol_reveal=false"
+    (box :orientation "h" :space-evenly "false" :class "metric"
+      (button :onclick "pavucontrol &" :class "vol_icon" "")
+      (revealer :transition "slideleft"
+                :reveal vol_reveal
+                :duration "350ms"
+        (scale :class "vol_bar"
+               :value vol_percent
+               :tooltip "${vol_percent}"
+               :min 0
+               :max 101
+               :onchange "amixer -D pulse sset Master {}%")
+    )
+  )
+  )
+)
+#+end_src
+
+#+begin_src scss :tangle eww.scss
+.metric scale trough highlight {
+  background-color: rgba(90, 80, 185, 1);
+  color: #000000;
+  border-radius: 10px;
+}
+.metric scale trough {
+  background-color: rgba(20, 30, 120, 0.6);
+  border-radius: 10px;
+  min-height: 12px;
+  min-width: 100px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.vol_icon {
+    font-size: 18px;
+    color: #a1bdce;
+    margin: 0px 10px 0px 10px;
+}
+
+.inner-mod{
+    margin: 0px 0px 0px 0px;
+    border-radius: 10px 16px 0px 10px;
+}
+#+end_src
+
+** Brightness
+
+#+begin_src lisp :tangle eww.yuck
+#+end_src
+
+#+begin_src scss :tangle eww.scss
+#+end_src
+
 ** Battery
 *** Widget
+
 #+begin_src lisp :tangle eww.yuck
 (defwidget battery_module []
   (box :class "bat_mod"
@@ -479,6 +557,11 @@ elif [ "$1" = "free" ]; then
 elif [ "$1" = "percent" ]; then
     echo $(awk "BEGIN { pc=100*${used}/${total}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
 fi
+#+end_src
+** Volume
+
+#+begin_src sh :mkdirp yes :tangle ./scripts/volume :shebang "#!/bin/sh"
+amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'
 #+end_src
 ** Network
 *** TODO

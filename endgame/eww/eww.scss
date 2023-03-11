@@ -36,12 +36,17 @@ button {
     background-color: $bg;
 }
 
-.left_modules, .right_modules{
+.left_modules, .right_modules, .center_modules{
+    background-color: rgba(0, 0, 0, 0.3);
     padding: 8px;
     border-radius: 15px;
     margin-left: 2px;
     margin-right: 2px;
     margin-top: 2px;
+}
+
+.sep {
+    color: rgb(90, 90, 90);
 }
 
 .clock {
@@ -84,6 +89,33 @@ button {
     color: transparent;
     margin: 6px;
 }
+
+.metric scale trough highlight {
+  background-color: rgba(90, 80, 185, 1);
+  color: #000000;
+  border-radius: 10px;
+}
+.metric scale trough {
+  background-color: rgba(20, 30, 120, 0.6);
+  border-radius: 10px;
+  min-height: 12px;
+  min-width: 100px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.vol_icon {
+    font-size: 18px;
+    color: #a1bdce;
+    margin: 0px 10px 0px 10px;
+}
+
+.inner-mod{
+    margin: 0px 0px 0px 0px;
+    border-radius: 10px 16px 0px 10px;
+}
+
+
 
 .bat {
     color: rgb(152, 195, 121);
