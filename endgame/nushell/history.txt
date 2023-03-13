@@ -1,0 +1,308 @@
+chsh
+ls
+cd .config
+config nu
+l
+ls
+ls -s 
+cd nushell
+which ls
+l
+ls
+nvim config.ru
+vim config.nu
+emacsclient -nc config.nu
+reload config
+watch --help
+ls --help
+ls
+cd ..
+./nushell
+ls
+cd
+zsh
+restart
+start
+ls
+cd repos
+ls
+cd uni
+ls
+cd java
+cd com1003_labs-hegde-atri/
+l
+ls
+open build.gradle
+cat build.gradle
+bat build.gradle
+ls
+ls | table
+dust
+config.nu
+fprintd
+sudo fprintd
+config nu
+wxit
+config nu
+load config
+load ~/.config/nushell/config.nu
+reload
+realod config
+reload config
+nvim
+cd .config/nvim
+ls
+nvim .
+nvim
+chsh
+nu
+ls Public/
+ls
+ls Downloads
+du
+du Downloads
+dust
+du
+reedline
+nvim
+exi
+ls | get name
+(ls | get name)
+ls
+cd repos
+ls
+cd personal/hegdeatri-dot-com/
+git status
+hyprctl
+hyprctl clients
+xeyes
+gs
+pi
+cd Documents
+ls
+rm thinkpad.conf
+helix thinkpad.conf
+cd Documents
+ls
+ping google.com
+pi
+ping 1.1.1.1
+nmcli con
+paru mermaid
+paru mermai
+mmcli
+mmdc
+which mmdc
+cd .emacs.d
+ls
+ls -a
+git status
+ls
+which mmdc
+systemctl --user restart emacs
+paru cdlatex
+systemctl --user restart emacs
+cd repos
+ls
+cd uni
+ls
+cd ..
+l
+ls
+cd .
+cd ..
+cd Documents/
+ls
+pandoc -f pdf -t latex
+pandoc -f pdf -t markdown
+zathura COM1002.pdf
+cd repos
+ls
+cd uni
+ls
+cd ise
+ls
+cd project
+ls
+mkdir docs
+cp ../edflix/main.pdf docs/main.pdf
+ls
+cd docs
+ls
+cd ..
+ls
+git status
+git pull
+ls
+helix .gitignore
+l
+ls
+helix .
+bundle install
+zshrc
+nu
+hell
+kill
+ripgrep
+rg
+ls
+chsh mizuuu
+ls
+cd .config
+ls
+cd ..
+sudo nvim /etc/locale.conf
+p
+pp
+p
+man p
+which p
+l
+ls
+ls -a
+paru
+ls
+cd .config
+ls
+cd nushell
+ls
+locale
+ls
+cd .config
+ls
+cd nushell
+ls
+cd ise
+cd repos/personal/hegdeatri-dot-com/
+ls
+pkill nushell
+ls
+cd wallpapers/
+ls
+cd tokyo-night/
+l
+ls
+img2sixel wall-01.webp
+ls
+cd wallpapers/tokyo-night/
+ls
+icat wall-01.webp
+zshrc
+pgrep gammastep
+gammastep &!
+gammstep &
+paru pueue
+gammastep &
+pueue gammastep
+pueue add gammastep
+systemctl --user enable --now pueued.service
+pueue status
+pueue
+ls
+cd Videos
+ls
+cd big
+ls
+hyprctl clients
+hypr
+mpv `Playboi Carti  - Miss The Rage Slowed Reverb (re-upload).mp4`
+ls
+locale
+export LANG=
+export LANG en_GB.UTF-8
+export LANG="en_GB.UTF-8"
+ls
+zsh
+ls
+cd wallpapers/
+ls
+img2sixel wallhaven-l8mwjq_3840x2160.png
+ls
+hyprctl active
+hyprctl activewindow
+mpv `Playboi Carti  - Miss The Rage Slowed Reverb (re-upload).mp4`
+cd Videos
+ls
+cd big
+ls
+ps
+tutor
+tutor begin
+tutor tables
+tutor cells
+tutor shorthands
+tutor expressions
+tutor echo
+tutor each
+ls
+shells
+shlls
+shells
+mpv `Playboi Carti  - Miss The Rage Slowed Reverb (re-upload).mp4` --loop
+ls
+zsh
+cd Videos/big
+ls
+cd com1001
+ls
+cd repos/uni/ise/com1001
+cd slides
+ls
+zathura `1-1-intro.pdf`
+hyprctl activewindow
+ls
+hyprctl activewindow
+ls
+zsh
+hyprctl activewindow
+zsh
+zathura `1-1-intro.pdf`
+ls
+cd repos/uni/ise/com1001/slides
+hyprctl activewindow
+cd slides
+cd repos/uni/ise/com1001/slides
+zathura `1-1-intro.pdf`
+zathura `1-1-intro.pdf`
+hyprctl activewindow
+ls
+zathura `1-1-intro.pdf`
+hyprctl activewindow
+hyprctl
+hyprctl dispatch swallow
+hyprctl activewindow
+paru howdy
+$env.config.show_banner
+$env.LANG
+ncmpcpp
+locale
+ls
+ls -a -l
+cat /etc/shells
+helllo
+hello
+gs
+$nu.scope.aliases
+alias gs
+run gs
+start gs
+help start
+cd repos/uni/ise/com1001/slides
+cd
+cd slides
+z
+z repos/uni/ise/com1001/slides/
+z
+z slides
+cd slids
+cd slides
+ls
+cd
+zshrc
+gs
+ls
+rxfetch
+cd dotfiles
+ls
+cd endgame
+ls
