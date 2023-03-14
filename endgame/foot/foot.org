@@ -1,0 +1,78 @@
+#+title: Foot Configuration
+#+author: Atri Hegde
+#+property: header-args :tangle foot.ini
+#+auto_tangle: t
+
+* Table of Contents :TOC:
+- [[#font][Font]]
+- [[#environment-variables][Environment variables]]
+- [[#ui][UI]]
+  - [[#bell][Bell]]
+  - [[#cursor][Cursor]]
+  - [[#colors][Colors]]
+
+* Font
+
+#+begin_src conf
+font=JetBrainsMono Nerd Font:size=10
+#+end_src
+
+* Environment variables
+
+* UI
+** Bell
+** Cursor
+
+#+begin_src conf
+[cursor]
+style=beam
+blink=yes
+#+end_src
+
+** Colors
+
+#+begin_src conf
+[colors]
+alpha=0.9
+# background=002b36
+# foreground=839496
+
+## Normal/regular colors (color palette 0-7)
+# regular0=073642  # black
+# regular1=dc322f  # red
+# regular2=859900  # green
+# regular3=b58900  # yellow
+# regular4=268bd2  # blue
+# regular5=d33682  # magenta
+# regular6=2aa198  # cyan
+# regular7=eee8d5  # white
+
+## Bright colors (color palette 8-15)
+# bright0=08404f   # bright black
+# bright1=e35f5c   # bright red
+# bright2=9fb700   # bright green
+# bright3=d9a400   # bright yellow
+# bright4=4ba1de   # bright blue
+# bright5=dc619d   # bright magenta
+# bright6=32c1b6   # bright cyan
+# bright7=ffffff   # bright white
+
+## dimmed colors (see foot.ini(5) man page)
+# dim0=<not set>
+# ...
+# dim7=<not-set>
+
+## The remaining 256-color palette
+# 16 = <256-color palette #16>
+# ...
+# 255 = <256-color palette #255>
+
+## Misc colors
+# selection-foreground=<inverse foreground/background>
+# selection-background=<inverse foreground/background>
+# jump-labels=<regular0> <regular3>          # black-on-yellow
+# scrollback-indicator=<regular0> <bright4>  # black-on-bright-blue
+# search-box-no-match=<regular0> <regular1>  # black-on-red
+# search-box-match=<regular0> <regular3>     # black-on-yellow
+# urls=<regular3>
+#+end_src
