@@ -1,3 +1,110 @@
+#+title: Hyprland configuration
+#+author: Atri Hegde
+#+property: header-args :tangle hyprland.conf
+#+auto_tangle: t
+
+* Table of Contents :TOC:
+- [[#startup-script][Startup Script]]
+  - [[#xdg-portal][XDG-Portal]]
+  - [[#variables][Variables]]
+  - [[#gtk-settings][GTK settings]]
+  - [[#polkit][Polkit]]
+  - [[#daemons][Daemons]]
+  - [[#startup-applications][Startup applications]]
+- [[#hyprland-config][Hyprland config]]
+  - [[#monitor-keybinds][Monitor keybinds]]
+  - [[#exec-once][Exec-once]]
+  - [[#input][Input]]
+  - [[#aesthetics][Aesthetics]]
+  - [[#layout][Layout]]
+  - [[#misc][Misc]]
+  - [[#window-rules][Window rules]]
+  - [[#keybinds][Keybinds]]
+
+* Startup Script
+
+The things that need to happen when Hyprland is launched!
+
+** XDG-Portal
+
+#+begin_src shell :tangle startup :shebang #!/bin/sh
+# --- xdg-desktop-portal-hyprland ---
+sleep 1
+killall xdg-desktop-portal-hyprland
+killall xdg-desktop-portal-wlr
+killall xdg-desktop-portal
+/usr/libexec/xdg-desktop-portal-hyprland &
+sleep 2
+/usr/lib/xdg-desktop-portal &
+#+end_src
+
+** Variables
+
+#+begin_src shell :tangle startup :shebang #!/bin/sh
+# --- OTHER settings ---
+export SDL_VIDEODRIVER=wayland
+export _JAVA_AWT_WM_NONREPARENTING=1
+export QT_QPA_PLATFORM=wayland
+export GDK_BACKEND="wayland,x11"
+#+end_src
+
+** GTK settings
+
+#+begin_src shell :tangle startup :shebang #!/bin/sh
+# --- GTK settings ---
+gsettings set org.gnome.desktop.interface gtk-theme 'Kanagawa-B'
+gsettings set org.gnome.desktop.interface icon-theme 'Flatery-Dark'
+gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
+#+end_src
+
+** Polkit
+
+#+begin_src shell :tangle startup :shebang #!/bin/sh
+# --- gnome polkit ---
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+#+end_src
+
+** Daemons
+
+#+begin_src shell :tangle startup :shebang #!/bin/sh
+# --- Notification daemon ---
+mako &
+
+# --- Background ---
+swww init
+swww img ~/wallpapers/minimal/minimal-wave.png
+
+# --- Bar ---
+eww daemon && eww open main
+
+# --- swayidle ---
+swayidle -w \
+    timeout 300 '~/.local/bin/custom/lockscreen' \
+    before-sleep '~/.local/bin/custom/lockscreen' &
+
+# --- Foot terminal ---
+foot --server
+#+end_src
+
+** Startup applications
+
+#+begin_src shell :tangle startup :shebang #!/bin/sh
+# --- Open apps on startup ---
+firefox &
+
+# --- Scripts ---
+~/.local/bin/custom/look-away &
+
+# --- gammastep ---
+gammastep &
+#+end_src
+
+* Hyprland config
+
+
+** Monitor keybinds
+
+#+begin_src conf
 # --- Atri Hegde --- #
 #   Hyprland config  #
 # ------------------ #
@@ -15,12 +122,20 @@ wsbind=7, eDP-1
 wsbind=8, eDP-1
 wsbind=9, eDP-1
 wsbind=10, eDP-1
+#+end_src
 
+** Exec-once
+
+#+begin_src conf
 # Execute your favorite apps at launch
 exec-once = ~/.config/hypr/startup &
 # Source a file (multi-file configs)
 # source = ~/.config/hypr/myColors.conf
+#+end_src
 
+** Input
+
+#+begin_src conf
 input {
     kb_layout = gb
     kb_variant =
@@ -39,12 +154,21 @@ input {
     accel_profile = flat
 }
 
+#+end_src
+
+*** Device settings
+
+#+begin_src conf
 # --- Trackpoint ---
 device:etps/2-elantech-trackpoint {
     sensitivity = 0.1
     accel_profile = flat
 }
+#+end_src
 
+** Aesthetics
+
+#+begin_src conf
 general {
     gaps_in = 4
     gaps_out = 4
@@ -84,6 +208,11 @@ animations {
     # animation = border, 1, 10, default
 }
 
+#+end_src
+
+** Layout
+
+#+begin_src conf
 dwindle {
     pseudotile = yes
     preserve_split = true
@@ -100,7 +229,11 @@ master {
 gestures {
     workspace_swipe = on
 }
+#+end_src
 
+** Misc
+
+#+begin_src conf
 misc {
     always_follow_on_dnd = false
     disable_hyprland_logo = true
@@ -108,6 +241,11 @@ misc {
     swallow_regex= ^(foot)$
 }
 
+#+end_src
+
+** Window rules
+
+#+begin_src conf
 # --- Window Rules ---
 windowrule=workspace 1 silent, firefox
 windowrule=workspace 4 silent, Logseq
@@ -122,6 +260,14 @@ windowrule = opacity 0.95 0.9, Emacs
 windowrule = opacity 1.0 0.7, kitty
 windowrule = opacity 1.0 0.7, foot
 
+#+end_src
+
+** Keybinds
+
+*** Apps/Actions
+**** TODO SHIFT-W for random bg
+
+#+begin_src conf
 # See https://wiki.hyprland.org/Configuring/Keywords/ for more
 $mainMod = SUPER
 
@@ -153,6 +299,11 @@ bind = $mainMod, G, togglegroup,
 bind = ALT, TAB, changegroupactive, f
 bind = ALT SHIFT, TAB, changegroupactive, b
 
+#+end_src
+
+*** Window Manipulation
+
+#+begin_src conf
 # Move focus and move windows
 bind = $mainMod, h, movefocus, l
 bind = $mainMod, l, movefocus, r
@@ -207,7 +358,11 @@ bind = $mainMod CTRL, left, workspace, e-1
 # Move/resize windows with mainMod + LMB/RMB and dragging
 bindm = $mainMod, mouse:272, movewindow
 bindm = $mainMod, mouse:273, resizewindow
+#+end_src
 
+*** Multimedia
+
+#+begin_src conf
 # --- Volume keys ---
 binde = , XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
 binde = , XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
@@ -225,9 +380,21 @@ bind = , XF86AudioPrev, exec, playerctl previous
 binde=, XF86MonBrightnessUp, exec, brightnessctl s +10 -q
 binde=, XF86MonBrightnessDown, exec, brightnessctl s 10- -q
 
+#+end_src
+
+*** Screenshot
+
+#+begin_src conf
 # --- Misc ---
 bind=, Print, exec, grimblast save area - | ~/.local/bin/custom/shadower | wl-copy
 bind=$mainMod, Print, exec, grimblast save active - | ~/.local/bin/custom/shadower | wl-copy
 bind=$mainMod SHIFT, Print, exec, grim -g "$(slurp)" - | swappy -f -
+#+end_src
 
+*** Monitor modes
+**** TODO
+
+#+begin_src conf
 # Cycle through monitor modes
+#+end_src
+

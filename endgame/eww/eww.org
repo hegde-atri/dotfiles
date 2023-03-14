@@ -193,8 +193,7 @@ The bar configuration.
 (defwidget clock_module []
   (eventbox :onhover "${EWW_CMD} update cal_reveal=true"
             :onhoverlost "${EWW_CMD} update cal_reveal=false"
-            :onclick "${EWW_CMD} open calendar_window"
-            :onrightclick "${EWW_CMD} close calendar_window"
+            :onclick "${EWW_CMD} open --toggle calendar_window"
             (box :space-evenly false :orientation "h"
                  (label :class "clock" :text "${time}")
                  (revealer :transition "slideleft"

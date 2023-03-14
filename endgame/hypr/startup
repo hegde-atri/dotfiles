@@ -15,7 +15,6 @@ export QT_QPA_PLATFORM=wayland
 export GDK_BACKEND="wayland,x11"
 
 # --- GTK settings ---
-# gsettings set org.gnome.desktop.interface gtk-theme 'Material-Black-Blueberry-3.38'
 gsettings set org.gnome.desktop.interface gtk-theme 'Kanagawa-B'
 gsettings set org.gnome.desktop.interface icon-theme 'Flatery-Dark'
 gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
@@ -31,24 +30,21 @@ swww init
 swww img ~/wallpapers/minimal/minimal-wave.png
 
 # --- Bar ---
-#eww daemon
-#eww open bar
-#eww open bar1
-waybar &
+eww daemon && eww open main
+
+# --- swayidle ---
+swayidle -w \
+    timeout 300 '~/.local/bin/custom/lockscreen' \
+    before-sleep '~/.local/bin/custom/lockscreen' &
+
+# --- Foot terminal ---
+foot --server &
 
 # --- Open apps on startup ---
 firefox &
-logseq --enable-features=UseOzonePlatform --ozone-platform=wayland &
-kitty -e ncmpcpp
 
 # --- Scripts ---
 ~/.local/bin/custom/look-away &
 
 # --- gammastep ---
 gammastep &
-
-# --- swayidle ---
-swayidle -w \
-	timeout 300 '~/.local/bin/custom/lockscreen' \
-	before-sleep '~/.local/bin/custom/lockscreen' &
-

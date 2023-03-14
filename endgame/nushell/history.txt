@@ -306,3 +306,41 @@ cd dotfiles
 ls
 cd endgame
 ls
+cp -r ~/.config/nushell .
+ls
+nvim README.md
+cd dotfiles
+dust
+cd org
+ls
+gs
+cd hegdeatri
+ls
+code .
+yarn dev
+gs
+ga
+gs
+gc "new posts drafts"
+gp
+mpv `Playboi Carti - cult classic (prod.ta2cute).mp4` --loop
+ls
+rm test.sh
+time zsh -i -c exit
+/bin/time zsh -i -c exit
+zsh
+pgrep look-away
+pgrep gnome
+pgrep swayidle
+pueue
+pueue 0
+pueue help
+pueue start 0
+pueue
+pueue kill gammastep
+pueue log 0
+pueue start
+pueue
+ls
+cd endgame
+ls
