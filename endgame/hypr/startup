@@ -17,7 +17,7 @@ export GDK_BACKEND="wayland,x11"
 # --- GTK settings ---
 gsettings set org.gnome.desktop.interface gtk-theme 'Kanagawa-B'
 gsettings set org.gnome.desktop.interface icon-theme 'Flatery-Dark'
-gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
+gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors - White'
 
 # --- gnome polkit ---
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
@@ -27,7 +27,7 @@ mako &
 
 # --- Background ---
 swww init
-swww img ~/wallpapers/minimal/minimal-wave.png
+swww img ~/wallpapers/tokyo-night/wall-04.webp
 
 # --- Bar ---
 eww daemon && eww open main

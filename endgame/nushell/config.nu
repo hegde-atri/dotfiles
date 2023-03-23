@@ -166,11 +166,12 @@ let light_theme = {
     shape_variable: purple
 }
 
-# External completer example
-# let carapace_completer = {|spans|
-#     carapace $spans.0 nushell $spans | from json
-# }
+# Completion using carapace
+let-env PATH = ($env.PATH | prepend "/home/mizuuu/.config/carapace/bin")
 
+let carapace_completer = {|spans|
+  carapace $spans.0 nushell $spans | from json
+}
 
 # The default config record. This is where much of your global configuration is setup.
 let-env config = {
@@ -264,7 +265,7 @@ let-env config = {
     external: {
       enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up my be very slow
       max_results: 100 # setting it lower can improve completion performance at the cost of omitting some options
-      completer: null # check 'carapace_completer' above as an example
+      completer: $carapace_completer # check 'carapace_completer' above as an example
     }
   }
   filesize: {
@@ -526,8 +527,13 @@ let-env config = {
     }
   ]
 }
+# Starship prompt
+source ~/.cache/starship/init.nu
+# Zoxide
 source ~/.zoxide.nu
-alias cd = z
+# PNPM
+let-env PNPM_HOME = $"($env.HOME)/Library/pnpm"
+let-env PATH = ($env.PATH | append $env.PNPM_HOME)
 
 alias l = exa --icons -l
 alias ls = exa --icons
@@ -589,3 +595,5 @@ alias hst = (history 1 -1 | cut -c 8- | sort | uniq | fzf | tr -d '\n' | wl-copy
 # -- Sync my music --
 alias sendMusic = rsync -avP ~/Music pi:~/
 alias getMusic = echo 'TODO'
+
+rxfetch

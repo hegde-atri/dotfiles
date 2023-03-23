@@ -64,5 +64,9 @@ let-env NU_PLUGIN_DIRS = [
 # Inherit the correct locale
 let-env LANG = "en_GB.UTF-8"
 
+# starship
+mkdir ~/.cache/starship
+starship init nu | save -f ~/.cache/starship/init.nu
+
 # zoxide
 zoxide init nushell | save -f ~/.zoxide.nu
