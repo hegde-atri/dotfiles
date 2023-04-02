@@ -25,6 +25,7 @@
 - [[#scripts][Scripts]]
   - [[#memory][Memory]]
   - [[#volume-1][Volume]]
+  - [[#brightness-1][Brightness]]
   - [[#network][Network]]
   - [[#vpn][VPN]]
   - [[#music][Music]]
@@ -146,6 +147,7 @@ The bar configuration.
        :class "right_modules"
        (vpn_module)
        (sep)
+       (brightness_module)
        (volume_module)
        (sep)
        (cpu_module)
@@ -320,14 +322,14 @@ The bar configuration.
 
 #+begin_src lisp :tangle eww.yuck
 (defvar vol_reveal false)
-(defpoll vol_percent :interval "1s" "~/.config/eww/scripts/volume")
-(defpoll mic_percent :interval "1s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+(defpoll vol_percent :interval "3s" "~/.config/eww/scripts/volume")
+(defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
 
 (defwidget volume_module []
   (eventbox :onhover "${EWW_CMD} update vol_reveal=true"
             :onhoverlost "${EWW_CMD} update vol_reveal=false"
     (box :orientation "h" :space-evenly "false" :class "metric"
-      (button :onclick "pavucontrol &" :class "vol_icon" "")
+      (button :onclick "pavucontrol &" :class "vol_icon" "󰕾")
       (revealer :transition "slideleft"
                 :reveal vol_reveal
                 :duration "350ms"
@@ -373,6 +375,23 @@ The bar configuration.
 ** Brightness
 
 #+begin_src lisp :tangle eww.yuck
+(defvar bright_reveal true)
+(defpoll bright_percent :interval "3s" "~/.config/eww/scripts/brightness")
+(defwidget brightness_module []
+  (eventbox :onhover "${EWW_CMD} update bright_reveal=true"
+            :onhoverlost "${EWW_CMD} update bright_reveal=false"
+            (box :orientation "h" :space-evenly "false" :class "metric"
+                 (button :class "vol_icon" "󰕾")
+                 (revealer :transition "slideleft"
+                           :reveal bright_reveal
+                           :duration "350ms"
+                           (scale :class "vol_bar"
+                                  :value bright_percent
+                                  :tooltip "${bright_percent}"
+                                  :min 0
+                                  :max 101
+                                  :onchange "brightnessctl s {}%")))))
+
 #+end_src
 
 #+begin_src scss :tangle eww.scss
@@ -495,6 +514,7 @@ Temporary solution I stole while I get time to make my own
 					(button :class "song_btn_play" :onclick "~/.config/eww/scripts/music_info --toggle" song_status)
 					(button :class "song_btn_next" :onclick "~/.config/eww/scripts/music_info --next" ""))))))
 #+end_src
+
 * Spotify
 * Workspaces
 
@@ -562,6 +582,13 @@ fi
 #+begin_src sh :mkdirp yes :tangle ./scripts/volume :shebang "#!/bin/sh"
 amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'
 #+end_src
+
+** Brightness
+
+#+begin_src sh :mkdirp yes :tangle ./scripts/brightness :shebang "#!/bin/sh"
+brightnessctl g | awk '{ perc = $1/255 * 100 }; END { print perc }'
+#+end_src
+
 ** Network
 *** TODO
 #+begin_src sh :mkdirp yes :tangle ./scripts/network :shebang "#!/bin/sh"
@@ -591,7 +618,8 @@ socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | s
 #+end_src
 *** Workspaces
 =get-workspaces= returns all the workspaces.
-#+begin_src sh :mkdirp yes :tangle ./scripts/hypr/get-workspaces :shebang "#!/bin/sh"
+
+#+begin_src bash :mkdirp yes :tangle ./scripts/hypr/get-workspaces :shebang "#!/bin/bash"
 spaces (){
         WORKSPACE_WINDOWS=$(hyprctl workspaces -j | jq 'map({key: .id | tostring, value: .windows}) | from_entries')
         echo "$(seq 1 10 | jq --argjson windows "${WORKSPACE_WINDOWS}" --slurp -Mc 'map(tostring) | map({id: ., windows: ($windows[.]//0)})')"
@@ -602,6 +630,7 @@ socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | w
         spaces
 done
 #+end_src
+
 =get-active-workspace= returns the active workspace.
 #+begin_src sh :mkdirp yes :tangle ./scripts/hypr/get-active-workspace :shebang "#!/bin/sh"
 hyprctl monitors -j | jq --raw-output .[0].activeWorkspace.id

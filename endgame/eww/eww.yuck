@@ -53,6 +53,7 @@
        :class "right_modules"
        (vpn_module)
        (sep)
+       (brightness_module)
        (volume_module)
        (sep)
        (cpu_module)
@@ -136,14 +137,14 @@
          ""))))
 
 (defvar vol_reveal false)
-(defpoll vol_percent :interval "1s" "~/.config/eww/scripts/volume")
-(defpoll mic_percent :interval "1s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+(defpoll vol_percent :interval "3s" "~/.config/eww/scripts/volume")
+(defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
 
 (defwidget volume_module []
   (eventbox :onhover "${EWW_CMD} update vol_reveal=true"
             :onhoverlost "${EWW_CMD} update vol_reveal=false"
     (box :orientation "h" :space-evenly "false" :class "metric"
-      (button :onclick "pavucontrol &" :class "vol_icon" "")
+      (button :onclick "pavucontrol &" :class "vol_icon" "󰕾")
       (revealer :transition "slideleft"
                 :reveal vol_reveal
                 :duration "350ms"
@@ -158,7 +159,22 @@
   )
 )
 
-
+(defvar bright_reveal true)
+(defpoll bright_percent :interval "3s" "~/.config/eww/scripts/brightness")
+(defwidget brightness_module []
+  (eventbox :onhover "${EWW_CMD} update bright_reveal=true"
+            :onhoverlost "${EWW_CMD} update bright_reveal=false"
+            (box :orientation "h" :space-evenly "false" :class "metric"
+                 (button :class "vol_icon" "󰕾")
+                 (revealer :transition "slideleft"
+                           :reveal bright_reveal
+                           :duration "350ms"
+                           (scale :class "vol_bar"
+                                  :value bright_percent
+                                  :tooltip "${bright_percent}"
+                                  :min 0
+                                  :max 101
+                                  :onchange "brightnessctl s {}%")))))
 
 (defwidget battery_module []
   (box :class "bat_mod"
