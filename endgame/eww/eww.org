@@ -375,13 +375,14 @@ The bar configuration.
 ** Brightness
 
 #+begin_src lisp :tangle eww.yuck
-(defvar bright_reveal true)
-(defpoll bright_percent :interval "3s" "~/.config/eww/scripts/brightness")
+(defvar bright_reveal false)
+(defpoll bright_percent :interval "3s" "dash ~/.config/eww/scripts/brightness percent")
+(defpoll bright_symbol :interval "1s" "dash ~/.config/eww/scripts/brightness symbol")
 (defwidget brightness_module []
   (eventbox :onhover "${EWW_CMD} update bright_reveal=true"
             :onhoverlost "${EWW_CMD} update bright_reveal=false"
             (box :orientation "h" :space-evenly "false" :class "metric"
-                 (button :class "vol_icon" "󰕾")
+                 (button :class "vol_icon" bright_symbol)
                  (revealer :transition "slideleft"
                            :reveal bright_reveal
                            :duration "350ms"
@@ -585,8 +586,19 @@ amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d
 
 ** Brightness
 
-#+begin_src sh :mkdirp yes :tangle ./scripts/brightness :shebang "#!/bin/sh"
-brightnessctl g | awk '{ perc = $1/255 * 100 }; END { print perc }'
+#+begin_src sh :mkdirp yes :tangle ./scripts/brightness :shebang #!/bin/sh
+if [ "$1" = "percent" ]; then
+    brightnessctl g | awk '{ perc = $1/255 * 100 }; END { print perc }'
+elif [ "$1" = "symbol" ]; then
+    perc=$(brightnessctl g)
+    if [ $perc -gt 153 ]; then
+        echo "󰃠" && exit
+    elif [ $perc -gt 76 ]; then
+        echo "󰃟" && exit
+    else
+        echo "󰃞"
+    fi
+fi
 #+end_src
 
 ** Network

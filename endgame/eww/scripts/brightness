@@ -1,2 +1,13 @@
 #!/bin/sh
-brightnessctl g | awk '{ perc = $1/255 * 100 }; END { print perc }'
+if [ "$1" = "percent" ]; then
+    brightnessctl g | awk '{ perc = $1/255 * 100 }; END { print perc }'
+elif [ "$1" = "symbol" ]; then
+    perc=$(brightnessctl g)
+    if [ $perc -gt 153 ]; then
+        echo "󰃠" && exit
+    elif [ $perc -gt 76 ]; then
+        echo "󰃟" && exit
+    else
+        echo "󰃞"
+    fi
+fi
