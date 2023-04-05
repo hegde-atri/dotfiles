@@ -15,22 +15,32 @@ export QT_QPA_PLATFORM=wayland
 export GDK_BACKEND="wayland,x11"
 
 # --- GTK settings ---
-gsettings set org.gnome.desktop.interface gtk-theme 'Kanagawa-B'
-gsettings set org.gnome.desktop.interface icon-theme 'Flatery-Dark'
-gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors - White'
+gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
+gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
 
 # --- gnome polkit ---
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 
+# --- Pipewire / Audio ---
+/usr/bin/pipewire &
+/usr/bin/pipewire-pulse &
+/usr/bin/wireplumber &
+
 # --- Notification daemon ---
-mako &
+dunst &
+
+# --- Emacs ---
+emacs --daemon &
+
+# --- MPD ---
+mpd
 
 # --- Background ---
-swww init
-swww img ~/wallpapers/tokyo-night/wall-04.webp
+swww init && swww img ~/wallpapers/tokyo-night/wall-04.webp &
 
 # --- Bar ---
-eww daemon && eww open main
+eww daemon && eww open main &
 
 # --- swayidle ---
 swayidle -w \
@@ -41,10 +51,10 @@ swayidle -w \
 foot --server &
 
 # --- Open apps on startup ---
-firefox &
+# firefox &
 
 # --- Scripts ---
 ~/.local/bin/custom/look-away &
 
 # --- gammastep ---
-gammastep &
+# gammastep &
