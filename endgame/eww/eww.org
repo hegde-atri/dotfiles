@@ -30,6 +30,7 @@
   - [[#vpn][VPN]]
   - [[#music][Music]]
   - [[#hypr][Hypr]]
+- [[#launch-bar][Launch bar]]
 
 * Requirements
 All the packages used/required.
@@ -81,7 +82,7 @@ Main windows, with their left, center and right modules.
 My main bar on my primary monitor
 
 #+begin_src lisp :tangle eww.yuck
-(defwindow main
+(defwindow bar0
            :monitor 0
            :geometry (geometry :x "0%"
                                :y "0px"
@@ -98,7 +99,7 @@ My main bar on my primary monitor
 Secondary bar for my secondary monitor if I am using one.
 
 #+begin_src lisp :tangle eww.yuck
-(defwindow secondary
+(defwindow bar1
            :monitor 1
            :geometry (geometry :x "0%"
                                :y "0px"
@@ -557,7 +558,6 @@ Temporary solution I stole while I get time to make my own
 }
 #+end_src
 
-
 * Scripts
 ** Memory
 Simple argument parsing for the different options
@@ -647,4 +647,23 @@ done
 #+begin_src sh :mkdirp yes :tangle ./scripts/hypr/get-active-workspace :shebang "#!/bin/sh"
 hyprctl monitors -j | jq --raw-output .[0].activeWorkspace.id
 socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | stdbuf -o0 grep '^workspace>>' | stdbuf -o0 awk -F '>>|,' '{print $2}'
+#+end_src
+
+* Launch bar
+
+#+begin_src sh :shebang #!/bin/sh :tangle ./launch_bars
+## Files and cmd
+EWW="eww -c $HOME/.config/eww/"
+
+## Run eww daemon if not running already
+if [[ ! $(pidof eww) ]]; then
+    ${EWW} daemon
+    sleep 1
+fi
+
+## Open widgets
+NB_MONITORS=($(hyprctl monitors -j | jaq -r '.[] | .id'))
+for i in "${!NB_MONITORS[@]}"; do
+    ${EWW} open bar$i
+done
 #+end_src

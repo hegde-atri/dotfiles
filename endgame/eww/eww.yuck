@@ -1,4 +1,4 @@
-(defwindow main
+(defwindow bar0
            :monitor 0
            :geometry (geometry :x "0%"
                                :y "0px"
@@ -11,7 +11,7 @@
            (main_bar)
 )
 
-(defwindow secondary
+(defwindow bar1
            :monitor 1
            :geometry (geometry :x "0%"
                                :y "0px"
