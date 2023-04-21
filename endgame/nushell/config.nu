@@ -5,165 +5,85 @@
 # And here is the theme collection
 # https://github.com/nushell/nu_scripts/tree/main/themes
 let dark_theme = {
-    # color for nushell primitives
-    separator: white
-    leading_trailing_space_bg: { attr: n } # no fg, no bg, attr none effectively turns this off
-    header: green_bold
-    empty: blue
-    # Closures can be used to choose colors for specific values.
-    # The value (in this case, a bool) is piped into the closure.
-    bool: { if $in { 'light_cyan' } else { 'light_gray' } }
-    int: white
+  separator: "#a9b7c6"
+    leading_trailing_space_bg: { attr: "n" }
+    header: { fg: "#6a8759" attr: "b" }
+    empty: "#9876aa"
+    bool: {|| if $in { "#629755" } else { "light_gray" } }
+    int: "#a9b7c6"
     filesize: {|e|
       if $e == 0b {
-        'white'
+        "#a9b7c6"
       } else if $e < 1mb {
-        'cyan'
-      } else { 'blue' }
+        "#629755"
+      } else {{ fg: "#9876aa" }}
     }
-    duration: white
-    date: { (date now) - $in |
+    duration: "#a9b7c6"
+    date: {|| (date now) - $in |
       if $in < 1hr {
-        'red3b'
+        { fg: "#4eade5" attr: "b" }
       } else if $in < 6hr {
-        'orange3'
+        "#4eade5"
       } else if $in < 1day {
-        'yellow3b'
+        "#bbb529"
       } else if $in < 3day {
-        'chartreuse2b'
+        "#6a8759"
       } else if $in < 1wk {
-        'green3b'
+        { fg: "#6a8759" attr: "b" }
       } else if $in < 6wk {
-        'darkturquoise'
+        "#629755"
       } else if $in < 52wk {
-        'deepskyblue3b'
-      } else { 'dark_gray' }
+        "#9876aa"
+      } else { "dark_gray" }
     }
-    range: white
-    float: white
-    string: white
-    nothing: white
-    binary: white
-    cellpath: white
-    row_index: green_bold
-    record: white
-    list: white
-    block: white
-    hints: dark_gray
+    range: "#a9b7c6"
+    float: "#a9b7c6"
+    string: "#a9b7c6"
+    nothing: "#a9b7c6"
+    binary: "#a9b7c6"
+    cellpath: "#a9b7c6"
+    row_index: { fg: "#6a8759" attr: "b" }
+    record: "#a9b7c6"
+    list: "#a9b7c6"
+    block: "#a9b7c6"
+    hints: "dark_gray"
 
-    shape_and: purple_bold
-    shape_binary: purple_bold
-    shape_block: blue_bold
-    shape_bool: light_cyan
-    shape_custom: green
-    shape_datetime: cyan_bold
-    shape_directory: cyan
-    shape_external: cyan
-    shape_externalarg: green_bold
-    shape_filepath: cyan
-    shape_flag: blue_bold
-    shape_float: purple_bold
-    # shapes are used to change the cli syntax highlighting
-    shape_garbage: { fg: "#FFFFFF" bg: "#FF0000" attr: b}
-    shape_globpattern: cyan_bold
-    shape_int: purple_bold
-    shape_internalcall: cyan_bold
-    shape_list: cyan_bold
-    shape_literal: blue
-    shape_matching_brackets: { attr: u }
-    shape_nothing: light_cyan
-    shape_operator: yellow
-    shape_or: purple_bold
-    shape_pipe: purple_bold
-    shape_range: yellow_bold
-    shape_record: cyan_bold
-    shape_redirection: purple_bold
-    shape_signature: green_bold
-    shape_string: green
-    shape_string_interpolation: cyan_bold
-    shape_table: blue_bold
-    shape_variable: purple
-}
+    shape_and: { fg: "#cc7832" attr: "b" }
+    shape_binary: { fg: "#cc7832" attr: "b" }
+    shape_block: { fg: "#9876aa" attr: "b" }
+    shape_bool: "#629755"
+    shape_custom: "#6a8759"
+    shape_datetime: { fg: "#629755" attr: "b" }
+    shape_directory: "#629755"
+    shape_external: "#629755"
+    shape_externalarg: { fg: "#6a8759" attr: "b" }
+    shape_filepath: "#629755"
+    shape_flag: { fg: "#9876aa" attr: "b" }
+    shape_float: { fg: "#cc7832" attr: "b" }
+    shape_garbage: { fg: "#FFFFFF" bg: "#FF0000" attr: "b" }
+    shape_globpattern: { fg: "#629755" attr: "b" }
+    shape_int: { fg: "#cc7832" attr: "b" }
+    shape_internalcall: { fg: "#629755" attr: "b" }
+    shape_list: { fg: "#629755" attr: "b" }
+    shape_literal: "#9876aa"
+    shape_match_pattern: "#6a8759"
+    shape_matching_brackets: { attr: "u" }
+    shape_nothing: "#629755"
+    shape_operator: "#bbb529"
+    shape_or: { fg: "#cc7832" attr: "b" }
+    shape_pipe: { fg: "#cc7832" attr: "b" }
+    shape_range: { fg: "#bbb529" attr: "b" }
+    shape_record: { fg: "#629755" attr: "b" }
+    shape_redirection: { fg: "#cc7832" attr: "b" }
+    shape_signature: { fg: "#6a8759" attr: "b" }
+    shape_string: "#6a8759"
+    shape_string_interpolation: { fg: "#629755" attr: "b" }
+    shape_table: { fg: "#9876aa" attr: "b" }
+    shape_variable: "#cc7832"
 
-let light_theme = {
-    # color for nushell primitives
-    separator: dark_gray
-    leading_trailing_space_bg: { attr: n } # no fg, no bg, attr none effectively turns this off
-    header: green_bold
-    empty: blue
-    # Closures can be used to choose colors for specific values.
-    # The value (in this case, a bool) is piped into the closure.
-    bool: { if $in { 'dark_cyan' } else { 'dark_gray' } }
-    int: dark_gray
-    filesize: {|e|
-      if $e == 0b {
-        'dark_gray'
-      } else if $e < 1mb {
-        'cyan_bold'
-      } else { 'blue_bold' }
-    }
-    duration: dark_gray
-  date: { (date now) - $in |
-    if $in < 1hr {
-      'red3b'
-    } else if $in < 6hr {
-      'orange3'
-    } else if $in < 1day {
-      'yellow3b'
-    } else if $in < 3day {
-      'chartreuse2b'
-    } else if $in < 1wk {
-      'green3b'
-    } else if $in < 6wk {
-      'darkturquoise'
-    } else if $in < 52wk {
-      'deepskyblue3b'
-    } else { 'dark_gray' }
-  }
-    range: dark_gray
-    float: dark_gray
-    string: dark_gray
-    nothing: dark_gray
-    binary: dark_gray
-    cellpath: dark_gray
-    row_index: green_bold
-    record: white
-    list: white
-    block: white
-    hints: dark_gray
-
-    shape_and: purple_bold
-    shape_binary: purple_bold
-    shape_block: blue_bold
-    shape_bool: light_cyan
-    shape_custom: green
-    shape_datetime: cyan_bold
-    shape_directory: cyan
-    shape_external: cyan
-    shape_externalarg: green_bold
-    shape_filepath: cyan
-    shape_flag: blue_bold
-    shape_float: purple_bold
-    # shapes are used to change the cli syntax highlighting
-    shape_garbage: { fg: "#FFFFFF" bg: "#FF0000" attr: b}
-    shape_globpattern: cyan_bold
-    shape_int: purple_bold
-    shape_internalcall: cyan_bold
-    shape_list: cyan_bold
-    shape_literal: blue
-    shape_matching_brackets: { attr: u }
-    shape_nothing: light_cyan
-    shape_operator: yellow
-    shape_or: purple_bold
-    shape_pipe: purple_bold
-    shape_range: yellow_bold
-    shape_record: cyan_bold
-    shape_redirection: purple_bold
-    shape_signature: green_bold
-    shape_string: green
-    shape_string_interpolation: cyan_bold
-    shape_table: blue_bold
-    shape_variable: purple
+    background: "#2b2b2b"
+    foreground: "#a9b7c6"
+    cursor: "#a9b7c6"
 }
 
 # Completion using carapace
@@ -261,7 +181,7 @@ let-env config = {
     case_sensitive: false # set to true to enable case-sensitive completions
     quick: true  # set this to false to prevent auto-selecting completions when only one remains
     partial: true  # set this to false to prevent partial filling of the prompt
-    algorithm: "prefix"  # prefix or fuzzy
+    algorithm: "fuzzy"  # prefix or fuzzy
     external: {
       enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up my be very slow
       max_results: 100 # setting it lower can improve completion performance at the cost of omitting some options
@@ -274,8 +194,8 @@ let-env config = {
   }
   cursor_shape: {
     emacs: line # block, underscore, line (line is the default)
-    vi_insert: block # block, underscore, line (block is the default)
-    vi_normal: underscore # block, underscore, line  (underscore is the default)
+    vi_insert: line # block, underscore, line (block is the default)
+    vi_normal: block # block, underscore, line  (underscore is the default)
   }
   color_config: $dark_theme   # if you want a light theme, replace `$dark_theme` to `$light_theme`
   use_grid_icons: true
@@ -290,10 +210,10 @@ let-env config = {
   render_right_prompt_on_last_line: false # true or false to enable or disable right prompt to be rendered on last line of the prompt.
 
   hooks: {
-    pre_prompt: [{
+    pre_prompt: [{||
       null  # replace with source code to run before the prompt is shown
     }]
-    pre_execution: [{
+    pre_execution: [{||
       null  # replace with source code to run before the repl input is run
     }]
     env_change: {
@@ -301,8 +221,11 @@ let-env config = {
         null  # replace with source code to run if the PWD environment is different since the last repl input
       }]
     }
-    display_output: {
+    display_output: {||
       if (term size).columns >= 100 { table -e } else { table }
+    }
+    command_not_found: {||
+      null  # replace with source code to return an error message when a command is not found
     }
   }
   menus: [
@@ -543,6 +466,7 @@ alias lla = exa --icons -la
 alias lt = exa --icons -T
 alias lta = exa --icons -Ta
 alias pi = ssh mizuuu@10.27.27.103
+alias lf = joshuto
 # -- Git Alias --
 alias gs = git status
 alias ga = git add .
@@ -554,9 +478,12 @@ alias gsb = git checkout -b
 alias gp = git push
 alias git-add-origin = git remote set-url --add origin
 # -- Action Alias --
-alias startdocker = sudo systemctl start docker.service
-alias startcups = sudo systemctl start cups.service
-alias bluetooth = sudo systemctl start bluetooth.service
+#alias startdocker = sudo systemctl start docker.service
+alias startdocker = sudo rc-service docker start
+# alias startcups = sudo systemctl start cups.service
+alias startcups = sudo rc-service cupsd start
+# alias bluetooth = sudo systemctl start bluetooth.service
+alias bluetooth = sudo rc-service bluetoothd start
 alias vpn = nmcli connection up thinkpad
 alias clip = wl-copy
 alias presentmd = npx @marp-team/marp-cli@^2 --bespoke.transition --preview
@@ -582,15 +509,17 @@ alias hypr = vim ~/.config/hypr/hyprland.conf
 # -- Program Alias --
 alias icat = kitty +kitten icat
 alias logseq = logseq --enable-features=UseOzonePlatform --ozone-platform=wayland
-alias vim = emacsclient -nc
+alias nvim = emacsclient -nc
+alias vim = emacsclient -nw
 alias vv = emacsclient -nw
 alias neovide = WINIT_UNIX_BACKEND=x11 neovide
 alias cd = z
 alias pp = ncmpcpp
 alias zz = zathura
+alias repo = repoman
 
 # -- Utility --
-alias hst = (history 1 -1 | cut -c 8- | sort | uniq | fzf | tr -d '\n' | wl-copy)
+# alias hst = (history 1 -1 | cut -c 8- | sort | uniq | fzf | tr -d '\n' | wl-copy)
 
 # -- Sync my music --
 alias sendMusic = rsync -avP ~/Music pi:~/
