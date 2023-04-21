@@ -1,0 +1,118 @@
+#+title: ncmpcpp config
+#+author: Atri Hegde
+#+property: header-args :tangle config
+#+auto_tangle: t
+
+* Table of Contents :TOC:
+- [[#music-dir][Music dir]]
+- [[#visualisation-settings][Visualisation settings]]
+- [[#appearance][Appearance]]
+  - [[#ui][UI]]
+  - [[#alternate-ui][Alternate UI]]
+  - [[#progress-bar][Progress bar]]
+  - [[#window][Window]]
+  - [[#song-list][Song list]]
+  - [[#colors][Colors]]
+- [[#behaviour][Behaviour]]
+- [[#scripts][Scripts]]
+  - [[#notification][Notification]]
+
+* Music dir
+
+#+begin_src conf
+mpd_host               = localhost
+mpd_port               = 6600
+mpd_music_dir          = ~/Music/music
+#+end_src
+
+* Visualisation settings
+
+#+begin_src conf
+visualizer_data_source = /tmp/mpd.fifo
+visualizer_output_name = "mpd_visualizer"
+visualizer_in_stereo   = "yes"
+visualizer_look        = ●●
+visualizer_type        = "ellipse"
+#+end_src
+
+* Appearance
+
+** UI
+
+#+begin_src conf
+autocenter_mode        = "yes"
+centered_cursor        = "yes"
+playlist_display_mode  = "columns"
+colors_enabled         = "yes"
+user_interface         = alternative
+volume_color           = "white"
+#+end_src
+
+** Alternate UI
+
+#+begin_src conf
+alternative_ui_separator_color        = "black"
+alternative_header_first_line_format  = $b$5$/b  $b$8{%t}|{%f}$/b $/b
+alternative_header_second_line_format = {$b{$2  %a$9}{ - $7  %b$9}{ ($2%y$9)}}|{%D}
+#+end_src
+
+** Progress bar
+
+#+begin_src conf
+progressbar_look            = "▂▂▂"
+progressbar_color           = "black"
+progressbar_elapsed_color   = "yellow"
+#+end_src
+
+** Window
+
+#+begin_src conf
+statusbar_visibility        = "no"
+header_visibility           = "no"
+titles_visibility           = "no"
+#+end_src
+
+** Song list
+
+#+begin_src conf
+song_status_format         = "$7%t"
+song_list_format           = "  %t $R%a %l  "
+song_library_format        = {{%a - %t} (%b)}|{%f}
+song_columns_list_format   = "(53)[white]{tr} (45)[blue]{a}"
+#+end_src
+
+** Colors
+
+#+begin_src conf
+main_window_color                   = "blue"
+current_item_prefix                 = "$(blue)$r"
+current_item_suffix                 = "$/r$(end)"
+#current_item_inactive_column_prefix = red
+#current_item_inactive_column_suffix = red
+color1 = "white"
+color2 = "red"
+#+end_src
+
+* Behaviour
+
+#+begin_src conf
+mpd_crossfade_time               = "2"
+allow_for_physical_item_deletion = "no"
+#+end_src
+
+* Scripts
+
+** Notification
+
+I usually have this disabled.
+
+#+begin_src shell :tangle ~/.local/bin/custom/songinfo :shebang #!/bin/sh
+music_dir="~/Music/music"
+previewdir="~/.config/ncmpcpp/previews"
+filename="$(mpc --format "$music_dir"/%file% current)"
+previewname="$previewdir/$(mpc --format %album% current | base64).png"
+
+[ -e "$previewname" ] || ffmpeg -y -i "$filename" -an -vf scale=128:128 "$previewname" > /dev/null 2>&1
+
+notify-send -r 27072 "Now Playing" "$(mpc --format '%title% \n%artist%' current)" -i "$previewname"
+#+end_src
