@@ -85,7 +85,7 @@ mpd
 swww init && swww img ~/wallpapers/tokyo-night/wall-04.webp &
 
 # --- Bar ---
-eww daemon && eww open main &
+~/.config/eww/launch_bars &
 
 # --- swayidle ---
 swayidle -w \
@@ -289,8 +289,8 @@ bind = $mainMod, Y, exec, emacsclient -nc
 bind = $mainMod, O, exec, ~/.local/bin/custom/lockscreen
 bind = $mainMod, P, exec, wlogout
 # --- eww bar ---
-bind = $mainMod, B, exec, eww open --toggle main
-bind = $mainMod SHIFT, B, exec, eww open --toggle secondary
+bind = $mainMod, B, exec, eww open --toggle bar0
+bind = $mainMod SHIFT, B, exec, eww open --toggle bar1
 # --- wofi things ---
 bind = $mainMod, space, exec, pkill wofi || wofi --show drun
 bind = $mainMod, W, exec, ~/.local/bin/custom/set-bg

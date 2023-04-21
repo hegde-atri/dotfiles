@@ -40,7 +40,7 @@ mpd
 swww init && swww img ~/wallpapers/tokyo-night/wall-04.webp &
 
 # --- Bar ---
-eww daemon && eww open main &
+~/.config/eww/launch_bars &
 
 # --- swayidle ---
 swayidle -w \
