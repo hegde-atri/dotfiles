@@ -4,8 +4,8 @@ path=~/wallpapers
 path="$(find $path -type d | grep -v .git | wofi --dmenu "Choose category")"
 
 if [ "$folder" == "-h" ] ; then
-	echo "First argument must be a folder within ~/Pictures/wallpapers"
+	echo "First argument must be a folder within ~/wallpapers"
 fi
 
 img="$(find $path -type f | grep -v .git | shuf -n 1)"
-swww img $img
+swww img $img --transition-type outer --transition-pos 0.854,0.977 --transition-step 90 --transition-fps 60
