@@ -91,9 +91,12 @@ let-env PATH = ($env.PATH | append "~/.cargo/bin")
 # Add local bin to path
 let-env PATH = ($env.PATH | append "~/.local/bin" | append "~/.local/bin/custom")
 # Add doom emacs to path
-let-env PATH = ($env.PATH | append "~/.config/emacs/bin")
+# let-env PATH = ($env.PATH | append "~/.config/emacs/bin")
+let-env PATH = ($env.PATH | append "~/.emacs.d/bin")
 # Ruby gems to path
-let-env PATH = ($env.PATH | append "/home/mizuuu/.rbenv/versions/3.1.3/bin/")
+# let-env PATH = ($env.PATH | append "/home/mizuuu/.rbenv/versions/2.6.6/bin")
+# Add go binaries to path
+let-env PATH = ($env.PATH | append "/home/mizuuu/go/bin")
 
 # starship
 mkdir ~/.cache/starship

@@ -118,9 +118,12 @@ let-env PATH = ($env.PATH | append "~/.cargo/bin")
 # Add local bin to path
 let-env PATH = ($env.PATH | append "~/.local/bin" | append "~/.local/bin/custom")
 # Add doom emacs to path
-let-env PATH = ($env.PATH | append "~/.config/emacs/bin")
+# let-env PATH = ($env.PATH | append "~/.config/emacs/bin")
+let-env PATH = ($env.PATH | append "~/.emacs.d/bin")
 # Ruby gems to path
-let-env PATH = ($env.PATH | append "/home/mizuuu/.rbenv/versions/3.1.3/bin/")
+# let-env PATH = ($env.PATH | append "/home/mizuuu/.rbenv/versions/2.6.6/bin")
+# Add go binaries to path
+let-env PATH = ($env.PATH | append "/home/mizuuu/go/bin")
 
 # starship
 mkdir ~/.cache/starship
@@ -604,7 +607,7 @@ alias la = exa --icons -a
 alias lla = exa --icons -la
 alias lt = exa --icons -T
 alias lta = exa --icons -Ta
-alias pi = ssh mizuuu@10.27.27.103
+alias pi = ssh pi
 alias lf = joshuto
 # -- Git Alias --
 alias gs = git status
@@ -613,6 +616,7 @@ alias gaa = git add -A .
 alias gc = git commit -m
 alias gb = git branch
 alias gsb = git checkout -b
+alias grc = git rebase --continue
 # alias gc=~/.local/bin/commit.sh
 alias gp = git push
 alias git-add-origin = git remote set-url --add origin
