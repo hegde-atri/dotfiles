@@ -36,6 +36,9 @@ killall xdg-desktop-portal
 /usr/libexec/xdg-desktop-portal-hyprland &
 sleep 2
 /usr/lib/xdg-desktop-portal &
+
+# --- dbus ---
+dbus-daemon --session --address=unix:path=$XDG_RUNTIME_DIR/bus &
 #+end_src
 
 ** Variables
@@ -43,9 +46,13 @@ sleep 2
 #+begin_src shell :tangle startup :shebang #!/bin/sh
 # --- OTHER settings ---
 export SDL_VIDEODRIVER=wayland
-export _JAVA_AWT_WM_NONREPARENTING=1
 export QT_QPA_PLATFORM=wayland
 export GDK_BACKEND="wayland,x11"
+# --- Java settings ---
+export _JAVA_AWT_WM_NONREPARENTING=1
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
+# export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+export JAVA_FONTS=/usr/share/fonts/TTF
 #+end_src
 
 ** GTK settings
@@ -73,7 +80,7 @@ gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
 /usr/bin/wireplumber &
 
 # --- Notification daemon ---
-dunst &
+mako &
 
 # --- Emacs ---
 emacs --daemon &
@@ -82,10 +89,10 @@ emacs --daemon &
 mpd
 
 # --- Background ---
-swww init && swww img ~/wallpapers/tokyo-night/wall-04.webp &
+swww init &
 
 # --- Bar ---
-~/.config/eww/launch_bars &
+# ~/.config/eww/launch_bars &
 
 # --- swayidle ---
 swayidle -w \
@@ -122,6 +129,7 @@ foot --server &
 monitor=eDP-1,preferred,0x1080,1.0
 monitor=DP-1,1920x1080@120,0x0,1.0
 # monitor=HDMI-A-1,preferred,1920x0,1.0
+# wsbind=1, HDMI-A-1
 wsbind=1, DP-1
 wsbind=2, DP-1
 wsbind=3, DP-1
@@ -267,7 +275,7 @@ windowrulev2 = float,class:^(firefox)$,title:^(Picture-in-Picture)$
 windowrulev2 = pin,class:^(firefox)$,title:^(Picture-in-Picture)$
 windowrulev2 = nofullscreenrequest,class:^(firefox)$,title:^(Picture-in-Picture)$
 # --- Opacity ---
-windowrule = opacity 0.95 0.9, Emacs
+windowrule = opacity 0.8 0.75, Emacs
 windowrule = opacity 1.0 0.7, kitty
 windowrule = opacity 1.0 0.7, foot
 

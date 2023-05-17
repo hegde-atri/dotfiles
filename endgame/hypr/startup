@@ -8,11 +8,18 @@ killall xdg-desktop-portal
 sleep 2
 /usr/lib/xdg-desktop-portal &
 
+# --- dbus ---
+dbus-daemon --session --address=unix:path=$XDG_RUNTIME_DIR/bus &
+
 # --- OTHER settings ---
 export SDL_VIDEODRIVER=wayland
-export _JAVA_AWT_WM_NONREPARENTING=1
 export QT_QPA_PLATFORM=wayland
 export GDK_BACKEND="wayland,x11"
+# --- Java settings ---
+export _JAVA_AWT_WM_NONREPARENTING=1
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
+# export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+export JAVA_FONTS=/usr/share/fonts/TTF
 
 # --- GTK settings ---
 gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
@@ -28,7 +35,7 @@ gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
 /usr/bin/wireplumber &
 
 # --- Notification daemon ---
-dunst &
+mako &
 
 # --- Emacs ---
 emacs --daemon &
@@ -37,10 +44,10 @@ emacs --daemon &
 mpd
 
 # --- Background ---
-swww init && swww img ~/wallpapers/tokyo-night/wall-04.webp &
+swww init &
 
 # --- Bar ---
-~/.config/eww/launch_bars &
+# ~/.config/eww/launch_bars &
 
 # --- swayidle ---
 swayidle -w \
