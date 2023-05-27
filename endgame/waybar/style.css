@@ -1,0 +1,109 @@
+* {
+    font-family:"FontAwesome", "Noto Sans", "Overpass";
+    font-size: 13px;
+}
+
+window#waybar {
+    background-color: rgba(0,0,0,0.4);
+    /* border-bottom: 2px solid white; */
+}
+
+#workspaces button {
+  transition: border 0.2s;
+  transition: color 0.2s;
+  margin: 0px 3px;
+  padding-right: 3px;
+  padding-left: 3px;
+  border-radius: 0px;
+  color: gray;
+  border-bottom: 3px solid gray;
+}
+
+#workspaces button.active {
+  color: #DCD7BA;
+  border-bottom: 3px solid #DCD7BA;
+}
+
+#mpd {
+  border-bottom: 3px solid #FF5D62;
+}
+
+#custom-spotify {
+  border-bottom: 3px solid #E46876;
+}
+
+#custom-weather {
+  border-bottom: 3px solid #D27E99;
+}
+
+#pulseaudio {
+  border-bottom: 3px solid #C0A36E;
+}
+
+#pulseaudio.muted {
+	background-color: rgba(255,0,0,0.2);
+	color: #cdd6f4;
+}
+
+#network {
+  border-bottom: 3px solid #98BB6C;
+}
+
+#memory {
+  border-bottom: 3px solid #A3D4D5;
+}
+
+#cpu {
+  border-bottom: 3px solid #7FB4CA;
+}
+
+#temperature {
+  border-bottom: 3px solid #9CABCA;
+}
+
+#backlight {
+  border-bottom: 3px solid #7E9CD8;
+}
+
+#battery {
+  border-bottom: 3px solid #957FB8;
+}
+
+#clock {
+  border-bottom: 3px solid #938AA9;
+}
+
+@keyframes flash {
+    to {
+        color: black;
+    }
+}
+
+#battery.critical:not(.charging) {
+    background-color: red;
+    color: white;
+    animation-name: flash;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#backlight,
+#battery,
+#clock,
+#cpu,
+#disk,
+#mode,
+#memory,
+#mpd,
+#tray,
+#custom-weather,
+#custom-spotify,
+#pulseaudio,
+#network {
+	border-radius: 0px;
+	/* margin: 6px 0px; */
+  margin: 0px 2px;
+	padding: 2px 6px;
+}
