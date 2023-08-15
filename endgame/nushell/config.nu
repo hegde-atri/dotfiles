@@ -87,14 +87,14 @@ let dark_theme = {
 }
 
 # Completion using carapace
-let-env PATH = ($env.PATH | prepend "/home/mizuuu/.config/carapace/bin")
+$env.PATH = ($env.PATH | prepend "/home/mizuuu/.config/carapace/bin")
 
 let carapace_completer = {|spans|
   carapace $spans.0 nushell $spans | from json
 }
 
 # The default config record. This is where much of your global configuration is setup.
-let-env config = {
+$env.config = {
   ls: {
     use_ls_colors: true # use the LS_COLORS environment variable to colorize output
     clickable_links: true # enable or disable clickable links. Your terminal has to support links.
@@ -455,8 +455,10 @@ source ~/.cache/starship/init.nu
 # Zoxide
 source ~/.zoxide.nu
 # PNPM
-let-env PNPM_HOME = $"($env.HOME)/Library/pnpm"
-let-env PATH = ($env.PATH | append $env.PNPM_HOME)
+# $env.PNPM_HOME = $"($env.HOME)/Library/pnpm"
+# $env.PATH = ($env.PATH | append $env.PNPM_HOME)
+source ~/.config/nushell/scripts/paste_image.nu
+# source ~/.config/nushell/scripts/secrets.nu
 
 alias l = exa --icons -l
 alias ls = exa --icons
@@ -489,7 +491,7 @@ alias vpn = nmcli connection up thinkpad
 alias clip = wl-copy
 alias presentmd = npx @marp-team/marp-cli@^2 --bespoke.transition --preview
 alias present-compilePDF = marp --pdf --allow-local-files
-alias ytmp3 = yt-dlp -f 'ba' -x --audio-format mp3 -o '%(title)s.%(ext)s' --embed-thumbnail --parse-metadata 'title:%(artist)s - %(title)s'
+alias ytmp3 = yt-dlp -f 'ba' -x --audio-format mp3 -o '%(artist)s - %(title)s.%(ext)s' --embed-thumbnail --parse-metadata 'title:%(artist)s - %(title)s'
 alias ytmp3-chapters = yt-dlp -f 'ba' -x --audio-format mp3 -o '%(title)s.%(ext)s' --embed-thumbnail --parse-metadata 'title:%(artist)s - %(title)s' --split-chapters  -o 'chapter:%(title)s/[%(section_number)s] - %(section_title)s.%(ext)s'
 alias ytmp4 = yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s'
 alias ytmp4-chapters = yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s' --split-chapters  -o 'chapter:%(title)s/[%(section_number)s] - %(section_title)s.%(ext)s'
@@ -524,6 +526,6 @@ alias repo = repoman
 
 # -- Sync my music --
 alias sendMusic = rsync -avP ~/Music pi:~/
-alias getMusic = echo 'TODO'
+alias getMusic = rsync -avP pi:~/Music ~
 
-rxfetch
+pfetch

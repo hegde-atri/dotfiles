@@ -16,11 +16,23 @@ I finally switched to nushell, what appeared to be the fastest when I tested the
 
 * Table of Contents :TOC:
 - [[#preface][Preface]]
+- [[#scripts][Scripts]]
+  - [[#paste-image][Paste image]]
 - [[#envnu][Env.nu]]
 - [[#confignu][Config.nu]]
   - [[#aliases][Aliases]]
   - [[#a-simple-fetch-to-finish-it-][A simple fetch to finish it :)]]
 - [[#gitignore][gitignore]]
+
+* Scripts
+
+** Paste image
+
+#+begin_src conf :mkdirp t :tangle scripts/paste_image.nu :shebang #!/bin/nu
+def paste_image [filename] {
+  wl-paste | convert - $filename
+}
+#+end_src
 
 * Env.nu
 
@@ -68,21 +80,21 @@ def create_right_prompt [] {
 }
 
 # Use nushell functions to define your right and left prompt
-let-env PROMPT_COMMAND = {|| create_left_prompt }
-let-env PROMPT_COMMAND_RIGHT = {|| create_right_prompt }
+$env.PROMPT_COMMAND = {|| create_left_prompt }
+$env.PROMPT_COMMAND_RIGHT = {|| create_right_prompt }
 
 # The prompt indicators are environmental variables that represent
 # the state of the prompt
-let-env PROMPT_INDICATOR = {|| "> " }
-let-env PROMPT_INDICATOR_VI_INSERT = {|| ": " }
-let-env PROMPT_INDICATOR_VI_NORMAL = {|| "> " }
-let-env PROMPT_MULTILINE_INDICATOR = {|| "::: " }
+$env.PROMPT_INDICATOR = {|| "> " }
+$env.PROMPT_INDICATOR_VI_INSERT = {|| ": " }
+$env.PROMPT_INDICATOR_VI_NORMAL = {|| "> " }
+$env.PROMPT_MULTILINE_INDICATOR = {|| "::: " }
 
 # Specifies how environment variables are:
 # - converted from a string to a value on Nushell startup (from_string)
 # - converted from a value back to a string when running external commands (to_string)
 # Note: The conversions happen *after* config.nu is loaded
-let-env ENV_CONVERSIONS = {
+$env.ENV_CONVERSIONS = {
   "PATH": {
     from_string: { |s| $s | split row (char esep) | path expand -n }
     to_string: { |v| $v | path expand -n | str join (char esep) }
@@ -96,34 +108,34 @@ let-env ENV_CONVERSIONS = {
 # Directories to search for scripts when calling source or use
 #
 # By default, <nushell-config-dir>/scripts is added
-let-env NU_LIB_DIRS = [
+$env.NU_LIB_DIRS = [
     ($nu.config-path | path dirname | path join 'scripts')
 ]
 
 # Directories to search for plugin binaries when calling register
 #
 # By default, <nushell-config-dir>/plugins is added
-let-env NU_PLUGIN_DIRS = [
+$env.NU_PLUGIN_DIRS = [
     ($nu.config-path | path dirname | path join 'plugins')
 ]
 
 # To add entries to PATH (on Windows you might use Path), you can use the following pattern:
-# let-env PATH = ($env.PATH | split row (char esep) | prepend '/some/path')
+# $env.PATH = ($env.PATH | split row (char esep) | prepend '/some/path')
 
 # Inherit the correct locale
-let-env LANG = "en_GB.UTF-8"
+$env.LANG = "en_GB.UTF-8"
 
 # Add cargo to path
-let-env PATH = ($env.PATH | append "~/.cargo/bin")
+$env.PATH = ($env.PATH | append "~/.cargo/bin")
 # Add local bin to path
-let-env PATH = ($env.PATH | append "~/.local/bin" | append "~/.local/bin/custom")
+$env.PATH = ($env.PATH | append "~/.local/bin" | append "~/.local/bin/custom")
 # Add doom emacs to path
-# let-env PATH = ($env.PATH | append "~/.config/emacs/bin")
-let-env PATH = ($env.PATH | append "~/.emacs.d/bin")
+$env.PATH = ($env.PATH | append "~/.config/emacs/bin")
+# $env.PATH = ($env.PATH | append "~/.emacs.d/bin")
 # Ruby gems to path
-# let-env PATH = ($env.PATH | append "/home/mizuuu/.rbenv/versions/2.6.6/bin")
+# $env.PATH = ($env.PATH | append "/home/mizuuu/.rbenv/versions/2.6.6/bin")
 # Add go binaries to path
-let-env PATH = ($env.PATH | append "/home/mizuuu/go/bin")
+$env.PATH = ($env.PATH | append "/home/mizuuu/go/bin")
 
 # starship
 mkdir ~/.cache/starship
@@ -225,14 +237,14 @@ let dark_theme = {
 }
 
 # Completion using carapace
-let-env PATH = ($env.PATH | prepend "/home/mizuuu/.config/carapace/bin")
+$env.PATH = ($env.PATH | prepend "/home/mizuuu/.config/carapace/bin")
 
 let carapace_completer = {|spans|
   carapace $spans.0 nushell $spans | from json
 }
 
 # The default config record. This is where much of your global configuration is setup.
-let-env config = {
+$env.config = {
   ls: {
     use_ls_colors: true # use the LS_COLORS environment variable to colorize output
     clickable_links: true # enable or disable clickable links. Your terminal has to support links.
@@ -593,8 +605,10 @@ source ~/.cache/starship/init.nu
 # Zoxide
 source ~/.zoxide.nu
 # PNPM
-let-env PNPM_HOME = $"($env.HOME)/Library/pnpm"
-let-env PATH = ($env.PATH | append $env.PNPM_HOME)
+# $env.PNPM_HOME = $"($env.HOME)/Library/pnpm"
+# $env.PATH = ($env.PATH | append $env.PNPM_HOME)
+source ~/.config/nushell/scripts/paste_image.nu
+# source ~/.config/nushell/scripts/secrets.nu
 #+end_src
 
 ** Aliases
@@ -631,7 +645,7 @@ alias vpn = nmcli connection up thinkpad
 alias clip = wl-copy
 alias presentmd = npx @marp-team/marp-cli@^2 --bespoke.transition --preview
 alias present-compilePDF = marp --pdf --allow-local-files
-alias ytmp3 = yt-dlp -f 'ba' -x --audio-format mp3 -o '%(title)s.%(ext)s' --embed-thumbnail --parse-metadata 'title:%(artist)s - %(title)s'
+alias ytmp3 = yt-dlp -f 'ba' -x --audio-format mp3 -o '%(artist)s - %(title)s.%(ext)s' --embed-thumbnail --parse-metadata 'title:%(artist)s - %(title)s'
 alias ytmp3-chapters = yt-dlp -f 'ba' -x --audio-format mp3 -o '%(title)s.%(ext)s' --embed-thumbnail --parse-metadata 'title:%(artist)s - %(title)s' --split-chapters  -o 'chapter:%(title)s/[%(section_number)s] - %(section_title)s.%(ext)s'
 alias ytmp4 = yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s'
 alias ytmp4-chapters = yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s' --split-chapters  -o 'chapter:%(title)s/[%(section_number)s] - %(section_title)s.%(ext)s'
@@ -666,17 +680,18 @@ alias repo = repoman
 
 # -- Sync my music --
 alias sendMusic = rsync -avP ~/Music pi:~/
-alias getMusic = echo 'TODO'
+alias getMusic = rsync -avP pi:~/Music ~
 #+end_src
 
 ** A simple fetch to finish it :)
 
 #+begin_src conf
-rxfetch
+pfetch
 #+end_src
 
 * gitignore
 
 #+begin_src gitignore :tangle .gitignore
 history.txt
+secrets.nu
 #+end_src

@@ -9,7 +9,7 @@ sleep 2
 /usr/lib/xdg-desktop-portal &
 
 # --- dbus ---
-dbus-daemon --session --address=unix:path=$XDG_RUNTIME_DIR/bus &
+# dbus-daemon --session --address=unix:path=$XDG_RUNTIME_DIR/bus &
 
 # --- OTHER settings ---
 export SDL_VIDEODRIVER=wayland
@@ -18,7 +18,7 @@ export GDK_BACKEND="wayland,x11"
 # --- Java settings ---
 export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
-# export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 export JAVA_FONTS=/usr/share/fonts/TTF
 
 # --- GTK settings ---
@@ -30,9 +30,9 @@ gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 
 # --- Pipewire / Audio ---
-/usr/bin/pipewire &
-/usr/bin/pipewire-pulse &
-/usr/bin/wireplumber &
+# /usr/bin/pipewire &
+# /usr/bin/pipewire-pulse &
+# /usr/bin/wireplumber &
 
 # --- Notification daemon ---
 mako &
@@ -41,18 +41,19 @@ mako &
 emacs --daemon &
 
 # --- MPD ---
-mpd
+mpd &
 
 # --- Background ---
 swww init &
 
 # --- Bar ---
 # ~/.config/eww/launch_bars &
+waybar &
 
 # --- swayidle ---
-swayidle -w \
-    timeout 300 '~/.local/bin/custom/lockscreen' \
-    before-sleep '~/.local/bin/custom/lockscreen' &
+#swayidle -w \
+#    timeout 300 '~/.local/bin/custom/lockscreen' \
+#    before-sleep '~/.local/bin/custom/lockscreen' &
 
 # --- Foot terminal ---
 foot --server &
@@ -61,7 +62,7 @@ foot --server &
 # firefox &
 
 # --- Scripts ---
-~/.local/bin/custom/look-away &
+# ~/.local/bin/custom/look-away &
 
 # --- gammastep ---
 # gammastep &
