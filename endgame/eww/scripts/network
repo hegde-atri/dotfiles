@@ -1,2 +1,10 @@
 #!/bin/sh
-name=$(nmcli c | rg '(wifi)|(ethernet)' | awk '{print ($1)}')
+connection_type=$(nmcli -t -f TYPE connection show --active >/dev/null)
+
+if echo "$connection_type" rg -q "802-11-wireless">/dev/null; then
+    echo "󰈀"
+elif echo "$connection_type" rg -q "802-3-ethernet" >/dev/null; then
+    echo "󰤨"
+else
+    echo ""
+fi

@@ -1,0 +1,2 @@
+#!/bin/sh
+name=$(nmcli c | rg '(wifi)|(ethernet)' | awk '{print ($1)}')

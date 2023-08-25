@@ -1,0 +1,669 @@
+#+title: EWW configuration
+#+author: Atri Hegde
+#+auto_tangle: t
+
+* Table of Contents :TOC:
+- [[#requirements][Requirements]]
+- [[#global-css][Global CSS]]
+- [[#main-bars-and-widgets][Main bars and widgets]]
+- [[#clock-and-calendar][Clock and Calendar]]
+  - [[#variables][Variables]]
+  - [[#widget][Widget]]
+  - [[#window][Window]]
+  - [[#styling][Styling]]
+- [[#system][System]]
+  - [[#cpu][CPU]]
+  - [[#ram][RAM]]
+  - [[#volume][Volume]]
+  - [[#brightness][Brightness]]
+  - [[#battery][Battery]]
+  - [[#control-centre][Control Centre]]
+- [[#network-and-vpn][Network and VPN]]
+- [[#mpd][MPD]]
+- [[#spotify][Spotify]]
+- [[#workspaces][Workspaces]]
+- [[#scripts][Scripts]]
+  - [[#memory][Memory]]
+  - [[#volume-1][Volume]]
+  - [[#brightness-1][Brightness]]
+  - [[#network][Network]]
+  - [[#vpn][VPN]]
+  - [[#music][Music]]
+  - [[#hypr][Hypr]]
+- [[#launch-bar][Launch bar]]
+
+* Requirements
+All the packages used/required.
+- =ripgrep=
+- =awk=
+- =alsa-utils=, to provide =amixer=
+* Global CSS
+
+Global css rules and variables.
+#+begin_src scss :tangle eww.scss
+$bg: transparent;
+$red: #e06c75;
+$error: #f38ba8;
+$warn: #e5c890;
+$success: #a6e3a1;
+
+$background-alt: #313244;
+$background-alt2: #1e1e2e;
+$foreground: #cdd6f4;
+$red-alt: #f38ba8;
+$yellow: #f9e2af;
+$orange: #fab387;
+$green: #a6e3a1;
+$blue: #89b4fa;
+$blue2: #74c7ec;
+$magenta: #cba6f7;
+$cyan: #94e2d5;
+
+,* {
+    all: unset;
+    font-family: "MonoLisa Nerd Font";
+}
+
+button {
+    padding-right: 10px;
+    padding-left: 10px;
+    transition: all;
+    transition-duration: 300ms;
+}
+
+.bat_mod, .ram_mod, .cpu_mod, .vpn_mod, .net_mod {
+    margin: 0px 10px 0px 10px;
+}
+#+end_src
+
+* Main bars and widgets
+Main windows, with their left, center and right modules.
+
+My main bar on my primary monitor
+
+#+begin_src lisp :tangle eww.yuck
+(defwindow bar0
+           :monitor 0
+           :geometry (geometry :x "0%"
+                               :y "0px"
+                               :width "100%"
+                               :height "30px"
+                               :anchor "top center")
+           :stacking "fg"
+           :exclusive true
+           :focusable false
+           (main_bar)
+)
+#+end_src
+
+Secondary bar for my secondary monitor if I am using one.
+
+#+begin_src lisp :tangle eww.yuck
+(defwindow bar1
+           :monitor 1
+           :geometry (geometry :x "0%"
+                               :y "0px"
+                               :width "100%"
+                               :height "30px"
+                               :anchor "top center")
+           :stacking "fg"
+           :exclusive true
+           :focusable false
+           (main_bar)
+)
+#+end_src
+
+Experimental island concept
+
+
+The bar configuration.
+
+#+begin_src lisp :tangle eww.yuck
+(defwidget main_bar []
+  (box :class "main_bar"
+       (left)
+       (center)
+       (right)
+  )
+)
+
+(defwidget left []
+  (box :space-evenly false
+       :halign "start"
+       :class "left_modules"
+  )
+)
+
+(defwidget center []
+  (box :space-evenly true
+       :halign "center"
+       :class "center_modules"
+       (music)
+  )
+)
+
+(defwidget right []
+  (box :halign "end"
+       :space-evenly false
+       :class "right_modules"
+       (vpn_module)
+       (sep)
+       (brightness_module)
+       (volume_module)
+       (sep)
+       (cpu_module)
+       (ram_module)
+       (battery_module)
+       (clock_module)
+  )
+)
+(defwidget sep []
+  (label :class "sep" :text "|")
+)
+#+end_src
+
+#+begin_src scss :tangle eww.scss
+.main_bar{
+    background-color: $bg;
+}
+
+.left_modules, .right_modules, .center_modules{
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 8px;
+    border-radius: 15px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+}
+
+.sep {
+    color: rgb(90, 90, 90);
+}
+#+end_src
+
+* Clock and Calendar
+** Variables
+#+begin_src lisp :tangle eww.yuck
+(defvar cal_reveal false)
+(defpoll cal_day :interval "1h" "date '+%d'")
+(defpoll cal_month :interval "1h" "date '+%m'")
+(defpoll time :interval "1s"
+              :initial "initial-value"
+              `date +%H:%M:%S`)
+#+end_src
+** Widget
+#+begin_src lisp :tangle eww.yuck
+(defwidget clock_module []
+  (eventbox :onhover "${EWW_CMD} update cal_reveal=true"
+            :onhoverlost "${EWW_CMD} update cal_reveal=false"
+            :onclick "${EWW_CMD} open --toggle calendar_window"
+            (box :space-evenly false :orientation "h"
+                 (label :class "clock" :text "${time}")
+                 (revealer :transition "slideleft"
+                           :reveal cal_reveal
+                           :duration "350ms"
+                           (box
+                             (label :class "cal_label_day" :text "${cal_day}")
+                             (label :class "cal_label_month" :text "${cal_month}")
+                           )
+                 )
+            )
+  )
+)
+#+end_src
+** Window
+#+begin_src lisp :tangle eww.yuck
+(defwidget calendar_module []
+  (box :class "cal" :orientation "vertical"
+       (box :class "cal-in"
+       (calendar :class "cal-wid")))
+)
+
+(defwindow calendar_window
+  :monitor 0
+  :geometry (geometry :x "0px"
+                      :y "5px"
+                      :anchor "top right")
+  (calendar_module)
+)
+#+end_src
+** Styling
+
+#+begin_src scss :tangle eww.scss
+.clock {
+    font-family: "Iosevka Aile";
+}
+
+.cal_label_day {
+    font-family: "Iosevka Aile";
+    padding-left: 10px;
+    color: $red;
+}
+
+.cal_label_month {
+    font-family: "Iosevka Aile";
+    color: $warn;
+}
+
+#+end_src
+* System
+** CPU
+*** Widget
+#+begin_src lisp :tangle eww.yuck
+(defpoll cpu_temp :interval "5s" "(expr $(cat /sys/class/hwmon/hwmon3/temp1_input) / 1000)")
+(defwidget cpu_module []
+  (box :class "cpu_mod"
+       (circular-progress
+         :valign "center"
+         :class "cpu"
+         :clockwise true
+         :start-at 75
+         :thickness 4
+         :value "${EWW_CPU.avg}"
+         (button
+           :class "cpu_icon"
+           :tooltip "${cpu_temp}°C"
+           :onclick `notify-send "Info centre"`
+           ""))))
+
+#+end_src
+*** Styling
+
+#+begin_src scss :tangle eww.scss
+.cpu {
+    color: rgb(86, 182, 194);
+    background-color: rgb(10, 50, 80);
+}
+
+.cpu_icon {
+    min-height: 0;
+    min-width: 0;
+    color: transparent;
+    padding: 0px;
+    margin: 6px;
+}
+#+end_src
+** RAM
+*** Widget
+#+begin_src lisp :tangle eww.yuck
+(defwidget ram_module []
+  (box :class "ram_mod"
+       (circular-progress
+         :valign "center"
+         :class "ram"
+         :clockwise true
+         :start-at 75
+         :thickness 4
+         :value "${EWW_RAM.used_mem_perc}"
+       (button
+         :class "ram_icon"
+         :tooltip "${EWW_RAM.used_mem_perc}%"
+         :onclick `notify-send "Info centre"`
+         ""))))
+
+
+#+end_src
+*** Styling
+#+begin_src scss :tangle eww.scss
+.ram {
+    color: rgb(97, 175, 239);
+    background-color: rgb(30, 70, 90);
+}
+
+.ram_icon {
+    min-height: 0;
+    min-width: 0;
+    padding: 0px;
+    color: transparent;
+    margin: 6px;
+}
+
+#+end_src
+** Volume
+
+#+begin_src lisp :tangle eww.yuck
+(defvar vol_reveal false)
+(defpoll vol_percent :interval "3s" "~/.config/eww/scripts/volume")
+(defpoll mic_percent :interval "3s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+
+(defwidget volume_module []
+  (eventbox :onhover "${EWW_CMD} update vol_reveal=true"
+            :onhoverlost "${EWW_CMD} update vol_reveal=false"
+    (box :orientation "h" :space-evenly "false" :class "metric"
+      (button :onclick "pavucontrol &" :class "vol_icon" "󰕾")
+      (revealer :transition "slideleft"
+                :reveal vol_reveal
+                :duration "350ms"
+        (scale :class "vol_bar"
+               :value vol_percent
+               :tooltip "${vol_percent}"
+               :min 0
+               :max 101
+               :onchange "amixer -D pulse sset Master {}%")
+    )
+  )
+  )
+)
+#+end_src
+
+#+begin_src scss :tangle eww.scss
+.metric scale trough highlight {
+  background-color: rgba(90, 80, 185, 1);
+  color: #000000;
+  border-radius: 10px;
+}
+.metric scale trough {
+  background-color: rgba(20, 30, 120, 0.6);
+  border-radius: 10px;
+  min-height: 12px;
+  min-width: 100px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.vol_icon {
+    font-size: 18px;
+    color: #a1bdce;
+    margin: 0px 10px 0px 10px;
+}
+
+.inner-mod{
+    margin: 0px 0px 0px 0px;
+    border-radius: 10px 16px 0px 10px;
+}
+#+end_src
+
+** Brightness
+
+#+begin_src lisp :tangle eww.yuck
+(defvar bright_reveal false)
+(defpoll bright_percent :interval "3s" "dash ~/.config/eww/scripts/brightness percent")
+(defpoll bright_symbol :interval "1s" "dash ~/.config/eww/scripts/brightness symbol")
+(defwidget brightness_module []
+  (eventbox :onhover "${EWW_CMD} update bright_reveal=true"
+            :onhoverlost "${EWW_CMD} update bright_reveal=false"
+            (box :orientation "h" :space-evenly "false" :class "metric"
+                 (button :class "vol_icon" bright_symbol)
+                 (revealer :transition "slideleft"
+                           :reveal bright_reveal
+                           :duration "350ms"
+                           (scale :class "vol_bar"
+                                  :value bright_percent
+                                  :tooltip "${bright_percent}"
+                                  :min 0
+                                  :max 101
+                                  :onchange "brightnessctl s {}%")))))
+
+#+end_src
+
+#+begin_src scss :tangle eww.scss
+#+end_src
+
+** Battery
+*** Widget
+
+#+begin_src lisp :tangle eww.yuck
+(defwidget battery_module []
+  (box :class "bat_mod"
+    (circular-progress :valign "center"
+                       :class "bat"
+                       :clockwise true
+                       :start-at 75
+                       :thickness 4
+                       :value "${EWW_BATTERY.BAT0.capacity}"
+      (button
+        :class "bat_icon"
+        :tooltip "battery on ${EWW_BATTERY.BAT0.capacity}%"
+        :onclick `notify-send "info-centre"`
+        "")
+    )
+  )
+)
+
+#+end_src
+*** Styling
+#+begin_src scss :tangle eww.scss
+.bat {
+    color: rgb(152, 195, 121);
+    background-color: rgb(15, 80, 60);
+}
+
+.bat_icon {
+    min-height: 0;
+    min-width: 0;
+    color: transparent;
+    padding: 0px;
+    margin: 6px;
+}
+#+end_src
+** Control Centre
+*** Window
+*** Widgets
+*** Styling
+#+begin_src scss :tangle eww.scss
+
+#+end_src
+#+begin_src scss :tangle eww.scss
+
+#+end_src
+* Network and VPN
+
+#+begin_src lisp :tangle eww.yuck
+(defvar network_reveal false)
+(defvar network_centre false)
+(defwidget network_module []
+  (box :class "network_module"
+       (button
+         :class "network_button"
+         :tooltip "tooltip"
+         :onclick "${EWW_CMD} update network_reveal true"
+         "network")
+  )
+)
+#+end_src
+
+#+begin_src lisp :tangle eww.yuck
+(defpoll vpn :interval "2s" "~/.config/eww/scripts/vpn label")
+(defpoll vpn_tip :interval "2s" "~/.config/eww/scripts/vpn tooltip")
+(defwidget vpn_module []
+  (box :class "vpn_mod"
+       (button
+         :class "vpn_button ${vpn_tip == "Disconnected" ? "vpn_inactive" : "vpn_active"}"
+         :tooltip vpn_tip
+         :onclick `nmcli con up thinkpad`
+         :onrightclick `nmcli con down thinkpad`
+         vpn)))
+
+#+end_src
+
+#+begin_src scss :tangle eww.scss
+.vpn_button {
+}
+
+.vpn_inactive {
+    color: $warn;
+}
+
+.vpn_active {
+    color: $success;
+}
+#+end_src
+
+* MPD
+
+Temporary solution I stole while I get time to make my own
+
+#+begin_src lisp :tangle eww.yuck
+;; MPD widget
+(defvar music_reveal false)
+(defpoll song :interval "2s"  "~/.config/eww/scripts/music_info --song")
+(defpoll song_artist :interval "2s"  "~/.config/eww/scripts/music_info --artist")
+(defpoll current_status :interval "1s"  "~/.config/eww/scripts/music_info --time")
+(defpoll song_status :interval "2s"  "~/.config/eww/scripts/music_info --status")
+(defpoll cover_art :interval "2s"  "~/.config/eww/scripts/music_info --cover")
+
+(defwidget music []
+  (eventbox :onhover "${EWW_CMD} update music_reveal=true"
+			  :onhoverlost "${EWW_CMD} update music_reveal=false"
+		(box :class "module-2" :orientation "h" :space-evenly "false" :vexpand "false" :hexpand "false"
+			(box :class "song_cover_art" :vexpand "false" :hexpand "false" :style "background-image: url('${cover_art}');")
+			(button :class "song" :onclick "~/.config/eww/scripts/pop music" song)
+	    (revealer :transition "slideright"
+			      :reveal music_reveal
+			      :duration "350ms"
+          (box :vexpand "false" :hexpand "false" :orientation "h"
+                    (button :class "song_btn_prev" :onclick "~/.config/eww/scripts/music_info --prev" "")
+					(button :class "song_btn_play" :onclick "~/.config/eww/scripts/music_info --toggle" song_status)
+					(button :class "song_btn_next" :onclick "~/.config/eww/scripts/music_info --next" ""))))))
+#+end_src
+
+* Spotify
+* Workspaces
+
+#+begin_src lisp :tangle eww.yuck
+;; Window title
+(deflisten window :initial "..." "dash ~/.config/eww/scripts/hypr/window-title")
+(defwidget window_name []
+  (box
+    (label :limit-width 50 :text window)
+  )
+)
+
+;; Workspaces
+(deflisten workspaces :init "[]" "dash ~/.config/eww/scripts/hypr/get-workspaces")
+(deflisten current_workspace :initial "2" "dash ~/.config/eww/scripts/hypr/get-active-workspace")
+(defwidget workspaces []
+  (box :space-evenly true
+       (for workspace in workspaces
+            (eventbox :class "workspace-entry ${workspace.id == current_workspace ? "active-workspace" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
+                 (label :text "${workspace.id}")
+            )
+       )
+  )
+)
+#+end_src
+
+#+begin_src scss :tangle eww.scss
+.workspace {
+}
+.occupied {
+    color: $foreground;
+}
+
+.empty{
+    color: $background-alt;
+}
+.active-workspace {
+    color: white;
+}
+#+end_src
+
+* Scripts
+** Memory
+Simple argument parsing for the different options
+#+begin_src sh :mkdirp yes :tangle ./scripts/memory :shebang "#!/bin/sh"
+total="$(free --mega | rg Mem: | awk '{print $2}')"
+free="$(free --mega | rg Mem: | awk '{print $4}')"
+avail="$(free --mega | rg Mem: | awk '{print $7}')"
+used=$(expr $total - $avail)
+cache="$(free --mega | rg Mem: | awk '{print $6}')"
+
+if [ "$1" = "total" ]; then
+    echo $total
+elif [ "$1" = "used" ]; then
+    echo $used
+elif [ "$1" = "free" ]; then
+    echo $free
+elif [ "$1" = "percent" ]; then
+    echo $(awk "BEGIN { pc=100*${used}/${total}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
+fi
+#+end_src
+** Volume
+
+#+begin_src sh :mkdirp yes :tangle ./scripts/volume :shebang "#!/bin/sh"
+amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'
+#+end_src
+
+** Brightness
+
+#+begin_src sh :mkdirp yes :tangle ./scripts/brightness :shebang #!/bin/sh
+if [ "$1" = "percent" ]; then
+    brightnessctl g | awk '{ perc = $1/255 * 100 }; END { print perc }'
+elif [ "$1" = "symbol" ]; then
+    perc=$(brightnessctl g)
+    if [ $perc -gt 153 ]; then
+        echo "󰃠" && exit
+    elif [ $perc -gt 76 ]; then
+        echo "󰃟" && exit
+    else
+        echo "󰃞"
+    fi
+fi
+#+end_src
+
+** Network
+*** TODO
+#+begin_src sh :mkdirp yes :tangle ./scripts/network :shebang "#!/bin/sh"
+name=$(nmcli c | rg '(wifi)|(ethernet)' | awk '{print ($1)}')
+
+#+end_src
+** VPN
+
+#+begin_src sh :mkdirp yes :tangle ./scripts/vpn :shebang "#!/bin/sh"
+if [ "$1" = "label" ]; then
+    test -d /proc/sys/net/ipv4/conf/ppp0 && echo "󰖂 UoS" && exit
+    test -d /proc/sys/net/ipv4/conf/thinkpad && echo "󰖂 Home" && exit
+    echo " N/A" && exit
+elif [ "$1" = tooltip ]; then
+    test -d /proc/sys/net/ipv4/conf/ppp0 && echo "󰖂 Connected to UoS" && exit
+    test -d /proc/sys/net/ipv4/conf/thinkpad && echo "󰖂 Connected home" && exit
+    echo "Disconnected" && exit
+fi
+#+end_src
+** Music
+** Hypr
+*** Window title
+
+#+begin_src sh :mkdirp yes :tangle ./scripts/window-title :shebang "#!/bin/sh"
+hyprctl activewindow -j | jq --raw-output .title
+socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | stdbuf -o0 grep '^activewindow>>' | stdbuf -o0 awk -F '>>|,' '{print $3}'
+#+end_src
+*** Workspaces
+=get-workspaces= returns all the workspaces.
+
+#+begin_src bash :mkdirp yes :tangle ./scripts/hypr/get-workspaces :shebang "#!/bin/bash"
+spaces (){
+        WORKSPACE_WINDOWS=$(hyprctl workspaces -j | jq 'map({key: .id | tostring, value: .windows}) | from_entries')
+        echo "$(seq 1 10 | jq --argjson windows "${WORKSPACE_WINDOWS}" --slurp -Mc 'map(tostring) | map({id: ., windows: ($windows[.]//0)})')"
+}
+
+spaces
+socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | while read -r line; do
+        spaces
+done
+#+end_src
+
+=get-active-workspace= returns the active workspace.
+#+begin_src sh :mkdirp yes :tangle ./scripts/hypr/get-active-workspace :shebang "#!/bin/sh"
+hyprctl monitors -j | jq --raw-output .[0].activeWorkspace.id
+socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | stdbuf -o0 grep '^workspace>>' | stdbuf -o0 awk -F '>>|,' '{print $2}'
+#+end_src
+
+* Launch bar
+
+#+begin_src sh :shebang #!/bin/sh :tangle ./launch_bars
+## Files and cmd
+EWW="eww -c $HOME/.config/eww/"
+
+## Run eww daemon if not running already
+if [[ ! $(pidof eww) ]]; then
+    ${EWW} daemon
+    sleep 1
+fi
+
+## Open widgets
+NB_MONITORS=($(hyprctl monitors -j | jaq -r '.[] | .id'))
+for i in "${!NB_MONITORS[@]}"; do
+    ${EWW} open bar$i
+done
+#+end_src

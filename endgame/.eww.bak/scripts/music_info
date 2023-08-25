@@ -22,7 +22,7 @@ get_song() {
 		echo "Offline"
 	else
 		echo "$song"
-	fi
+	fi	
 }
 
 ## Get artist
@@ -32,7 +32,7 @@ get_artist() {
 		echo ""
 	else
 		echo "$artist"
-	fi
+	fi	
 }
 
 ## Get time
@@ -42,7 +42,7 @@ get_time() {
 		echo "0"
 	else
 		echo "$time"
-	fi
+	fi	
 }
 get_ctime() {
 	ctime=`mpc status | grep "#" | awk '{print $3}' | sed 's|/.*||g'`
@@ -50,7 +50,7 @@ get_ctime() {
 		echo "0:00"
 	else
 		echo "$ctime"
-	fi
+	fi	
 }
 get_ttime() {
 	ttime=`mpc -f %time% current`
@@ -58,7 +58,7 @@ get_ttime() {
 		echo "0:00"
 	else
 		echo "$ttime"
-	fi
+	fi	
 }
 
 ## Get cover
