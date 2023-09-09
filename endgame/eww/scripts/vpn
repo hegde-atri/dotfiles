@@ -2,7 +2,7 @@
 if [ "$1" = "label" ]; then
     test -d /proc/sys/net/ipv4/conf/ppp0 && echo "󰖂 UoS" && exit
     test -d /proc/sys/net/ipv4/conf/thinkpad && echo "󰖂 Home" && exit
-    echo "  N/A" && exit
+    echo " N/A" && exit
 elif [ "$1" = tooltip ]; then
     test -d /proc/sys/net/ipv4/conf/ppp0 && echo "󰖂 Connected to UoS" && exit
     test -d /proc/sys/net/ipv4/conf/thinkpad && echo "󰖂 Connected home" && exit

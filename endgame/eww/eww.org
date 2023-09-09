@@ -1,79 +1,246 @@
-#+title: Eww
+#+title: EWW configuration
+#+author: Atri Hegde
 #+auto_tangle: t
 
-* Windows
+* Table of Contents :TOC:
+- [[#requirements][Requirements]]
+- [[#global-css][Global CSS]]
+- [[#main-bars-and-widgets][Main bars and widgets]]
+- [[#clock-and-calendar][Clock and Calendar]]
+  - [[#variables][Variables]]
+  - [[#widget][Widget]]
+  - [[#window][Window]]
+  - [[#styling][Styling]]
+- [[#system][System]]
+  - [[#cpu][CPU]]
+  - [[#ram][RAM]]
+  - [[#volume][Volume]]
+  - [[#brightness][Brightness]]
+  - [[#battery][Battery]]
+- [[#network][Network]]
+  - [[#network-button][Network button]]
+  - [[#network-window][Network window]]
+- [[#vpn][VPN]]
+  - [[#widget-1][Widget]]
+  - [[#script][Script]]
+  - [[#styling-1][Styling]]
+- [[#spotify][Spotify]]
+  - [[#widget-2][Widget]]
+  - [[#window-1][Window]]
+  - [[#script-1][Script]]
+  - [[#styling-2][Styling]]
+- [[#workspaces][Workspaces]]
+  - [[#widget-3][Widget]]
+  - [[#script-2][Script]]
+  - [[#styling-3][Styling]]
+- [[#control-center][Control Center]]
+  - [[#main-widget][Main widget]]
+  - [[#power-controls][Power controls]]
+- [[#launch-bar][Launch bar]]
+
+* Requirements
+All the packages used/required.
+- =ripgrep=
+- =awk=
+- =alsa-utils=, to provide =amixer=
+
+* Global CSS
+
+Global css rules and variables.
+#+begin_src scss :tangle eww.scss
+$bg: transparent;
+$red: #e06c75;
+$error: #f38ba8;
+$warn: #e5c890;
+$success: #a6e3a1;
+
+$background: #0e1013    ;
+$background-alt: #313244;
+$background-alt2: #1e1e2e;
+$foreground: #cdd6f4;
+$red-alt: #f38ba8;
+$yellow: #f9e2af;
+$orange: #fab387;
+$green: #a6e3a1;
+$blue: #89b4fa;
+$blue2: #74c7ec;
+$magenta: #cba6f7;
+$cyan: #94e2d5;
+
+,* {
+    all: unset;
+    font-family: "MonoLisa Nerd Font";
+}
+
+button {
+    padding-right: 10px;
+    padding-left: 10px;
+    transition: all;
+    transition-duration: 300ms;
+}
+
+.bat_mod, .ram_mod, .cpu_mod, .vpn_mod, .net_mod {
+    margin: 0px 10px 0px 10px;
+}
+#+end_src
+
+* Main bars and widgets
+Main windows, with their left, center and right modules.
+
+My main bar on my primary monitor
 
 #+begin_src yuck :tangle eww.yuck
 (defwindow bar0
            :monitor 0
            :geometry (geometry :x "0%"
                                :y "0px"
-                               :width "10%"
-                               :height "40px"
+                               :width "100%"
+                               :height "30px"
                                :anchor "top center")
            :stacking "fg"
-           :focusable "false"
-           :exclusive "false"
-  (main_bar))
+           :exclusive true
+           :focusable false
+           (main_bar)
+)
+#+end_src
 
+Secondary bar for my secondary monitor if I am using one.
+
+#+begin_src yuck :tangle eww.yuck
 (defwindow bar1
            :monitor 1
            :geometry (geometry :x "0%"
                                :y "0px"
-                               :width "10%"
-                               :height "40px"
+                               :width "100%"
+                               :height "30px"
                                :anchor "top center")
            :stacking "fg"
-           :focusable "false"
-           :exclusive "false"
-  (main_bar))
+           :exclusive true
+           :focusable false
+           (main_bar)
+)
 #+end_src
 
-#+begin_src scss :tangle eww.scss
-,* {
-  all: unset;
-}
-.background {
-  background: black;
-  border-radius: 5px;
-}
+Control centre
 
-button {
-  padding: 10px;
-}
+#+begin_src yuck :tangle eww.yuck
+(defwindow control_centre
+           :monitor 0
+           :geometry (geometry :x "0%"
+                               :y "0px"
+                               :width "90%"
+                               :height "90%"
+                               :anchor "center center")
+           :stacking "overlay"
+           :exclusive false
+           :focusable true
+           (control_centre_widget)
+)
 #+end_src
 
-** Main widget
+The bar configuration.
 
 #+begin_src yuck :tangle eww.yuck
 (defwidget main_bar []
-           (box :class "main_bar"
-                (vpn_module)
-                (clock_module)
-                (battery_module)
-                (net_module)
-           )
+  (box :class "main_bar"
+       (left)
+       (center)
+       (right)
+  )
+)
+
+(defwidget left []
+  (box :space-evenly false
+       :halign "start"
+       :class "left_modules"
+       (workspaces)
+  )
+)
+
+(defwidget center []
+  (box :space-evenly true
+       :halign "center"
+       :class "center_modules"
+       (music)
+  )
+)
+
+(defwidget right []
+  (box :halign "end"
+       :space-evenly false
+       :class "right_modules"
+       (vpn_module)
+       (network_module)
+       (sep)
+       (brightness_module)
+       (volume_module)
+       (sep)
+       (cpu_module)
+       (ram_module)
+       (battery_module)
+       (clock_module)
+  )
+)
+(defwidget sep []
+  (label :class "sep" :text "|")
 )
 #+end_src
 
+#+begin_src scss :tangle eww.scss
+.main_bar{
+    background-color: $background;
+}
 
-* Widgets
+.left_modules, .right_modules, .center_modules{
+    padding: 8px;
+    border-radius: 15px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+}
 
-** Time
+.sep {
+    color: rgb(90, 90, 90);
+}
+#+end_src
+
+* Clock and Calendar
+** Variables
 
 #+begin_src yuck :tangle eww.yuck
+(defvar cal_reveal false)
+(defpoll cal_day :interval "1h" "date '+%d'")
+(defpoll cal_month :interval "1h" "date '+%m'")
 (defpoll time :interval "1s"
               :initial "initial-value"
-              `date +%H:%M`)
+              `date +%H:%M:%S`)
+#+end_src
 
+** Widget
+
+#+begin_src yuck :tangle eww.yuck
 (defwidget clock_module []
-           (eventbox :onclick "${EWW_CMD} open --toggle calendar_window"
-            (box :space-evenly true :orientation "h"
+  (eventbox :onhover "${EWW_CMD} update cal_reveal=true"
+            :onhoverlost "${EWW_CMD} update cal_reveal=false"
+            :onclick "${EWW_CMD} open --toggle calendar_window"
+            (box :space-evenly false :orientation "h"
                  (label :class "clock" :text "${time}")
+                 (revealer :transition "slideleft"
+                           :reveal cal_reveal
+                           :duration "350ms"
+                           (box
+                             (label :class "cal_label_day" :text "${cal_day}")
+                             (label :class "cal_label_month" :text "${cal_month}")
+                           )
+                 )
             )
-            )
+  )
 )
+#+end_src
 
+** Window
+
+#+begin_src yuck :tangle eww.yuck
 (defwidget calendar_module []
   (box :class "cal" :orientation "vertical"
        (box :class "cal-in"
@@ -83,22 +250,34 @@ button {
 (defwindow calendar_window
   :monitor 0
   :geometry (geometry :x "0px"
-                      :y "40px"
-                      :anchor "top center")
+                      :y "5px"
+                      :anchor "top right")
   (calendar_module)
 )
 #+end_src
 
+** Styling
+
 #+begin_src scss :tangle eww.scss
 .clock {
-  font-family: "JetBrains Mono";
-  font-size: 25px;
+    font-family: "Iosevka Aile";
+}
+
+.cal_label_day {
+    font-family: "Iosevka Aile";
+    padding-left: 10px;
+    color: $red;
+}
+
+.cal_label_month {
+    font-family: "Iosevka Aile";
+    color: $warn;
 }
 
 .cal {
   background-color: black;
-  font-family: "JetBrains Mono";
-  font-size: 16px;
+  font-family: "Iosevka Aile";
+  font-size: 15px;
   font-weight: normal;
 
 .cal-in {
@@ -140,153 +319,645 @@ calendar.highlight {
 calendar:indeterminate {
   color: #808080;
 }
+
 #+end_src
 
-** Battery
+* System
+** CPU
+*** Widget
 
 #+begin_src yuck :tangle eww.yuck
-(defpoll bat_status :interval "3s" "~/.config/eww/scripts/bat_status")
-(defwidget battery_module []
-           (box :class "bat_mod"
-                (circular-progress :valign "center"
-                                   :class "bat"
-                                   :clockwise true
-                                   :start-at 75
-                                   :thickness 5
-                                   :value "${EWW_BATTERY.BAT0.capacity}"
-                                   (button
-                                    :class "bat_icon ${bat_status == "Charging" ? "bat_charging" : "bat_charged"}"
-                                    :tooltip "battery on ${EWW_BATTERY.BAT0.capacity}%"
-                                    bat_status
-                                    )
-                                   )
-                )
-           )
+(defpoll cpu_temp :interval "5s" "(expr $(cat /sys/class/hwmon/hwmon3/temp1_input) / 1000)")
+(defwidget cpu_module []
+  (box :class "cpu_mod"
+       (circular-progress
+         :valign "center"
+         :class "cpu"
+         :clockwise true
+         :start-at 75
+         :thickness 4
+         :value "${EWW_CPU.avg}"
+         (button
+           :class "cpu_icon"
+           :tooltip "${cpu_temp}°C"
+           :onclick `notify-send "Info centre"`
+           ""))))
+
 #+end_src
+
+*** Styling
 
 #+begin_src scss :tangle eww.scss
-.bat {
-  color: rgb(152, 195, 121);
-  background-color: rgb(15, 80, 60);
+.cpu {
+    color: rgb(86, 182, 194);
+    background-color: rgb(10, 50, 80);
 }
 
-
-.bat_icon {
-  min-height: 0;
-  min-width: 0;
-  color:transparent;
-  font-size: 12px;
-  margin: 2px;
-  background-color: black;
-}
-
-.bat_charged {
-  color: gray;
-}
-.bat_charging {
-  color: yellow;
+.cpu_icon {
+    min-height: 0;
+    min-width: 0;
+    color: transparent;
+    padding: 0px;
+    margin: 6px;
 }
 #+end_src
 
-#+begin_src sh :shebang #!/bin/sh :mkdirp true :tangle ./scripts/bat_status
-status=$(cat /sys/class/power_supply/BAT0/status)
-if [ "$status" = "Charging" ]; then
-    echo "󱐋"
-elif [ "$status" = "Discharging" ]; then
-    echo ""
-elif [ "$status" = "Not charging" ]; then
-    echo ""
+** RAM
+*** Widget
+
+#+begin_src yuck :tangle eww.yuck
+(defwidget ram_module []
+  (box :class "ram_mod"
+       (circular-progress
+         :valign "center"
+         :class "ram"
+         :clockwise true
+         :start-at 75
+         :thickness 4
+         :value "${EWW_RAM.used_mem_perc}"
+       (button
+         :class "ram_icon"
+         :tooltip "${EWW_RAM.used_mem_perc}%"
+         :onclick `notify-send "Info centre"`
+         ""))))
+
+
+#+end_src
+
+*** Script
+
+Simple argument parsing for the different options
+
+#+begin_src sh :mkdirp yes :tangle ./scripts/memory :shebang "#!/bin/sh"
+total="$(free --mega | rg Mem: | awk '{print $2}')"
+free="$(free --mega | rg Mem: | awk '{print $4}')"
+avail="$(free --mega | rg Mem: | awk '{print $7}')"
+used=$(expr $total - $avail)
+cache="$(free --mega | rg Mem: | awk '{print $6}')"
+
+if [ "$1" = "total" ]; then
+    echo $total
+elif [ "$1" = "used" ]; then
+    echo $used
+elif [ "$1" = "free" ]; then
+    echo $free
+elif [ "$1" = "percent" ]; then
+    echo $(awk "BEGIN { pc=100*${used}/${total}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
 fi
 #+end_src
 
-** VPN
+*** Styling
+
+#+begin_src scss :tangle eww.scss
+.ram {
+    color: rgb(97, 175, 239);
+    background-color: rgb(30, 70, 90);
+}
+
+.ram_icon {
+    min-height: 0;
+    min-width: 0;
+    padding: 0px;
+    color: transparent;
+    margin: 6px;
+}
+
+#+end_src
+
+** Volume
+*** Widget
+
+#+begin_src yuck :tangle eww.yuck
+(defvar vol_reveal false)
+(defpoll vol_percent :initial "0" :interval "3s" "~/.config/eww/scripts/volume")
+(defpoll mic_percent :interval "3s" "amixer -D pipewire sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+
+(defwidget volume_module []
+  (eventbox :onhover "${EWW_CMD} update vol_reveal=true"
+            :onhoverlost "${EWW_CMD} update vol_reveal=false"
+    (box :orientation "h" :space-evenly "false" :class "metric"
+      (button :onclick "pavucontrol &" :class "vol_icon" "󰕾")
+      (revealer :transition "slideleft"
+                :reveal vol_reveal
+                :duration "350ms"
+        (scale :class "vol_bar"
+               :value vol_percent
+               :tooltip "${vol_percent}"
+               :min 0
+               :max 101
+               :onchange "amixer -D pipewire sset Master {}%")
+    )
+  )
+  )
+)
+#+end_src
+
+*** Script
+
+#+begin_src sh :mkdirp yes :tangle ./scripts/volume :shebang "#!/bin/sh"
+amixer -D pipewire sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'
+#+end_src
+
+*** Styling
+
+#+begin_src scss :tangle eww.scss
+.metric scale trough highlight {
+  background-color: rgba(90, 80, 185, 1);
+  color: #000000;
+  border-radius: 10px;
+}
+.metric scale trough {
+  background-color: rgba(20, 30, 120, 0.6);
+  border-radius: 10px;
+  min-height: 12px;
+  min-width: 100px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.vol_icon {
+    font-size: 18px;
+    color: #a1bdce;
+    margin: 0px 10px 0px 10px;
+}
+
+.inner-mod{
+    margin: 0px 0px 0px 0px;
+    border-radius: 10px 16px 0px 10px;
+}
+#+end_src
+
+** Brightness
+*** Widget
+
+#+begin_src yuck :tangle eww.yuck
+(defvar bright_reveal false)
+(defpoll bright_percent :initial "0" :interval "3s" "dash ~/.config/eww/scripts/brightness percent")
+(defpoll bright_symbol :interval "1s" "dash ~/.config/eww/scripts/brightness symbol")
+(defwidget brightness_module []
+  (eventbox :onhover "${EWW_CMD} update bright_reveal=true"
+            :onhoverlost "${EWW_CMD} update bright_reveal=false"
+            (box :orientation "h" :space-evenly "false" :class "metric"
+                 (button :class "vol_icon" bright_symbol)
+                 (revealer :transition "slideleft"
+                           :reveal bright_reveal
+                           :duration "350ms"
+                           (scale :class "vol_bar"
+                                  :value bright_percent
+                                  :tooltip "${bright_percent}"
+                                  :min 0
+                                  :max 101
+                                  :onchange "brightnessctl s {}%")))))
+
+#+end_src
+
+*** Script
+
+#+begin_src sh :mkdirp yes :tangle ./scripts/brightness :shebang #!/bin/sh
+if [ $1 = "percent" ]; then
+    brightnessctl g | awk '{ perc = int($1/255 * 100 + 0.5) }; END { print perc }'
+elif [ "$1" = "symbol" ]; then
+    perc=$(brightnessctl g)
+    if [ $perc -gt 153 ]; then
+        echo "󰃠" && exit
+    elif [ $perc -gt 76 ]; then
+        echo "󰃟" && exit
+    else
+        echo "󰃞"
+    fi
+fi
+#+end_src
+
+** Battery
+*** Widget
+
+#+begin_src yuck :tangle eww.yuck
+(defwidget battery_module []
+  (box :class "bat_mod"
+    (circular-progress :valign "center"
+                       :class "bat"
+                       :clockwise true
+                       :start-at 75
+                       :thickness 4
+                       :value "${EWW_BATTERY.BAT0.capacity}"
+      (button
+        :class "bat_icon"
+        :tooltip "battery on ${EWW_BATTERY.BAT0.capacity}%"
+        :onclick `notify-send "info-centre"`
+        "")
+    )
+  )
+)
+
+#+end_src
+
+*** Styling
+
+#+begin_src scss :tangle eww.scss
+.bat {
+    color: rgb(152, 195, 121);
+    background-color: rgb(15, 80, 60);
+}
+
+.bat_icon {
+    min-height: 0;
+    min-width: 0;
+    color: transparent;
+    padding: 0px;
+    margin: 6px;
+}
+#+end_src
+
+*** Window
+*** Widgets
+*** Styling
+
+#+begin_src scss :tangle eww.scss
+
+#+end_src
+#+begin_src scss :tangle eww.scss
+
+#+end_src
+
+* Network
+** Network button
+*** Widget
+
+#+begin_src yuck :tangle eww.yuck
+(defvar network_reveal false)
+(defvar network_centre false)
+(defpoll net_icon :interval "2s" "~/.config/eww/scripts/network")
+(defwidget network_module []
+  (box :class "network_module"
+       (button
+         :class "network_button"
+         :tooltip "tooltip"
+         :onclick "${EWW_CMD} open --toggle network_window"
+         net_icon)
+  )
+)
+#+end_src
+
+*** Script
+
+#+begin_src sh :shebang #!/bin/sh :mkdirp true :tangle ./scripts/network
+connection_type=$(nmcli -t -f TYPE connection show --active)
+
+if echo "$connection_type" | grep -q "802-11-wireless"; then
+    echo "󰤨"
+elif echo "$connection_type" | grep -q "802-3-ethernet"; then
+    echo "󰈀"
+else
+    echo "󱘖"
+fi
+#+end_src
+
+*** Styling
+
+#+begin_src scss :tangle eww.scss
+.network_module {
+  margin-right: 8px;
+}
+.network_button {
+  color: $foreground;
+}
+#+end_src
+
+** Network window
+*** Widget
+
+#+begin_src yuck :tangle eww.yuck
+(defpoll active_con :initial "None" :interval "5s" "nmcli -t -f NAME connection show --active | head -n 1")
+
+(defwidget network_window_module []
+  (box :class "network_box" :orientation "vertical"
+       (label :class "net_active" :text active_con)
+       (label :class "net_down_label" :text "Download")
+       (label :class "net_down_speed" :text "${EWW_NET.thinkpad.NET_DOWN} B/s")
+       (graph
+        :class "net_down"
+        :dynamic true
+        :time-range "30s"
+        :line-style "round"
+        :value "${EWW_NET.thinkpad.NET_DOWN}")
+       (label :class "net_up_label" :text "Upload")
+       (label :class "net_up_speed" :text "${EWW_NET.thinkpad.NET_UP} B/s")
+       (graph
+        :class "net_up"
+        :dynamic true
+        :time-range "30s"
+        :line-style "round"
+        :value "${EWW_NET.thinkpad.NET_UP}")
+       )
+)
+
+(defwindow network_window
+  :monitor 0
+  :geometry (geometry :x "15%"
+                      :y "5px"
+                      :anchor "top right")
+  (network_window_module)
+)
+#+end_src
+
+*** Styling
+
+#+begin_src scss :tangle eww.scss
+.network_box {
+  border-radius: 5px;
+  background: $background-alt;
+  min-height: 200px;
+  min-width: 200px;
+  padding: 5px;
+}
+.net_active {
+  font-weight: bold;
+}
+.net_up {
+  color: $orange;
+}
+.net_down {
+  color: $green;
+}
+.net_down_label, .net_up_label {
+  font-family: Iosevka Aile;
+}
+.net_down_speed, .net_up_speed {
+  color: gray;
+  // color: rgba(255, 255, 255, 0.6);
+  font-family: Iosevka Aile;
+  font-size: 12px;
+}
+#+end_src
+
+* VPN
+** Widget
 
 #+begin_src yuck :tangle eww.yuck
 (defpoll vpn :interval "2s" "~/.config/eww/scripts/vpn label")
 (defpoll vpn_tip :interval "2s" "~/.config/eww/scripts/vpn tooltip")
 (defwidget vpn_module []
-           (box :class "vpn_mod"
-                (button
-                 :class "vpn_button ${vpn_tip == "Disconnected" ? "vpn_inactive" : "vpn_active"}"
-                 :tooltip vpn_tip
-                 :onclick `nmcli con up thinkpad`
-                 :onrightclick `nmcli con down thinkpad`
-                 vpn)
-                )
-           )
+  (box :class "vpn_mod"
+       (button
+         :class "vpn_button ${vpn_tip == "Disconnected" ? "vpn_inactive" : "vpn_active"}"
+         :tooltip vpn_tip
+         :onclick `nmcli con up thinkpad`
+         :onrightclick `nmcli con down thinkpad`
+         vpn)))
+
 #+end_src
 
-#+begin_src scss :tangle eww.scss
-.vpn_mod {
-  background-color: transparent;;
-}
+** Script
 
-.vpn_button {
-  background-color: transparent;
-}
-
-.vpn_button:hover {
-  color: gray;
-}
-
-.vpn_inactive {
-  color: #e5c890;
-}
-
-.vpn_active {
-  color: #a6e3a1
-}
-#+end_src
-
-#+begin_src sh :shebang #!/bin/sh :mkdirp true :tangle ./scripts/vpn
+#+begin_src sh :mkdirp yes :tangle ./scripts/vpn :shebang "#!/bin/sh"
 if [ "$1" = "label" ]; then
     test -d /proc/sys/net/ipv4/conf/ppp0 && echo "󰖂 UoS" && exit
     test -d /proc/sys/net/ipv4/conf/thinkpad && echo "󰖂 Home" && exit
-    echo "  N/A" && exit
+    echo " N/A" && exit
 elif [ "$1" = tooltip ]; then
     test -d /proc/sys/net/ipv4/conf/ppp0 && echo "󰖂 Connected to UoS" && exit
     test -d /proc/sys/net/ipv4/conf/thinkpad && echo "󰖂 Connected home" && exit
     echo "Disconnected" && exit
 fi
 #+end_src
-** Network
 
-#+begin_src yuck :tangle eww.yuck
-(defpoll net_icon :interval "2s" "~/.config/eww/scripts/network")
-(defwidget net_module []
-           (label
-            :class "net_icon"
-            :tooltip "Tooltip"
-            :text net_icon
-            )
-           )
-#+end_src
+** Styling
 
 #+begin_src scss :tangle eww.scss
-.net_icon {
-  color: white;
+.vpn_button {
+}
+
+.vpn_inactive {
+    color: $warn;
+}
+
+.vpn_active {
+    color: $success;
 }
 #+end_src
 
-#+begin_src sh :shebang #!/bin/sh :mkdirp true :tangle ./scripts/network
-connection_type=$(nmcli -t -f TYPE connection show --active >/dev/null)
-
-if echo "$connection_type" rg -q "802-11-wireless">/dev/null; then
-    echo "󰈀"
-elif echo "$connection_type" rg -q "802-3-ethernet" >/dev/null; then
-    echo "󰤨"
-else
-    echo ""
-fi
-
-#+end_src
-** Temp
+* Spotify
+** Widget
 
 #+begin_src yuck :tangle eww.yuck
+(deflisten song_name :initial "Not playing" `playerctl --follow --player spotify metadata title`)
+(defwidget music []
+           (button :class "music_button"
+                   :tooltip "Playing on Spotify"
+                   :onclick "song_info art && ${EWW_CMD} open --toggle music_window"
+                   :onrightclick "song_info toggle"
+                   song_name
+                   )
+)
+#+end_src
+
+** Window
+
+#+begin_src yuck :tangle eww.yuck
+(deflisten song_artist :initial "No One" "playerctl --follow --player spotify metadata artist")
+(defwidget music_window_module []
+           (box :class "music_box" :orientation "vertical" :space-evenly false
+                (label :text song_name)
+                (label :text song_artist)
+                (image :path "/tmp/playerctl_cover.png"
+                       :image-width 200
+                       :image-height 200)
+                (box :class "music_controls" :orientation "horizontal"
+                     (button :class "shuffle_button"
+                             :onclick "song_info shuffle"
+                             (label :text "󰒟")
+                             )
+                     (button :class "prev_button"
+                             :onclick "song_info prev"
+                             (label :text "󰙤")
+                             )
+                     (button :class "play_button"
+                             :onclick "song_info toggle"
+                             (label :text "󰐍")
+                             )
+                     (button :class "next_button"
+                             :onclick "song_info next"
+                             (label :text "󰙢")
+                             )
+                     (button :class "loop_button"
+                             :onclick "song_info loop"
+                             (label :text "󰕇")
+                             )
+                )
+           )
+)
+
+(defwindow music_window
+           :monitor 0
+           :geometry (geometry :x "0px"
+                               :y "5px"
+                               :anchor "top center"
+                     )
+           (music_window_module)
+)
+#+end_src
+
+** Script
+
+I used [[github:hegde-atri/playerctl-spotify-wrapper][this script]] instead.
+
+** Styling
+
+#+begin_src scss :tangle eww.scss
+.music_box {
+  background: $background-alt2;
+  border-radius: 10px;
+  padding: 5px;
+}
+.play_button {
+  font-size: 30;
+}
+.next_button, .prev_button {
+  font-size: 20;
+}
+.shuffle_button, .loop_button {
+  color: gray;
+}
+#+end_src
+
+* Workspaces
+** Widget
+#+begin_src yuck :tangle eww.yuck
+;; Window title
+(deflisten window :initial "..." "dash ~/.config/eww/scripts/hypr/window-title")
+(defwidget window_name []
+  (box
+    (label :limit-width 50 :text window)
+  )
+)
+
+;; Workspaces
+(deflisten workspaces :initial "(box :class \"workspace_module\" (label :text \"󰄯  󰄰  󰄰  󰄰  󰄰  󰄰  󰄰  󰄰  󰄰  󰄰\" ))" "~/.config/eww/scripts/hypr/workspaces")
+(defwidget workspaces []
+           (literal :content "${workspaces}")
+)
+#+end_src
+
+** Script
+
+#+begin_src python :mkdirp yes :tangle ./scripts/hypr/workspaces :shebang "#!/usr/bin/python"
+#!/usr/bin/python
+
+import subprocess
+import os
+import socket
+
+icons = ["󰄰","󰄰","󰄰","󰄰","󰄰","󰄰","󰄰","󰄰","󰄰","󰄰","󰄯","󰄯","󰄯","󰄯","󰄯","󰄯","󰄯","󰄯","󰄯","󰄯"]
+
+def update_workspace(active_workspace):
+    icons_index = [0,1,2,3,4,5,6,7,8,9]
+
+    icons_index[active_workspace - 1] = icons_index[active_workspace - 1] + 10
+    prompt = f"(box :class \"workspace_module\" (label :text \"{icons[icons_index[0]]}  {icons[icons_index[1]]}  {icons[icons_index[2]]}  {icons[icons_index[3]]}  {icons[icons_index[4]]}  {icons[icons_index[5]]}  {icons[icons_index[6]]}  {icons[icons_index[7]]}  {icons[icons_index[8]]}  {icons[icons_index[9]]}\" ))"
+
+    subprocess.run(f"echo '{prompt}'", shell=True)
+
+sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+
+server_address = f'/tmp/hypr/{os.environ["HYPRLAND_INSTANCE_SIGNATURE"]}/.socket2.sock'
+
+sock.connect(server_address)
+
+while True:
+    new_event = sock.recv(4096).decode("utf-8")
+
+    for item in new_event.split("\n"):
+        if "workspace>>" == item[0:11]:
+            workspaces_num = item[-1]
+
+            update_workspace(int(workspaces_num))
+#+end_src
+
+** Styling
+#+begin_src scss :tangle eww.scss
+.workspace_module {
+  margin: 0 6px 0 2px;
+  color: $foreground;
+}
+#+end_src
+
+* Control Center
+** Main widget
+*** Widget
+
+#+begin_src yuck :tangle eww.yuck
+(defwidget control_centre_widget []
+           (box :class "control_centre"
+                :orientation "h"
+                ;; Add mem, cpu usuage, temp, volume controls, calendar, music widget, vpn, sleep, lock, shutdown
+                (power_control)
+                )
+)
+#+end_src
+
+*** Styling
+
+#+begin_src scss :tangle eww.scss
+.control_centre {
+  background: $background;
+}
+
+#+end_src
+
+** Power controls
+
+#+begin_src yuck :tangle eww.yuck
+(defwidget power_control []
+           (box :class "power_control"
+                :orientation "v"
+                (button :onclick "systemctl suspend"
+                        :tooltip "Sleep"
+                        :class "sleep_button"
+                 (label :text "󰤄")
+                 )
+                (button :onclick "~/.config/eww/scripts/power shutdown"
+                        :tooltip "Shutdown"
+                        :class "shutdown_button"
+                 (label :text ""
+                        )
+                 )
+           )
+)
 #+end_src
 
 #+begin_src scss :tangle eww.scss
+.power_control {
+  font-size: 25px;
+}
+.sleep_button {
+  color: $yellow;
+}
+.shutdown_button {
+  color: $red;
+}
 #+end_src
 
-#+begin_src sh :shebang #!/bin/sh :mkdirp true :tangle ./scripts/temp
+*** Script
+
+#+begin_src sh :mkdirp t :tangle ./scripts/power :shebang #!/bin/sh
+
+#+end_src
+
+* Launch bar
+
+#+begin_src sh :shebang #!/bin/sh :tangle ./launch_bars
+## Files and cmd
+EWW="eww -c $HOME/.config/eww/"
+
+## Run eww daemon if not running already
+if [[ ! $(pidof eww) ]]; then
+    ${EWW} daemon
+    sleep 1
+fi
+
+## Open widgets
+NB_MONITORS=($(hyprctl monitors -j | jaq -r '.[] | .id'))
+for i in "${!NB_MONITORS[@]}"; do
+    ${EWW} open bar$i
+done
 #+end_src

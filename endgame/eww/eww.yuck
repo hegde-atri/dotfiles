@@ -2,45 +2,108 @@
            :monitor 0
            :geometry (geometry :x "0%"
                                :y "0px"
-                               :width "10%"
-                               :height "40px"
+                               :width "100%"
+                               :height "30px"
                                :anchor "top center")
            :stacking "fg"
-           :focusable "false"
-           :exclusive "false"
-  (main_bar))
+           :exclusive true
+           :focusable false
+           (main_bar)
+)
 
 (defwindow bar1
            :monitor 1
            :geometry (geometry :x "0%"
                                :y "0px"
-                               :width "10%"
-                               :height "40px"
+                               :width "100%"
+                               :height "30px"
                                :anchor "top center")
            :stacking "fg"
-           :focusable "false"
-           :exclusive "false"
-  (main_bar))
-
-(defwidget main_bar []
-           (box :class "main_bar"
-                (vpn_module)
-                (clock_module)
-                (battery_module)
-                (net_module)
-           )
+           :exclusive true
+           :focusable false
+           (main_bar)
 )
 
+(defwindow control_centre
+           :monitor 0
+           :geometry (geometry :x "0%"
+                               :y "0px"
+                               :width "90%"
+                               :height "90%"
+                               :anchor "center center")
+           :stacking "overlay"
+           :exclusive false
+           :focusable true
+           (control_centre_widget)
+)
+
+(defwidget main_bar []
+  (box :class "main_bar"
+       (left)
+       (center)
+       (right)
+  )
+)
+
+(defwidget left []
+  (box :space-evenly false
+       :halign "start"
+       :class "left_modules"
+       (workspaces)
+  )
+)
+
+(defwidget center []
+  (box :space-evenly true
+       :halign "center"
+       :class "center_modules"
+       (music)
+  )
+)
+
+(defwidget right []
+  (box :halign "end"
+       :space-evenly false
+       :class "right_modules"
+       (vpn_module)
+       (network_module)
+       (sep)
+       (brightness_module)
+       (volume_module)
+       (sep)
+       (cpu_module)
+       (ram_module)
+       (battery_module)
+       (clock_module)
+  )
+)
+(defwidget sep []
+  (label :class "sep" :text "|")
+)
+
+(defvar cal_reveal false)
+(defpoll cal_day :interval "1h" "date '+%d'")
+(defpoll cal_month :interval "1h" "date '+%m'")
 (defpoll time :interval "1s"
               :initial "initial-value"
-              `date +%H:%M`)
+              `date +%H:%M:%S`)
 
 (defwidget clock_module []
-           (eventbox :onclick "${EWW_CMD} open --toggle calendar_window"
-            (box :space-evenly true :orientation "h"
+  (eventbox :onhover "${EWW_CMD} update cal_reveal=true"
+            :onhoverlost "${EWW_CMD} update cal_reveal=false"
+            :onclick "${EWW_CMD} open --toggle calendar_window"
+            (box :space-evenly false :orientation "h"
                  (label :class "clock" :text "${time}")
+                 (revealer :transition "slideleft"
+                           :reveal cal_reveal
+                           :duration "350ms"
+                           (box
+                             (label :class "cal_label_day" :text "${cal_day}")
+                             (label :class "cal_label_month" :text "${cal_month}")
+                           )
+                 )
             )
-            )
+  )
 )
 
 (defwidget calendar_module []
@@ -52,49 +115,243 @@
 (defwindow calendar_window
   :monitor 0
   :geometry (geometry :x "0px"
-                      :y "40px"
-                      :anchor "top center")
+                      :y "5px"
+                      :anchor "top right")
   (calendar_module)
 )
 
-(defpoll bat_status :interval "3s" "~/.config/eww/scripts/bat_status")
+(defpoll cpu_temp :interval "5s" "(expr $(cat /sys/class/hwmon/hwmon3/temp1_input) / 1000)")
+(defwidget cpu_module []
+  (box :class "cpu_mod"
+       (circular-progress
+         :valign "center"
+         :class "cpu"
+         :clockwise true
+         :start-at 75
+         :thickness 4
+         :value "${EWW_CPU.avg}"
+         (button
+           :class "cpu_icon"
+           :tooltip "${cpu_temp}°C"
+           :onclick `notify-send "Info centre"`
+           ""))))
+
+(defwidget ram_module []
+  (box :class "ram_mod"
+       (circular-progress
+         :valign "center"
+         :class "ram"
+         :clockwise true
+         :start-at 75
+         :thickness 4
+         :value "${EWW_RAM.used_mem_perc}"
+       (button
+         :class "ram_icon"
+         :tooltip "${EWW_RAM.used_mem_perc}%"
+         :onclick `notify-send "Info centre"`
+         ""))))
+
+(defvar vol_reveal false)
+(defpoll vol_percent :initial "0" :interval "3s" "~/.config/eww/scripts/volume")
+(defpoll mic_percent :interval "3s" "amixer -D pipewire sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'")
+
+(defwidget volume_module []
+  (eventbox :onhover "${EWW_CMD} update vol_reveal=true"
+            :onhoverlost "${EWW_CMD} update vol_reveal=false"
+    (box :orientation "h" :space-evenly "false" :class "metric"
+      (button :onclick "pavucontrol &" :class "vol_icon" "󰕾")
+      (revealer :transition "slideleft"
+                :reveal vol_reveal
+                :duration "350ms"
+        (scale :class "vol_bar"
+               :value vol_percent
+               :tooltip "${vol_percent}"
+               :min 0
+               :max 101
+               :onchange "amixer -D pipewire sset Master {}%")
+    )
+  )
+  )
+)
+
+(defvar bright_reveal false)
+(defpoll bright_percent :initial "0" :interval "3s" "dash ~/.config/eww/scripts/brightness percent")
+(defpoll bright_symbol :interval "1s" "dash ~/.config/eww/scripts/brightness symbol")
+(defwidget brightness_module []
+  (eventbox :onhover "${EWW_CMD} update bright_reveal=true"
+            :onhoverlost "${EWW_CMD} update bright_reveal=false"
+            (box :orientation "h" :space-evenly "false" :class "metric"
+                 (button :class "vol_icon" bright_symbol)
+                 (revealer :transition "slideleft"
+                           :reveal bright_reveal
+                           :duration "350ms"
+                           (scale :class "vol_bar"
+                                  :value bright_percent
+                                  :tooltip "${bright_percent}"
+                                  :min 0
+                                  :max 101
+                                  :onchange "brightnessctl s {}%")))))
+
 (defwidget battery_module []
-           (box :class "bat_mod"
-                (circular-progress :valign "center"
-                                   :class "bat"
-                                   :clockwise true
-                                   :start-at 75
-                                   :thickness 5
-                                   :value "${EWW_BATTERY.BAT0.capacity}"
-                                   (button
-                                    :class "bat_icon ${bat_status == "Charging" ? "bat_charging" : "bat_charged"}"
-                                    :tooltip "battery on ${EWW_BATTERY.BAT0.capacity}%"
-                                    bat_status
-                                    )
-                                   )
-                )
-           )
+  (box :class "bat_mod"
+    (circular-progress :valign "center"
+                       :class "bat"
+                       :clockwise true
+                       :start-at 75
+                       :thickness 4
+                       :value "${EWW_BATTERY.BAT0.capacity}"
+      (button
+        :class "bat_icon"
+        :tooltip "battery on ${EWW_BATTERY.BAT0.capacity}%"
+        :onclick `notify-send "info-centre"`
+        "")
+    )
+  )
+)
+
+(defvar network_reveal false)
+(defvar network_centre false)
+(defpoll net_icon :interval "2s" "~/.config/eww/scripts/network")
+(defwidget network_module []
+  (box :class "network_module"
+       (button
+         :class "network_button"
+         :tooltip "tooltip"
+         :onclick "${EWW_CMD} open --toggle network_window"
+         net_icon)
+  )
+)
+
+(defpoll active_con :initial "None" :interval "5s" "nmcli -t -f NAME connection show --active | head -n 1")
+
+(defwidget network_window_module []
+  (box :class "network_box" :orientation "vertical"
+       (label :class "net_active" :text active_con)
+       (label :class "net_down_label" :text "Download")
+       (label :class "net_down_speed" :text "${EWW_NET.thinkpad.NET_DOWN} B/s")
+       (graph
+        :class "net_down"
+        :dynamic true
+        :time-range "30s"
+        :line-style "round"
+        :value "${EWW_NET.thinkpad.NET_DOWN}")
+       (label :class "net_up_label" :text "Upload")
+       (label :class "net_up_speed" :text "${EWW_NET.thinkpad.NET_UP} B/s")
+       (graph
+        :class "net_up"
+        :dynamic true
+        :time-range "30s"
+        :line-style "round"
+        :value "${EWW_NET.thinkpad.NET_UP}")
+       )
+)
+
+(defwindow network_window
+  :monitor 0
+  :geometry (geometry :x "15%"
+                      :y "5px"
+                      :anchor "top right")
+  (network_window_module)
+)
 
 (defpoll vpn :interval "2s" "~/.config/eww/scripts/vpn label")
 (defpoll vpn_tip :interval "2s" "~/.config/eww/scripts/vpn tooltip")
 (defwidget vpn_module []
-           (box :class "vpn_mod"
-                (button
-                 :class "vpn_button ${vpn_tip == "Disconnected" ? "vpn_inactive" : "vpn_active"}"
-                 :tooltip vpn_tip
-                 :onclick `nmcli con up thinkpad`
-                 :onrightclick `nmcli con down thinkpad`
-                 vpn)
+  (box :class "vpn_mod"
+       (button
+         :class "vpn_button ${vpn_tip == "Disconnected" ? "vpn_inactive" : "vpn_active"}"
+         :tooltip vpn_tip
+         :onclick `nmcli con up thinkpad`
+         :onrightclick `nmcli con down thinkpad`
+         vpn)))
+
+(deflisten song_name :initial "Not playing" `playerctl --follow --player spotify metadata title`)
+(defwidget music []
+           (button :class "music_button"
+                   :tooltip "Playing on Spotify"
+                   :onclick "song_info art && ${EWW_CMD} open --toggle music_window"
+                   :onrightclick "song_info toggle"
+                   song_name
+                   )
+)
+
+(deflisten song_artist :initial "No One" "playerctl --follow --player spotify metadata artist")
+(defwidget music_window_module []
+           (box :class "music_box" :orientation "vertical" :space-evenly false
+                (label :text song_name)
+                (label :text song_artist)
+                (image :path "/tmp/playerctl_cover.png"
+                       :image-width 200
+                       :image-height 200)
+                (box :class "music_controls" :orientation "horizontal"
+                     (button :class "shuffle_button"
+                             :onclick "song_info shuffle"
+                             (label :text "󰒟")
+                             )
+                     (button :class "prev_button"
+                             :onclick "song_info prev"
+                             (label :text "󰙤")
+                             )
+                     (button :class "play_button"
+                             :onclick "song_info toggle"
+                             (label :text "󰐍")
+                             )
+                     (button :class "next_button"
+                             :onclick "song_info next"
+                             (label :text "󰙢")
+                             )
+                     (button :class "loop_button"
+                             :onclick "song_info loop"
+                             (label :text "󰕇")
+                             )
                 )
            )
+)
 
-(defpoll net_icon :interval "2s" "~/.config/eww/scripts/network")
-(defwidget net_module []
-           (label
-            :class "net_icon"
-            :tooltip "Tooltip"
-            :text net_icon
-            )
+(defwindow music_window
+           :monitor 0
+           :geometry (geometry :x "0px"
+                               :y "5px"
+                               :anchor "top center"
+                     )
+           (music_window_module)
+)
+
+;; Window title
+(deflisten window :initial "..." "dash ~/.config/eww/scripts/hypr/window-title")
+(defwidget window_name []
+  (box
+    (label :limit-width 50 :text window)
+  )
+)
+
+;; Workspaces
+(deflisten workspaces :initial "(box :class \"workspace_module\" (label :text \"󰄯  󰄰  󰄰  󰄰  󰄰  󰄰  󰄰  󰄰  󰄰  󰄰\" ))" "~/.config/eww/scripts/hypr/workspaces")
+(defwidget workspaces []
+           (literal :content "${workspaces}")
+)
+
+(defwidget control_centre_widget []
+           (box :class "control_centre"
+                :orientation "h"
+                ;; Add mem, cpu usuage, temp, volume controls, calendar, music widget, vpn, sleep, lock, shutdown
+                (power_control)
+                )
+)
+
+(defwidget power_control []
+           (box :class "power_control"
+                :orientation "v"
+                (button :onclick "systemctl suspend"
+                        :tooltip "Sleep"
+                        :class "sleep_button"
+                 (label :text "󰤄")
+                 )
+                (button :onclick "~/.config/eww/scripts/power shutdown"
+                        :tooltip "Shutdown"
+                        :class "shutdown_button"
+                 (label :text ""
+                        )
+                 )
            )
-
-
+)
