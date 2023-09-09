@@ -1,0 +1,54 @@
+#+title: Wofi
+#+auther: Atri Hegde
+#+auto_tangle: t
+
+* Config
+#+begin_src conf :tangle config
+mode=run
+allow_images=true
+width=30%
+#+end_src
+
+* CSS
+
+#+begin_src css :tangle style.css
+,* {
+  border-radius: 5px;
+  border: none;
+}
+window {
+  font-family: Noto Sans;
+  font-size: 18px;
+  background-color: #0e1013;
+}
+#input {
+  background-color: #1e1e2e;
+  color: white;
+  padding: 0.2em;
+}
+#entry {
+  padding: 0.3em;
+}
+#entry:selected {
+  background-color: #89b4fa;
+}
+image {
+  margin: 0 5px 0 5px;
+}
+#text:selected {
+  color: black;
+}
+
+$background: #0e1013    ;
+$background-alt: #313244;
+$background-alt2: #1e1e2e;
+$foreground: #cdd6f4;
+$red-alt: #f38ba8;
+$yellow: #f9e2af;
+$orange: #fab387;
+$green: #a6e3a1;
+$blue: #89b4fa;
+$blue2: #74c7ec;
+$magenta: #cba6f7;
+$cyan: #94e2d5;
+#+end_src
