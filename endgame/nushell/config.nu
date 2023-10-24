@@ -100,10 +100,7 @@ $env.config = {
     clickable_links: true # enable or disable clickable links. Your terminal has to support links.
   }
   rm: {
-    always_trash: false # always act as if -t was given. Can be overridden with -p
-  }
-  cd: {
-    abbreviations: false # allows `cd s/o/f` to expand to `cd some/other/folder`
+    always_trash: true # always act as if -t was given. Can be overridden with -p
   }
   table: {
     mode: rounded # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none, other
@@ -218,8 +215,10 @@ $env.config = {
     }]
     env_change: {
       PWD: [{|before, after|
-        null  # replace with source code to run if the PWD environment is different since the last repl input
-      }]
+            if ('FNM_DIR' in $env) and ([.nvmrc .node-version] | path exists | any { |it| $it }) {
+                fnm use
+            }
+        }]
     }
     display_output: {||
       if (term size).columns >= 100 { table -e } else { table }
@@ -452,13 +451,16 @@ $env.config = {
 }
 # Starship prompt
 source ~/.cache/starship/init.nu
+
 # Zoxide
 source ~/.zoxide.nu
+
 # PNPM
 # $env.PNPM_HOME = $"($env.HOME)/Library/pnpm"
 # $env.PATH = ($env.PATH | append $env.PNPM_HOME)
+
 source ~/.config/nushell/scripts/paste_image.nu
-# source ~/.config/nushell/scripts/secrets.nu
+source ~/.config/nushell/scripts/secrets.nu
 
 alias l = exa --icons -l
 alias ls = exa --icons
@@ -477,55 +479,74 @@ alias gc = git commit -m
 alias gb = git branch
 alias gsb = git checkout -b
 alias grc = git rebase --continue
-# alias gc=~/.local/bin/commit.sh
 alias gp = git push
 alias git-add-origin = git remote set-url --add origin
 # -- Action Alias --
-#alias startdocker = sudo systemctl start docker.service
-alias startdocker = sudo rc-service docker start
-# alias startcups = sudo systemctl start cups.service
-alias startcups = sudo rc-service cupsd start
-# alias bluetooth = sudo systemctl start bluetooth.service
-alias bluetooth = sudo rc-service bluetoothd start
+# start docker
+alias startdocker = sudo systemctl start docker.service
+# alias startdocker = sudo rc-service docker start
+# start cups
+alias startcups = sudo systemctl start cups.service
+# alias startcups = sudo rc-service cupsd start
+# start bluetooth
+alias bluetooth = sudo systemctl start bluetooth.service
+# alias bluetooth = sudo rc-service bluetoothd start
+# enable home vpn
 alias vpn = nmcli connection up thinkpad
+# wl-copy
 alias clip = wl-copy
-alias presentmd = npx @marp-team/marp-cli@^2 --bespoke.transition --preview
+# marp cli present
+alias presentmd = marp --preview
+# marp cli convert to pdf.
 alias present-compilePDF = marp --pdf --allow-local-files
+# Download yt video as mp3
 alias ytmp3 = yt-dlp -f 'ba' -x --audio-format mp3 -o '%(artist)s - %(title)s.%(ext)s' --embed-thumbnail --parse-metadata 'title:%(artist)s - %(title)s'
+# Download yt video into mp3 files based on chapters
 alias ytmp3-chapters = yt-dlp -f 'ba' -x --audio-format mp3 -o '%(title)s.%(ext)s' --embed-thumbnail --parse-metadata 'title:%(artist)s - %(title)s' --split-chapters  -o 'chapter:%(title)s/[%(section_number)s] - %(section_title)s.%(ext)s'
+# Download yt video
 alias ytmp4 = yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s'
+# Download yt into different videos based on chapters
 alias ytmp4-chapters = yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s' --split-chapters  -o 'chapter:%(title)s/[%(section_number)s] - %(section_title)s.%(ext)s'
-alias hpAdapter = pactl set-default-sink alsa_output.usb-0c76_USB_PnP_Audio_Device-00.analog-stereo
-alias update = paru
-alias install = paru -S
-alias uninstall = paru -R
+# alias hpAdapter = pactl set-default-sink alsa_output.usb-0c76_USB_PnP_Audio_Device-00.analog-stereo
+# Start virt-man's default network
 alias startnetwork = sudo virsh net-start default
 # -- File Alias --
-alias bsh = nvim ~/.bashrc
-alias zshrc = nvim ~/.zshrc
-alias clearzsh = rm -rf .zsh_history
-alias bsp = nvim ~/.config/bspwm/bspwmrc
-alias sx = nvim ~/.config/bspwm/sxhkdrc
-alias hypr = vim ~/.config/hypr/hyprland.conf
+# alias bsh = nvim ~/.bashrc
+# alias zshrc = nvim ~/.zshrc
+# alias clearzsh = rm -rf .zsh_history
+# alias hypr = vim ~/.config/hypr/hyprland.conf
 # alias cd='echo "Nick is coolest"'
-# -- TODO: clean history
-# -- Program Alias --
+# kitty's kitten
 alias icat = kitty +kitten icat
+# open logseq
 alias logseq = logseq --enable-features=UseOzonePlatform --ozone-platform=wayland
+# run obsidian natively in wayland
+alias obsidian = obsidian -enable-features=UseOzonePlatform -ozone-platform=wayland
+# emacs -nc
 alias nvim = emacsclient -nc
+# emacs -nw
 alias vim = emacsclient -nw
+# emacs -nw
 alias vv = emacsclient -nw
+# neovide :(
 alias neovide = WINIT_UNIX_BACKEND=x11 neovide
+# zoxide
 alias cd = z
+# open ncmpcpp
 alias pp = ncmpcpp
+# open zathura
 alias zz = zathura
+# run repoman
 alias repo = repoman
 
 # -- Utility --
 # alias hst = (history 1 -1 | cut -c 8- | sort | uniq | fzf | tr -d '\n' | wl-copy)
+alias syncTime = do {
+    sudo ntpd -qg
+    sudo hwclock --systohc
+}
 
-# -- Sync my music --
 alias sendMusic = rsync -avP ~/Music pi:~/
 alias getMusic = rsync -avP pi:~/Music ~
 
-pfetch
+rxfetch

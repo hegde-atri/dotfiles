@@ -179,6 +179,7 @@ The bar configuration.
        (ram_module)
        (battery_module)
        (clock_module)
+       (systray)
   )
 )
 (defwidget sep []
@@ -532,39 +533,62 @@ fi
 *** Widget
 
 #+begin_src yuck :tangle eww.yuck
+(defpoll bat_status :interval "3s" "cat /sys/class/power_supply/BAT0/status")
+(defpoll bat_icon :interval "3s" "~/.config/eww/scripts/bat_status")
 (defwidget battery_module []
-  (box :class "bat_mod"
-    (circular-progress :valign "center"
-                       :class "bat"
-                       :clockwise true
-                       :start-at 75
-                       :thickness 4
-                       :value "${EWW_BATTERY.BAT0.capacity}"
-      (button
-        :class "bat_icon"
-        :tooltip "battery on ${EWW_BATTERY.BAT0.capacity}%"
-        :onclick `notify-send "info-centre"`
-        "")
-    )
-  )
-)
+           (box :class "bat_mod"
+                (circular-progress :valign "center"
+                                   :class "bat"
+                                   :clockwise true
+                                   :start-at 75
+                                   :thickness 4
+                                   :value "${EWW_BATTERY.BAT0.capacity}"
+                                   (button
+                                    :class "bat_icon ${bat_status == "Charging" ? "bat_charging" : ""} ${bat_status == "Not charging" ? "bat_charged" : ""}"
+                                    :tooltip "Battery on ${EWW_BATTERY.BAT0.capacity}%"
+                                    bat_icon
+                                    )
+                                   )
+                )
+           )
+#+end_src
 
+*** Script
+
+#+begin_src sh :mkdirp t :tangle ./scripts/bat_status :shebang #!/bin/sh
+status=$(cat /sys/class/power_supply/BAT0/status)
+if [ "$status" = "Charging" ]; then
+    echo "󱐋"
+elif [ "$status" = "Discharging" ]; then
+    echo ""
+elif [ "$status" = "Not charging" ]; then
+    echo ""
+fi
 #+end_src
 
 *** Styling
 
 #+begin_src scss :tangle eww.scss
 .bat {
-    color: rgb(152, 195, 121);
-    background-color: rgb(15, 80, 60);
+  color: rgb(152, 195, 121);
+  background-color: rgb(15, 80, 60);
 }
 
+
 .bat_icon {
-    min-height: 0;
-    min-width: 0;
-    color: transparent;
-    padding: 0px;
-    margin: 6px;
+  min-height: 0;
+  min-width: 0;
+  color: transparent;
+  padding: 0;
+  margin: 8px;
+  font-size: 10px;
+}
+
+.bat_charged {
+  color: gray;
+}
+.bat_charging {
+  color: $yellow;
 }
 #+end_src
 
@@ -665,7 +689,7 @@ fi
 #+begin_src scss :tangle eww.scss
 .network_box {
   border-radius: 5px;
-  background: $background-alt;
+  background: $background-alt2;
   min-height: 200px;
   min-width: 200px;
   padding: 5px;
@@ -744,7 +768,7 @@ fi
 (defwidget music []
            (button :class "music_button"
                    :tooltip "Playing on Spotify"
-                   :onclick "song_info art && ${EWW_CMD} open --toggle music_window"
+                   :onclick "song_info art & ${EWW_CMD} open --toggle music_window"
                    :onrightclick "song_info toggle"
                    song_name
                    )
@@ -915,7 +939,8 @@ while True:
                         :class "sleep_button"
                  (label :text "󰤄")
                  )
-                (button :onclick "~/.config/eww/scripts/power shutdown"
+                (button :onclick "shutdown now"
+                 ;:onclick "~/.config/eww/scripts/power shutdown"
                         :tooltip "Shutdown"
                         :class "shutdown_button"
                  (label :text ""
@@ -931,6 +956,9 @@ while True:
 }
 .sleep_button {
   color: $yellow;
+}
+.sleep_button:hover, .shutdown_button:hover{
+  background: $background-alt2;
 }
 .shutdown_button {
   color: $red;

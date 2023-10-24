@@ -4,16 +4,17 @@ import subprocess
 import os
 import socket
 
-icons = ["󰄰","󰄰","󰄰","󰄰","󰄰","󰄯","󰄯","󰄯","󰄯","󰄯"]
+icons = ["󰄰", "󰄰", "󰄰", "󰄰", "󰄰", "󰄯", "󰄯", "󰄯", "󰄯", "󰄯"]
+
 
 def update_workspace(active_workspace):
-    icons_index = [0,1,2,3,4] 
-    
+    icons_index = [0, 1, 2, 3, 4]
+
     icons_index[active_workspace - 1] = icons_index[active_workspace - 1] + 5
-    prompt = f"(box (label :text \"{icons[icons_index[0]]}  {icons[icons_index[1]]}  {icons[icons_index[2]]}  {icons[icons_index[3]]}  {icons[icons_index[4]]}\" ))"
-    
-    subprocess.run(f"echo '{prompt}'", 
-                   shell=True)
+    prompt = f'(box (label :text "{icons[icons_index[0]]}  {icons[icons_index[1]]}  {icons[icons_index[2]]}  {icons[icons_index[3]]}  {icons[icons_index[4]]}" ))'
+
+    subprocess.run(f"echo '{prompt}'", shell=True)
+
 
 sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
@@ -22,10 +23,10 @@ server_address = f'/tmp/hypr/{os.environ["HYPRLAND_INSTANCE_SIGNATURE"]}/.socket
 sock.connect(server_address)
 
 while True:
+    print(1)
     new_event = sock.recv(4096).decode("utf-8")
-    
+    print(2)
     for item in new_event.split("\n"):
-            
         if "workspace>>" == item[0:11]:
             workspaces_num = item[-1]
 

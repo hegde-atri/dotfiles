@@ -162,16 +162,25 @@ calendar:indeterminate {
 }
 
 .bat {
-    color: rgb(152, 195, 121);
-    background-color: rgb(15, 80, 60);
+  color: rgb(152, 195, 121);
+  background-color: rgb(15, 80, 60);
 }
 
+
 .bat_icon {
-    min-height: 0;
-    min-width: 0;
-    color: transparent;
-    padding: 0px;
-    margin: 6px;
+  min-height: 0;
+  min-width: 0;
+  color: transparent;
+  padding: 0;
+  margin: 8px;
+  font-size: 10px;
+}
+
+.bat_charged {
+  color: gray;
+}
+.bat_charging {
+  color: $yellow;
 }
 
 
@@ -187,7 +196,7 @@ calendar:indeterminate {
 
 .network_box {
   border-radius: 5px;
-  background: $background-alt;
+  background: $background-alt2;
   min-height: 200px;
   min-width: 200px;
   padding: 5px;
@@ -251,6 +260,9 @@ calendar:indeterminate {
 }
 .sleep_button {
   color: $yellow;
+}
+.sleep_button:hover, .shutdown_button:hover{
+  background: $background-alt2;
 }
 .shutdown_button {
   color: $red;

@@ -75,6 +75,7 @@
        (ram_module)
        (battery_module)
        (clock_module)
+       (systray)
   )
 )
 (defwidget sep []
@@ -192,22 +193,24 @@
                                   :max 101
                                   :onchange "brightnessctl s {}%")))))
 
+(defpoll bat_status :interval "3s" "cat /sys/class/power_supply/BAT0/status")
+(defpoll bat_icon :interval "3s" "~/.config/eww/scripts/bat_status")
 (defwidget battery_module []
-  (box :class "bat_mod"
-    (circular-progress :valign "center"
-                       :class "bat"
-                       :clockwise true
-                       :start-at 75
-                       :thickness 4
-                       :value "${EWW_BATTERY.BAT0.capacity}"
-      (button
-        :class "bat_icon"
-        :tooltip "battery on ${EWW_BATTERY.BAT0.capacity}%"
-        :onclick `notify-send "info-centre"`
-        "")
-    )
-  )
-)
+           (box :class "bat_mod"
+                (circular-progress :valign "center"
+                                   :class "bat"
+                                   :clockwise true
+                                   :start-at 75
+                                   :thickness 4
+                                   :value "${EWW_BATTERY.BAT0.capacity}"
+                                   (button
+                                    :class "bat_icon ${bat_status == "Charging" ? "bat_charging" : ""} ${bat_status == "Not charging" ? "bat_charged" : ""}"
+                                    :tooltip "Battery on ${EWW_BATTERY.BAT0.capacity}%"
+                                    bat_icon
+                                    )
+                                   )
+                )
+           )
 
 (defvar network_reveal false)
 (defvar network_centre false)
@@ -269,7 +272,7 @@
 (defwidget music []
            (button :class "music_button"
                    :tooltip "Playing on Spotify"
-                   :onclick "song_info art && ${EWW_CMD} open --toggle music_window"
+                   :onclick "song_info art & ${EWW_CMD} open --toggle music_window"
                    :onrightclick "song_info toggle"
                    song_name
                    )
@@ -347,7 +350,8 @@
                         :class "sleep_button"
                  (label :text "󰤄")
                  )
-                (button :onclick "~/.config/eww/scripts/power shutdown"
+                (button :onclick "shutdown now"
+                 ;:onclick "~/.config/eww/scripts/power shutdown"
                         :tooltip "Shutdown"
                         :class "shutdown_button"
                  (label :text ""

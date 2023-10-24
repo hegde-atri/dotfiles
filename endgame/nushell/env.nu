@@ -11,7 +11,7 @@ def create_left_prompt [] {
     }
 
     let dir = ([
-        ($env.PWD | str substring 0..($home | str length) | str replace -s $home "~"),
+        ($env.PWD | str substring 0..($home | str length) | str replace $home "~"),
         ($env.PWD | str substring ($home | str length)..)
     ] | str join)
 
@@ -28,7 +28,7 @@ def create_right_prompt [] {
     let time_segment = ([
         (ansi reset)
         (ansi magenta)
-        (date now | date format '%m/%d/%Y %r')
+        (date now | format date '%m/%d/%Y %r')
     ] | str join)
 
     let last_exit_code = if ($env.LAST_EXIT_CODE != 0) {([
@@ -86,6 +86,18 @@ $env.NU_PLUGIN_DIRS = [
 # Inherit the correct locale
 $env.LANG = "en_GB.UTF-8"
 
+if not (which fnm | is-empty) {
+  ^fnm env --json | from json | load-env
+  # Checking `Path` for Windows
+  let path = if 'Path' in $env { $env.Path } else { $env.PATH }
+  let node_path = if (sys).host.name == 'Windows' {
+    $"($env.FNM_MULTISHELL_PATH)"
+  } else {
+    $"($env.FNM_MULTISHELL_PATH)/bin"
+  }
+  $env.PATH = ($path | prepend [ $node_path ])
+}
+
 # Add cargo to path
 $env.PATH = ($env.PATH | append "~/.cargo/bin")
 # Add local bin to path
@@ -96,7 +108,12 @@ $env.PATH = ($env.PATH | append "~/.config/emacs/bin")
 # Ruby gems to path
 # $env.PATH = ($env.PATH | append "/home/mizuuu/.rbenv/versions/2.6.6/bin")
 # Add go binaries to path
-$env.PATH = ($env.PATH | append "/home/mizuuu/go/bin")
+$env.PATH = ($env.PATH | append "~/go/bin")
+# Add haskell things to path
+$env.PATH = ($env.PATH | append "~/.ghcup/bin")
+# Bun
+$env.BUN_INSTALL = $"($env.HOME)/.bun"
+$env.PATH = ($env.PATH | append $"($env.BUN_INSTALL)/bin")
 
 # starship
 mkdir ~/.cache/starship

@@ -32,5 +32,5 @@ border-radius=10
 border-color=#313244FF
 progress-color=#89b4faFF
 icons=1
-default-timeout=5
+default-timeout=5000
 #+end_src

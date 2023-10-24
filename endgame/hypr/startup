@@ -1,20 +1,19 @@
 #!/bin/sh
 # --- xdg-desktop-portal-hyprland ---
-sleep 1
-killall xdg-desktop-portal-hyprland
-killall xdg-desktop-portal-wlr
-killall xdg-desktop-portal
-/usr/libexec/xdg-desktop-portal-hyprland &
-sleep 2
-/usr/lib/xdg-desktop-portal &
+# sleep 1
+# killall xdg-desktop-portal-hyprland
+# killall xdg-desktop-portal-wlr
+# killall xdg-desktop-portal
+# /usr/libexec/xdg-desktop-portal-hyprland &
+# sleep 2
+# /usr/lib/xdg-desktop-portal &
+# /usr/lib/xdg-desktop-portal &
 
 # --- dbus ---
 # dbus-daemon --session --address=unix:path=$XDG_RUNTIME_DIR/bus &
+# dbus-update-activation-environment --all &
 
 # --- OTHER settings ---
-export SDL_VIDEODRIVER=wayland
-export QT_QPA_PLATFORM=wayland
-export GDK_BACKEND="wayland,x11"
 # --- Java settings ---
 export _JAVA_AWT_WM_NONREPARENTING=1
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
@@ -22,7 +21,8 @@ export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndF
 export JAVA_FONTS=/usr/share/fonts/TTF
 
 # --- GTK settings ---
-gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
+# gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
+gsettings set org.gnome.desktop.interface gtk-theme 'Material-Black-Blueberry'
 gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
 gsettings set org.gnome.desktop.interface cursor-theme 'Capitaine Cursors'
 
@@ -48,12 +48,12 @@ swww init &
 
 # --- Bar ---
 # ~/.config/eww/launch_bars &
-waybar &
+# waybar &
 
 # --- swayidle ---
-#swayidle -w \
-#    timeout 300 '~/.local/bin/custom/lockscreen' \
-#    before-sleep '~/.local/bin/custom/lockscreen' &
+swayidle -w \
+   timeout 300 '~/.local/bin/custom/lockscreen' \
+   before-sleep '~/.local/bin/custom/lockscreen' &
 
 # --- Foot terminal ---
 foot --server &
@@ -62,7 +62,10 @@ foot --server &
 # firefox &
 
 # --- Scripts ---
-# ~/.local/bin/custom/look-away &
+~/.local/bin/custom/look-away &
 
 # --- gammastep ---
-# gammastep &
+gammastep &
+
+# --- open tablet driver ---
+systemctl --user start opentabletdriver
