@@ -1,6 +1,6 @@
 #!/bin/sh
 
-path=~/wallpapers
+path=~/Pictures/wallpapers
 path="$(find $path -type d | grep -v .git | wofi --dmenu "Choose category")"
 
 if [ "$folder" == "-h" ] ; then

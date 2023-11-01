@@ -1,6 +1,0 @@
-#+title: ~/.local/bin
-
-A bunch of custom executables
-
-* Credits
-- ~shadower~: courtesy of [[https://github.com/n3oney][neoney]].

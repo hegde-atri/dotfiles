@@ -1,0 +1,11 @@
+#!/bin/sh
+notify-send "Look away" "Script started"
+while true; do
+    sleep 1200
+    notify-send "Look away" "Now look away for 20sec at something 6 meters away" --expire-time=20000
+    # pkill gammastep
+    # gammastep -b 0.1 &
+    # sleep 16
+    # pkill gammastep
+    # gammastep -r &
+done

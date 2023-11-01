@@ -1,0 +1,99 @@
+#!/bin/sh
+# Author: Atri Hegde
+
+if [ $# -ne 3 ]; then
+  echo "Usage: book_event dd mm yyyy"
+  echo "Please provide date"
+  exit 1
+fi
+
+day="$1"
+month="$2"
+year="$3"
+
+if [ ${#day} -ne 2 ]; then
+  echo "Day provided must be two digits"
+  exit
+fi
+if [ ${#month} -ne 2 ]; then
+  echo "Month provided must be two digits"
+  exit
+fi
+if [ ${#year} -ne 4 ]; then
+  echo "Year provided must be four digits"
+  exit
+fi
+
+# Check if gum and wtype is installed
+if ! gum -v &> /dev/null
+then
+   echo "Gum is not installed."
+   echo "To run me without fancy animations, open this script and remove/comment lines 3-9"
+   exit
+fi
+
+# Check if wtype is installed
+# if ! wtype -h &> /dev/null
+# then
+#     echo "wtype is required and not installed."
+#     exit
+# fi
+
+gum spin --spinner monkey --title "Waiting 3 seconds before starting" -- sleep 3
+
+gum spin --spinner dot --title "Entering: phone number." -- wtype "07471 637019"
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Society title." -- wtype "ShefESH"
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Society status" -- wtype "Secretary"
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Student Society Registration Body" -- wtype -k space
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Event title" -- wtype "Weekly Session"
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Type of event" -- wtype -k tab -k space
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Start date/time" -- wtype $day
+gum spin --spinner dot --title "Entering: Start date/time" -- wtype $month
+gum spin --spinner dot --title "Entering: Start date/time" -- wtype $year
+gum spin --spinner dot --title "Entering: Start date/time" -- wtype -k tab -k tab "1800"
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: End date/time" -- wtype $day $month "$year" -k tab -k tab "1930"
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Number of attendees" -- wtype 50
+wtype -k tab -k tab -k tab
+
+gum spin --spinner dot --title "Entering: External speaker attending event" -- wtype -k tab -k space
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Controversial event?" -- wtype -k tab -k space
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: External organisation" -- wtype -k tab -k space
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Where event is advertised" -- wtype "Society website, Society social media, SU"
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Licensing" -- wtype -k tab -k space
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Public attendees" -- wtype -k tab -k space
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Charge" -- wtype "None"
+wtype -k tab
+
+gum spin --spinner dot --title "Entering: Additional info" -- wtype "Projector needed"
+
+gum spin --spinner dot --title "Agreeing to things" -- wtype -k tab -k tab -k tab -k space
+
+echo "Done!"

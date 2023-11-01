@@ -5,11 +5,11 @@
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
-    "modules-left": ["wlr/workspaces"],
+    "modules-left": ["hyprland/workspaces"],
     //"modules-center": ["sway/window"],
     "modules-right": ["mpd", "custom/spotify", "pulseaudio", "network", "memory", "temperature", "backlight", "battery", "clock", "tray"],
     // Modules configuration
-     "wlr/workspaces": {
+     "hyprland/workspaces": {
          "on-click": "activate",
          "on-scroll-up": "hyprctl dispatch workspace e+1",
          "on-scroll-down": "hyprctl dispatch workspace e-1",
@@ -39,7 +39,7 @@
     },
     "clock": {
         "interval": 1,
-        "format": " {:%H:%M:%S}",
+        "format": " {:%H:%M}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
     },
