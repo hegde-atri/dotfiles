@@ -1,0 +1,27 @@
+#+title: zshrc
+#+author: Atri Hegde
+#+property: header-args :tangle ~/.zshrc
+
+* General
+** History
+#+begin_src shell :tangle ~/.zshrc
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+#+end_src
+
+** Completion system
+#+begin_src shell
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select
+#+end_src
+
+* Aliases
+
+
+* Adding programs
+** Starship
+#+begin_src bash
+eval "$(starship init zsh)"
+#+end_src
