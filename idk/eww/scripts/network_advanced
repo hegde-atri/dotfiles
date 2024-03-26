@@ -1,0 +1,8 @@
+#!/bin/sh
+if [ "$1" = "download" ]; then
+    echo "0"
+elif [ "$1" = "upload"]; then
+    echo "upload"
+elif [ "$1" = "name"]; then
+    echo "name"
+fi

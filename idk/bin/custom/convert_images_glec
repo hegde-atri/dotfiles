@@ -1,0 +1,15 @@
+#!/bin/bash                                                                 
+
+for file in *.zip; do
+  folder=${file%.zip}                                                         
+  mkdir "$folder"                                                           
+  unzip "$file" -d "$folder"                                                
+  cd "$folder"                                                              
+  for file in *.bmp; do                                                     
+    filename="${file%.*}"                                                 
+    convert "$file" "$filename.jpg"                                       
+  done                                                                      
+  rm *.bmp
+  zip -r "../$folder.zip" *.jpg                                                
+  cd ..                                                                     
+done  

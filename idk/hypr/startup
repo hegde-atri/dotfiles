@@ -1,0 +1,73 @@
+#!/bin/sh
+# --- xdg-desktop-portal-hyprland ---
+# sleep 1
+# killall xdg-desktop-portal-hyprland
+# killall xdg-desktop-portal-wlr
+# killall xdg-desktop-portal
+# /usr/libexec/xdg-desktop-portal-hyprland &
+# sleep 2
+# /usr/lib/xdg-desktop-portal &
+
+# --- dbus ---
+dbus-daemon --session --address=unix:path=$XDG_RUNTIME_DIR/bus &
+dbus-update-activation-environment --all &
+
+# --- OTHER settings ---
+# --- Java settings ---
+export _JAVA_AWT_WM_NONREPARENTING=1
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
+export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+export JAVA_FONTS=/usr/share/fonts/TTF
+
+# --- GTK settings ---
+gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
+gsettings set org.gnome.desktop.interface icon-theme 'Breeze Dark'
+gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
+
+# --- gnome polkit ---
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+
+# --- Pipewire / Audio ---
+/usr/bin/pipewire &
+/usr/bin/pipewire-pulse &
+/usr/bin/wireplumber &
+
+# --- Notification daemon ---
+mako &
+
+# --- Emacs ---
+emacs --daemon &
+
+# --- MPD ---
+mpd &
+
+# --- Background ---
+swww-daemon &
+
+# --- Signal ---
+# signal-desktop --use-tray-icon --enable-features=UseOzonePlatform --ozone-platform=wayland &
+# signal-desktop --use-tray-icon &
+
+# --- Bar ---
+# ~/.config/eww/launch_bars &
+# waybar &
+
+# --- swayidle ---
+swayidle -w \
+   timeout 300 '~/.local/bin/custom/lockscreen' \
+   before-sleep '~/.local/bin/custom/lockscreen' &
+
+# --- Foot terminal ---
+foot --server &
+
+# --- Open apps on startup ---
+# firefox &
+
+# --- Scripts ---
+~/.local/bin/custom/look-away &
+
+# --- gammastep ---
+gammastep &
+
+# --- open tablet driver ---
+systemctl --user start opentabletdriver

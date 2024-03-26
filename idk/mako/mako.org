@@ -1,0 +1,36 @@
+#+title: Mako
+#+author: Atri Hegde
+#+auto_tangle: t
+#+PROPERTY: header-args :tangle config
+
+* Table of contents :TOC:
+- [[#global][Global]]
+- [[#binding][Binding]]
+- [[#style][Style]]
+
+* Global
+
+#+begin_src conf
+max-history=25
+sort=-time
+#+end_src
+
+* Binding
+
+#+begin_src conf
+on-button-left=invoke-default-action
+on-button-right=dismiss
+#+end_src
+
+* Style
+
+#+begin_src conf
+font=Ioveska Aile 10
+background-color=#1e1e2eFF
+border-size=2
+border-radius=10
+border-color=#313244FF
+progress-color=#89b4faFF
+icons=1
+default-timeout=5000
+#+end_src

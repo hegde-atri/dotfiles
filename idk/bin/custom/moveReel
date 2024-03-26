@@ -1,0 +1,15 @@
+#!/bin/sh
+# Author: Atri Hegde
+
+if [ $# -ne 2 ]; then
+    echo "Usage: moveReel <currentFile> <finalFileName>"
+    exit 1
+fi
+
+orig="$1"
+target="$2"
+
+mkdir ~/Videos/hussles/$2
+mv $1 ~/Videos/hussles/$2/$2-raw.mp4
+
+echo "Moved $1 to ~/Videos/hussles/$2/$2.mp4"

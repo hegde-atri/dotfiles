@@ -1,0 +1,270 @@
+$bg: transparent;
+$red: #e06c75;
+$error: #f38ba8;
+$warn: #e5c890;
+$success: #a6e3a1;
+
+$background: #0e1013    ;
+$background-alt: #313244;
+$background-alt2: #1e1e2e;
+$foreground: #cdd6f4;
+$red-alt: #f38ba8;
+$yellow: #f9e2af;
+$orange: #fab387;
+$green: #a6e3a1;
+$blue: #89b4fa;
+$blue2: #74c7ec;
+$magenta: #cba6f7;
+$cyan: #94e2d5;
+
+* {
+    all: unset;
+    font-family: "MonoLisa Nerd Font";
+}
+
+button {
+    padding-right: 10px;
+    padding-left: 10px;
+    transition: all;
+    transition-duration: 300ms;
+}
+
+.bat_mod, .ram_mod, .cpu_mod, .vpn_mod, .net_mod {
+    margin: 0px 10px 0px 10px;
+}
+
+.main_bar{
+    background-color: $background;
+}
+
+.left_modules, .right_modules, .center_modules{
+    padding: 8px;
+    border-radius: 15px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+}
+
+.sep {
+    color: rgb(90, 90, 90);
+}
+
+.clock {
+    font-family: "Iosevka Aile";
+    padding-right: 5px;
+}
+
+.cal_label_day {
+    font-family: "Iosevka Aile";
+    padding-left: 10px;
+    color: $red;
+}
+
+.cal_label_month {
+    font-family: "Iosevka Aile";
+    color: $warn;
+}
+
+.cal {
+  background-color: black;
+  font-family: "Iosevka Aile";
+  font-size: 15px;
+  font-weight: normal;
+
+.cal-in {
+    padding: 0px 10px 0px 10px;
+    color: #ababab;
+
+.cal {
+     &.highlight {
+          padding: 20px;
+      }
+
+      padding: 50px;
+      margin-left: 10px;
+    }
+  }
+}
+
+calendar:selected {
+  color: white;
+  background-color: black;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+calendar.header {
+  color: gray;
+  font-weight: bold;
+}
+
+calendar.button {
+  color: gray;
+}
+
+calendar.highlight {
+  color: gray;
+  font-weight: bold;
+}
+
+calendar:indeterminate {
+  color: #808080;
+}
+
+.cpu {
+    color: rgb(86, 182, 194);
+    background-color: rgb(10, 50, 80);
+}
+
+.cpu_icon {
+    min-height: 0;
+    min-width: 0;
+    color: transparent;
+    padding: 0px;
+    margin: 6px;
+}
+
+.ram {
+    color: rgb(97, 175, 239);
+    background-color: rgb(30, 70, 90);
+}
+
+.ram_icon {
+    min-height: 0;
+    min-width: 0;
+    padding: 0px;
+    color: transparent;
+    margin: 6px;
+}
+
+.metric scale trough highlight {
+  background-color: rgba(90, 80, 185, 1);
+  color: #000000;
+  border-radius: 10px;
+}
+.metric scale trough {
+  background-color: rgba(20, 30, 120, 0.6);
+  border-radius: 10px;
+  min-height: 12px;
+  min-width: 100px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.vol_icon {
+    font-size: 18px;
+    color: #a1bdce;
+    margin: 0px 10px 0px 10px;
+}
+
+.inner-mod{
+    margin: 0px 0px 0px 0px;
+    border-radius: 10px 16px 0px 10px;
+}
+
+.bat {
+  color: rgb(152, 195, 121);
+  background-color: rgb(15, 80, 60);
+}
+
+
+.bat_icon {
+  min-height: 0;
+  min-width: 0;
+  color: transparent;
+  padding: 0;
+  margin: 8px;
+  font-size: 10px;
+}
+
+.bat_charged {
+  color: gray;
+}
+.bat_charging {
+  color: $yellow;
+}
+
+
+
+
+
+.network_module {
+  margin-right: 8px;
+}
+.network_button {
+  color: $foreground;
+}
+
+.network_box {
+  border-radius: 5px;
+  background: $background-alt2;
+  min-height: 200px;
+  min-width: 200px;
+  padding: 5px;
+}
+.net_active {
+  font-weight: bold;
+}
+.net_up {
+  color: $orange;
+}
+.net_down {
+  color: $green;
+}
+.net_down_label, .net_up_label {
+  font-family: Iosevka Aile;
+}
+.net_down_speed, .net_up_speed {
+  color: gray;
+  // color: rgba(255, 255, 255, 0.6);
+  font-family: Iosevka Aile;
+  font-size: 12px;
+}
+
+.vpn_button {
+}
+
+.vpn_inactive {
+    color: $warn;
+}
+
+.vpn_active {
+    color: $success;
+}
+
+.music_box {
+  background: $background-alt2;
+  border-radius: 10px;
+  padding: 5px;
+}
+.play_button {
+  font-size: 30;
+}
+.next_button, .prev_button {
+  font-size: 20;
+}
+.shuffle_button, .loop_button {
+  color: gray;
+}
+
+.workspace_module {
+  margin: 0 6px 0 2px;
+  color: $foreground;
+}
+
+.control_centre {
+  background: $background;
+}
+
+.power_control {
+  font-size: 25px;
+}
+.sleep_button {
+  color: $yellow;
+}
+.sleep_button:hover, .shutdown_button:hover{
+  background: $background-alt2;
+}
+.shutdown_button {
+  color: $red;
+}

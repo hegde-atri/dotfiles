@@ -1,0 +1,10 @@
+#!/bin/sh
+connection_type=$(nmcli -t -f TYPE connection show --active)
+
+if echo "$connection_type" | grep -q "802-11-wireless"; then
+    echo "󰤨"
+elif echo "$connection_type" | grep -q "802-3-ethernet"; then
+    echo "󰈀"
+else
+    echo "󱘖"
+fi
