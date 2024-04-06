@@ -20,20 +20,12 @@ export _JAVA_OPTIONS='-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndF
 export JAVA_FONTS=/usr/share/fonts/TTF
 
 # --- GTK settings ---
-gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
-gsettings set org.gnome.desktop.interface icon-theme 'Breeze Dark'
-gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
+gsettings set org.gnome.desktop.interface gtk-theme 'Dracula'
+gsettings set org.gnome.desktop.interface icon-theme 'Dracula'
+gsettings set org.gnome.desktop.interface cursor-theme ''
 
 # --- gnome polkit ---
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
-
-# --- Pipewire / Audio ---
-/usr/bin/pipewire &
-/usr/bin/pipewire-pulse &
-/usr/bin/wireplumber &
-
-# --- Notification daemon ---
-mako &
 
 # --- Emacs ---
 emacs --daemon &
@@ -44,30 +36,18 @@ mpd &
 # --- Background ---
 swww-daemon &
 
-# --- Signal ---
-# signal-desktop --use-tray-icon --enable-features=UseOzonePlatform --ozone-platform=wayland &
-# signal-desktop --use-tray-icon &
-
 # --- Bar ---
-# ~/.config/eww/launch_bars &
-# waybar &
-
-# --- swayidle ---
-swayidle -w \
-   timeout 300 '~/.local/bin/custom/lockscreen' \
-   before-sleep '~/.local/bin/custom/lockscreen' &
+ags &
 
 # --- Foot terminal ---
 foot --server &
-
-# --- Open apps on startup ---
-# firefox &
-
-# --- Scripts ---
-~/.local/bin/custom/look-away &
 
 # --- gammastep ---
 gammastep &
 
 # --- open tablet driver ---
-systemctl --user start opentabletdriver
+# systemctl --user start opentabletdriver
+
+# --- Scripts ---
+sleep 5
+~/.local/bin/custom/look-away &

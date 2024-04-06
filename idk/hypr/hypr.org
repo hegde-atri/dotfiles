@@ -26,9 +26,12 @@
 - [[#misc][Misc]]
 - [[#window-rules][Window rules]]
 - [[#keybinds][Keybinds]]
+- [[#hyprlock][Hyprlock]]
+- [[#hypridle][Hypridle]]
 - [[#scripts][Scripts]]
   - [[#disable-animations][Disable animations]]
   - [[#shutdown][Shutdown]]
+  - [[#desktop-portal-xdph][Desktop Portal (XDPH)]]
 
 * Hyprland config
 
@@ -99,9 +102,9 @@ export JAVA_FONTS=/usr/share/fonts/TTF
 
 #+begin_src shell :tangle startup :shebang #!/bin/sh
 # --- GTK settings ---
-gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
-gsettings set org.gnome.desktop.interface icon-theme 'Breeze Dark'
-gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
+gsettings set org.gnome.desktop.interface gtk-theme 'Dracula'
+gsettings set org.gnome.desktop.interface icon-theme 'Dracula'
+gsettings set org.gnome.desktop.interface cursor-theme ''
 #+end_src
 
 ** Polkit
@@ -114,14 +117,6 @@ gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
 ** Daemons
 
 #+begin_src shell :tangle startup :shebang #!/bin/sh
-# --- Pipewire / Audio ---
-/usr/bin/pipewire &
-/usr/bin/pipewire-pulse &
-/usr/bin/wireplumber &
-
-# --- Notification daemon ---
-mako &
-
 # --- Emacs ---
 emacs --daemon &
 
@@ -131,18 +126,8 @@ mpd &
 # --- Background ---
 swww-daemon &
 
-# --- Signal ---
-# signal-desktop --use-tray-icon --enable-features=UseOzonePlatform --ozone-platform=wayland &
-# signal-desktop --use-tray-icon &
-
 # --- Bar ---
-# ~/.config/eww/launch_bars &
-# waybar &
-
-# --- swayidle ---
-swayidle -w \
-   timeout 300 '~/.local/bin/custom/lockscreen' \
-   before-sleep '~/.local/bin/custom/lockscreen' &
+ags &
 
 # --- Foot terminal ---
 foot --server &
@@ -151,17 +136,16 @@ foot --server &
 ** Startup applications
 
 #+begin_src shell :tangle startup :shebang #!/bin/sh
-# --- Open apps on startup ---
-# firefox &
-
-# --- Scripts ---
-~/.local/bin/custom/look-away &
-
 # --- gammastep ---
 gammastep &
 
 # --- open tablet driver ---
-systemctl --user start opentabletdriver
+# systemctl --user start opentabletdriver
+
+# --- Scripts ---
+sleep 5
+~/.local/bin/custom/look-away &
+
 #+end_src
 
 * Monitor rules
@@ -189,16 +173,16 @@ monitor=eDP-1,preferred,0x1080,1.0
 monitor=DP-1,1920x1080@120,0x0,1.0
 monitor=HDMI-A-1,preferred,0x0,1.0
 
-workspace=DP-1, 1
-workspace=DP-1, 2
-workspace=DP-1, 3
-workspace=DP-1, 4
-workspace=DP-1, 5
-workspace=eDP-1, 6
-workspace=eDP-1, 7
-workspace=eDP-1, 8
-workspace=eDP-1, 9
-workspace=eDP-1, 10
+workspace= 1, monitor:DP-1
+workspace= 2, monitor:DP-1
+workspace= 3, monitor:DP-1
+workspace= 4, monitor:DP-1
+workspace= 5, monitor:DP-1
+workspace= 6, monitor:eDP-1
+workspace= 7, monitor:eDP-1
+workspace= 8, monitor:eDP-1
+workspace= 9, monitor:eDP-1
+workspace= 10, monitor:eDP-1
 #+end_src
 
 ** HDMI monitor
@@ -242,14 +226,15 @@ workspace=HDMI-A-1, 10
 #+begin_src conf :tangle modules/exec-once.conf
 exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec-once = ~/.config/hypr/startup &
-# exec-once=wl-paste -p --watch wl-copy -p ''
 #+end_src
 
 ** Autostart apps
 
 #+begin_src conf :tangle modules/exec-once.conf
 exec-once=gnome-keyring-daemon -d
-exec-once=[workspace 5 silent] signal-desktop --use-tray-icon --enable-features=UseOzonePlatform --ozone-platform=wayland &
+exec-once=noisetorch -i
+exec-once=hypridle
+# exec-once=[workspace 5 silent] signal-desktop --use-tray-icon --enable-features=UseOzonePlatform --ozone-platform=wayland &
 exec-once=[workspace 8 silent] spotify --enable-features=UseOzonePlatform --ozone-platform=wayland
 exec-once=[workspace 4 silent] ticktick
 #+end_src
@@ -269,7 +254,7 @@ env = QT_QPA_PLATFORM,wayland;xcb
 env = QT_WAYLAND_DISABLE_WINDOWDECORATION,1
 env = QT_QPA_PLATFORMTHEME,qt6ct
 # Theme
-env = XCURSOR_THEME,Capitaine Cursors
+# env = XCURSOR_THEME,Capitaine Cursors
 # ROCM
 env = ROC_ENABLE_PRE_VEGA,1
 #+end_src
@@ -413,7 +398,8 @@ windowrule=workspace 9 silent, webcord
 # --- Firefox Picture in Picture ---
 windowrulev2 = float,class:^(firefox)$,title:^(Picture-in-Picture)$
 windowrulev2 = pin,class:^(firefox)$,title:^(Picture-in-Picture)$
-# windowrulev2 = nofullscreenrequest,class:^(firefox)$,title:^(Picture-in-Picture)$
+windowrulev2 = float,class:^(firefox)$,title:^()$
+windowrulev2 = float,class:(kitty),title:(kitty)
 # --- Flameshot fix ---
 windowrulev2=move 0 0,title:^(flameshot)
 # windowrulev2=nofullscreenrequest,title:^(flameshot)
@@ -435,20 +421,20 @@ $mainMod = SUPER
 bind = $mainMod, return, exec, footclient
 bind = $mainMod, U, exec, firefox
 bind = $mainMod, Y, exec, emacsclient -nc
-bind = $mainMod, O, exec, ~/.local/bin/custom/lockscreen
+bind = $mainMod, O, exec, hyprlock
 bind = $mainMod, P, exec, wlogout
 # --- eww bar ---
 bind = $mainMod, B, exec, eww open --toggle bar0
 # bind = $mainMod SHIFT, B, exec, eww open --toggle bar1
 bind = $mainMod, N, exec, eww open --toggle control_centre
-bind = $mainModSHIFT, B, exec, pkill waybar || waybar
+bind = $mainMod SHIFT, B, exec, pkill waybar || waybar
 # --- wofi things ---
 bind = $mainMod, space, exec, pkill fuzzel || fuzzel
 bind = $mainMod, W, exec, pkill set-bg || ~/.local/bin/custom/set-bg
 bind = $mainMod, E, exec, pkill wofi-emoji || wofi-emoji
 
 # Util
-bind = $mainMod SHIFT, C, exec, hyprpicker | wl-copy
+bind = $mainMod SHIFT, C, exec, hyprpicker -ar
 
 # Window manager things
 bind = $mainMod, Q, killactive
@@ -461,7 +447,7 @@ bind = $mainMod SHIFT, F, fakefullscreen
 bind = $mainMod, T, pseudo, # dwindle
 bind = $mainMod, R, togglesplit, # dwindle
 bind = $mainMod, G, togglegroup,
-bind = ALT, TAB, changegroupactive, f
+# bind = ALT, TAB, changegroupactive, f
 bind = ALT SHIFT, TAB, changegroupactive, b
 # Enable powersave mode
 bind = ALT SHIFT, P, exec, ~/.config/hypr/scripts/toggle_animations.sh
@@ -470,7 +456,6 @@ bind = ALT SHIFT, P, exec, ~/.config/hypr/scripts/toggle_animations.sh
 binde = $mainMod, equal, exec, ~/.cargo/bin/hypr-helper gaps increase
 binde = $mainMod, minus, exec, ~/.cargo/bin/hypr-helper gaps decrease
 binde = $mainMod SHIFT, equal, exec, ~/.cargo/bin/hypr-helper gaps reset
-
 #+end_src
 
 **** Scratchpad
@@ -487,6 +472,7 @@ bind = SUPER,S,togglespecialworkspace
 bind = ,F1,pass,^(com\.obsproject\.Studio)$
 bind = ,F2,pass,^(com\.obsproject\.Studio)$
 bind = ,F3,pass,^(com\.obsproject\.Studio)$
+bind = ,F4,pass,^(com\.obsproject\.Studio)$
 #+end_src
 
 *** Window Manipulation
@@ -583,10 +569,104 @@ bind=$mainMod SHIFT, Print, exec, grim -g "$(slurp)" - | swappy -f -
 # Cycle through monitor modes
 #+end_src
 
+* Hyprlock
+#+begin_src conf :tangle hyprlock.conf
+general {
+    hide_cursor = true
+    ignore_empty_input = false
+    grace = 3
+}
+background {
+    monitor =
+    color = rgba(0, 0, 0, 0.7)
+    # all these options are taken from hyprland, see https://wiki.hyprland.org/Configuring/Variables/#blur for explanations
+    # blur_passes = 2 # 0 disables blurring
+    # blur_size = 1
+    # vibrancy_darkness = 0.0
+}
+label {
+    monitor =
+    text = cmd[update:1300] echo "<b><big> $(date +"%H:%M") </big></b>"
+    color = $color7
+    font_size = 64
+    font_family = JetBrains Mono Nerd Font 10
+    position = 0, 16
+    halign = center
+    valign = center
+}
+input-field {
+    monitor =
+    size = 250, 35
+    outline_thickness = 2
+    dots_size = 0.33 # Scale of input-field height, 0.2 - 0.8
+    dots_spacing = 0.15 # Scale of dots' absolute size, 0.0 - 1.0
+    dots_center = false
+    dots_rounding = -1 # -1 default circle, -2 follow input-field rounding
+    outer_color = rgb(151515)
+    inner_color = rgb(200, 200, 200)
+    font_color = rgb(10, 10, 10)
+    fade_on_empty = true
+    fade_timeout = 1000 # Milliseconds before fade_on_empty is triggered.
+    placeholder_text = <i>Input Password...</i> # Text rendered in the input box when it's empty.
+    hide_input = false
+    rounding = 15 # -1 means complete rounding (circle/oval)
+    check_color = rgb(204, 136, 34)
+    fail_color = rgb(204, 34, 34) # if authentication failed, changes outer_color and fail message color
+    fail_text = <i>$FAIL <b>($ATTEMPTS)</b></i> # can be set to empty
+    fail_transition = 300 # transition time in ms between normal outer_color and fail_color
+    capslock_color = -1
+    numlock_color = -1
+    bothlock_color = -1 # when both locks are active. -1 means don't change outer color (same for above)
+    invert_numlock = false # change color if numlock is off
+    swap_font_color = false # see below
+
+    position = 0, -20
+    halign = center
+    valign = center
+}
+#+end_src
+* Hypridle
+#+begin_src conf :tangle hypridle.conf
+general {
+    lock_cmd = pidof hyprlock || hyprlock       # avoid starting multiple hyprlock instances.
+    before_sleep_cmd = loginctl lock-session    # lock before suspend.
+    after_sleep_cmd = hyprctl dispatch dpms on  # to avoid having to press a key twice to turn on the display.
+}
+
+listener {
+    timeout = 150                                # 2.5min.
+    on-timeout = brightnessctl -s set 10         # set monitor backlight to minimum, avoid 0 on OLED monitor.
+    on-resume = brightnessctl -r                 # monitor backlight restor.
+}
+
+# turn off keyboard backlight, comment out this section if you dont have a keyboard backlight.
+listener {
+    timeout = 150                                          # 2.5min.
+    on-timeout = brightnessctl -sd rgb:kbd_backlight set 0 # turn off keyboard backlight.
+    on-resume = brightnessctl -rd rgb:kbd_backlight        # turn on keyboard backlight.
+}
+
+listener {
+    timeout = 300                                 # 5min
+    on-timeout = loginctl lock-session            # lock screen when timeout has passed
+}
+
+listener {
+    timeout = 330                                 # 5.5min
+    on-timeout = hyprctl dispatch dpms off        # screen off when timeout has passed
+    on-resume = hyprctl dispatch dpms on          # screen on when activity is detected after timeout has fired.
+}
+
+listener {
+    timeout = 1800                                # 30min
+    on-timeout = systemctl suspend                # suspend pc
+}
+#+end_src
+
 * Scripts
 ** Disable animations
-#+begin_src sh :shebang "#!/bin/sh" :mkdirp t :tangle scripts/toggle_animations.sh
-HYPRGAMEMODE=$(hyprctl getoption animations:enabled | awk 'NR==2{print $2}')
+#+begin_src sh :shebang "#!/usr/bin/env sh" :mkdirp t :tangle scripts/toggle_animations.sh
+HYPRGAMEMODE=$(hyprctl getoption animations:enabled | awk 'NR==1{print $2}')
 if [ "$HYPRGAMEMODE" = 1 ] ; then
     hyprctl --batch "\
         keyword animations:enabled 0;\
@@ -612,4 +692,15 @@ hyprctl --batch "$HYPRCMDS" >> /tmp/hypr/hyprexitwithgrace.log 2>&1
 # ( sleep 2; sudo shutdown now ) &  # doesn't work bc bg process is child of hyprland and will get killed with parent
 # f*!* it, just shutdown now
 sudo shutdown now >> /tmp/hypr/hyprexitwithgrace.log 2>&1
+#+end_src
+
+** Desktop Portal (XDPH)
+#+begin_src shell :shebang "#!/usr/bin/env bash" :mkdirp t :tangle scripts/xdph.sh
+sleep 1
+killall -e xdg-desktop-portal-hyprland
+killall -e xdg-desktop-portal-wlr
+killall xdg-desktop-portal
+/usr/lib/xdg-desktop-portal-hyprland &
+sleep 2
+/usr/lib/xdg-desktop-portal &
 #+end_src
