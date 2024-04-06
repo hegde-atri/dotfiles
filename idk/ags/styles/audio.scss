@@ -1,0 +1,103 @@
+@use "colors";
+
+.audio-settings-window {
+
+    image {
+        font-size: 15px;
+        padding: 10px;
+    }
+
+    slider {
+        background: colors.$primary;
+        box-shadow: none;
+        box-shadow: 0 0 5px black;
+
+        &:hover {
+            box-shadow:
+                0 0 5px black,
+                0 0 0 8px transparentize($color: colors.$overlay, $amount: 0.7);
+        }
+
+        &:active {
+            box-shadow:
+                0 0 5px black,
+                0 0 0 10px transparentize($color: colors.$overlay, $amount: 0.7);
+        }
+    }
+
+    trough {
+        // background: linear-gradient(to right, colors.$overlay 70%, colors.$error 30%);
+        min-height: 4px;
+        border-radius: 10px;
+        margin: 0 5px;
+    }
+
+    highlight {
+        background: colors.$primary;
+    }
+}
+
+.audio-settings-box {
+    background: transparentize($color: colors.$mantle, $amount: 0.4);
+    border-radius: 20px;
+    padding: 20px;
+    min-width: 400px;
+    transition: all 0.15s;
+}
+
+.audio-page-header {
+    background: colors.$surface;
+    border-radius: 100px;
+    padding: 4px;
+
+    button {
+        border-radius: 100px;
+        padding: 3px 60px;
+        label {
+            color: colors.$overlay;
+        }
+    }
+}
+
+.active-audio-page-header:nth-child(1) {
+    background: darken($color: colors.$secondary, $amount: 15);
+    box-shadow: 0px 0px 6px #000000aa;
+    label{
+
+            color: colors.$text;
+    }
+}
+.active-audio-page-header:nth-child(2) {
+    background: darken($color: colors.$primary, $amount: 15);
+    box-shadow: 0px 0px 6px #000000aa;
+    label{
+
+            color: colors.$text;
+    }
+}
+
+.current-audio-stream-box {
+    font-weight: bold;
+    image {
+        font-size: 18px;
+    }
+}
+
+.audio-stream-selector {
+    background: colors.$base;
+    box-shadow: 0 0 4px black;
+    margin: 5px;
+    border-radius: 12px;
+
+    padding: 5px;
+    
+    button:hover {
+        background: colors.$surface;
+        border-radius: 12px;
+    }
+    button:active {
+        background: colors.$surface;
+        border-radius: 12px;
+        opacity: .4;
+    }
+}

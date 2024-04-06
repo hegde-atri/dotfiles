@@ -1,0 +1,32 @@
+@use 'colors';
+
+* {
+  color: colors.$text;
+}
+
+button {
+  border: none;
+  background: none;
+  box-shadow: none;
+  outline:none;
+  border-radius: 0;
+  padding: 0;
+}
+
+menu {
+  background: transparentize($color: colors.$base, $amount: 0.9);
+}
+
+menuitem:hover {
+  background: colors.$surface;
+}
+
+tooltip {
+  background: transparentize($color: colors.$mantle, $amount: 0.02);
+  border: none;
+  label {
+    color: colors.$text;
+  }
+}
+
+

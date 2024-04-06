@@ -1,0 +1,570 @@
+.bar-window {
+  font-size: 14px;
+  background: #181825;
+}
+.bar-window circular-progress {
+  min-width: 24px;
+  min-height: 24px;
+  font-size: 3px;
+  background: #313244;
+  color: #89b4fa;
+}
+.bar-window circular-progress image {
+  color: #cdd6f4;
+  font-size: 8px;
+}
+
+.left-widget-container,
+.center-widget-container,
+.right-widget-container {
+  background: #181825;
+  border-radius: 10px;
+  min-height: 34px;
+}
+
+.left-widget-container {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.right-widget-container {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  padding-right: 12px;
+}
+
+.control-button {
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 18px;
+}
+.control-button:hover {
+  background: none;
+  opacity: 0.8;
+}
+.control-button:active {
+  background: none;
+  opacity: 0.5;
+}
+
+.workspace-widget {
+  margin-left: 15px;
+  border-radius: 20px;
+  background: #1e1e2e;
+  padding-left: 10px;
+  padding-right: 10px;
+  box-shadow: 0px 0px 4px black;
+  min-height: 30px;
+  margin-right: 2px;
+}
+.workspace-widget .workspace-fill {
+  padding: 3px;
+  margin: 0 2px;
+  border-radius: 20px;
+  background: #313244;
+  transition: all 0.2s;
+}
+.workspace-widget .active-workspace .workspace-fill {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  background: #89b4fa;
+}
+.workspace-widget .focused-workspace .workspace-fill {
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.player-widget {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.clock-widget {
+  margin: 4px;
+  font-weight: bold;
+  padding-left: 18px;
+  padding-right: 18px;
+  border-radius: 20px;
+}
+
+.systray-widget {
+  background: #1e1e2e;
+  min-height: 30px;
+  border-radius: 20px;
+  margin-right: 18px;
+  margin-left: 2px;
+  box-shadow: 0px 0px 4px black;
+}
+.systray-widget image {
+  font-size: 13px;
+  padding: 4px 8px;
+}
+.systray-widget image .systray-icons button {
+  border-radius: 20px;
+}
+.systray-widget image .systray-icons button:hover {
+  background: #313244;
+  opacity: 0.8;
+}
+.systray-widget image .systray-icons button:active {
+  background: #313244;
+  opacity: 0.5;
+}
+.systray-widget image .systray-button {
+  border-radius: 20px;
+}
+.systray-widget image .systray-button:hover {
+  background: #313244;
+  opacity: 0.8;
+}
+.systray-widget image .systray-button:active {
+  background: #313244;
+  opacity: 0.5;
+}
+.systray-widget image .systray-button image {
+  font-size: 16px;
+}
+
+.info-widget {
+  margin-right: 18px;
+}
+
+.brightness-widget circular-progress {
+  color: #f9e2af;
+}
+
+.microphone-widget circular-progress {
+  color: #cba6f7;
+}
+
+.battery-widget {
+  margin-right: 18px;
+  background: #1e1e2e;
+  border-radius: 20px;
+  min-height: 30px;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-right: 10px;
+  box-shadow: 0px 0px 4px black;
+}
+
+.battery-red .battery-progress {
+  color: #f38ba8;
+}
+
+.battery-yellow .battery-progress {
+  color: #f9e2af;
+}
+
+.battery-green .battery-progress {
+  color: #a6e3a1;
+}
+
+.battery-charging .battery-progress image {
+  color: #a6e3a1;
+  font-size: 15px;
+}
+
+.power-button {
+  font-size: 22px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.power-button:hover {
+  background: none;
+  opacity: 0.8;
+}
+.power-button:active {
+  background: none;
+  opacity: 0.5;
+}
+.power-button image {
+  color: #f38ba8;
+}
+
+.selector-ribbon {
+  background: #313244;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  min-width: 400px;
+  min-height: 36px;
+}
+.selector-ribbon button:hover {
+  background: #1e1e2e;
+  opacity: 0.8;
+}
+.selector-ribbon button:active {
+  background: #1e1e2e;
+  opacity: 0.5;
+}
+
+.appmenu-box {
+  background: #1e1e2e;
+  margin: 20px;
+  box-shadow: 1px 1px 5px black;
+}
+.appmenu-box button {
+  font-size: 16px;
+}
+.appmenu-box button:hover {
+  background: #1e1e2e;
+  opacity: 0.8;
+}
+.appmenu-box button:active {
+  background: #1e1e2e;
+  opacity: 0.5;
+}
+.appmenu-box button image {
+  font-size: 36px;
+}
+
+* {
+  color: #cdd6f4;
+}
+
+button {
+  border: none;
+  background: none;
+  box-shadow: none;
+  outline: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+menu {
+  background: rgba(30, 30, 46, 0.1);
+}
+
+menuitem:hover {
+  background: #313244;
+}
+
+tooltip {
+  background: rgba(24, 24, 37, 0.98);
+  border: none;
+}
+tooltip label {
+  color: #cdd6f4;
+}
+
+.powermenu-window .powermenu-widget {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 12px;
+  border-top: 1px solid #313244;
+  border-bottom: 1px solid #313244;
+  border-left: 1px solid #313244;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background: #181825;
+  padding: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+.powermenu-window button {
+  border-radius: 20px;
+  padding: 45px;
+}
+.powermenu-window button:hover {
+  background: #1e1e2e;
+  opacity: 0.8;
+}
+.powermenu-window button:active {
+  background: #1e1e2e;
+  opacity: 0.5;
+}
+.powermenu-window button:focus {
+  background: #1e1e2e;
+  opacity: 0.8;
+}
+.powermenu-window button image {
+  font-size: 45px;
+}
+.powermenu-window .poweroff-button image {
+  color: #f38ba8;
+}
+.powermenu-window .restart-button image {
+  color: #f9e2af;
+}
+.powermenu-window .suspend-button image {
+  color: #a6e3a1;
+}
+.powermenu-window .logout-button image {
+  color: #cba6f7;
+}
+.powermenu-window .lock-button image {
+  color: #89b4fa;
+}
+
+.confirm-window {
+  font-size: 18px;
+}
+.confirm-window .confirm-box {
+  margin-bottom: 500px;
+  background: #1e1e2e;
+  border-radius: 20px;
+  margin-left: 12px;
+  margin-top: 12px;
+  margin-right: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+.confirm-window .confirm-text {
+  padding: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
+  background: #313244;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+.confirm-window .confirm-button-container button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.confirm-window .confirm-button-container button:hover {
+  background: #313244;
+  opacity: 0.8;
+}
+.confirm-window .confirm-button-container button:active {
+  background: #313244;
+  opacity: 0.5;
+}
+.confirm-window .confirm-button-container button:focus {
+  background: #313244;
+  opacity: 0.8;
+}
+.confirm-window .confirm-button-container button:nth-child(1) {
+  border-bottom-left-radius: 20px;
+}
+.confirm-window .confirm-button-container button:nth-last-child(1) {
+  border-bottom-right-radius: 20px;
+}
+.confirm-window .confirm-button-container button:nth-child(1) label {
+  color: #f38ba8;
+}
+
+.notif-image {
+  border-radius: 10px;
+  margin: 5px 15px 5px 0px;
+}
+
+.notif-box {
+  min-width: 370px;
+  min-height: 60px;
+  margin-right: 10px;
+  background: #1e1e2e;
+  border: 1px solid #313244;
+  margin: 5px;
+  margin-right: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.notif-info-box {
+  padding: 2px 2px 2px 10px;
+}
+
+.notif-close-button {
+  padding: 0px 3px;
+  margin: 0 5px;
+  border-radius: 10px;
+}
+.notif-close-button:hover {
+  background: #313244;
+  opacity: 0.8;
+}
+.notif-close-button:active {
+  background: #313244;
+  opacity: 0.5;
+}
+
+.notif-popup-box {
+  margin-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background: #181825;
+}
+.notif-popup-box:hover {
+  opacity: 0.8;
+}
+.notif-popup-box:active {
+  opacity: 0.5;
+}
+.notif-popup-box,
+.notif-popup-box .urgent-notif {
+  border-right: 5px solid #f38ba8;
+}
+.notif-popup-box,
+.notif-popup-box .normal-notif {
+  border-right: 5px solid #89b4fa;
+}
+.notif-popup-box,
+.notif-popup-box .low-notif {
+  border-right: 5px solid #a6e3a1;
+}
+
+.notif-action-button {
+  margin-top: 5px;
+  background: #313244;
+  border-right: 1px solid #181825;
+  font-size: 0.9em;
+  padding: 2px;
+}
+.notif-action-button:hover {
+  opacity: 0.8;
+}
+.notif-action-button:active {
+  opacity: 0.5;
+}
+.notif-action-button:nth-child(1) {
+  border-bottom-left-radius: 10px;
+}
+.notif-action-button:nth-last-child(1) {
+  border-right: none;
+}
+
+.notif-title {
+  font-weight: bold;
+}
+
+.notif-time {
+  font-size: 0.8em;
+  color: #bac2de;
+}
+
+.notif-body {
+  font-size: 0.9em;
+  color: #bac2de;
+}
+
+.notif-panel-window {
+  background: transparent;
+}
+
+.notif-panel-box {
+  background: rgba(24, 24, 37, 0.6);
+  border-radius: 10px;
+}
+.notif-panel-box .notif-panel-header {
+  padding: 10px 20px;
+}
+.notif-panel-box .notif-panel-header > label {
+  font-size: 1.3em;
+}
+.notif-panel-box .notif-panel-header button {
+  padding: 0.6em 0.8em;
+  border-radius: 10px;
+  background: #313244;
+}
+.notif-panel-box .notif-panel-header button:hover {
+  opacity: 0.8;
+}
+.notif-panel-box .notif-panel-header button:active {
+  opacity: 0.5;
+}
+.notif-panel-box .notif-panel-region {
+  min-width: 400px;
+}
+.notif-panel-box trough {
+  border-radius: 20px;
+  padding: 5px;
+}
+.notif-panel-box slider {
+  min-width: 2px;
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+.audio-settings-window image {
+  font-size: 15px;
+  padding: 10px;
+}
+.audio-settings-window slider {
+  background: #89b4fa;
+  box-shadow: none;
+  box-shadow: 0 0 5px black;
+}
+.audio-settings-window slider:hover {
+  box-shadow:
+    0 0 5px black,
+    0 0 0 8px rgba(108, 112, 134, 0.3);
+}
+.audio-settings-window slider:active {
+  box-shadow:
+    0 0 5px black,
+    0 0 0 10px rgba(108, 112, 134, 0.3);
+}
+.audio-settings-window trough {
+  min-height: 4px;
+  border-radius: 10px;
+  margin: 0 5px;
+}
+.audio-settings-window highlight {
+  background: #89b4fa;
+}
+
+.audio-settings-box {
+  background: rgba(24, 24, 37, 0.6);
+  border-radius: 20px;
+  padding: 20px;
+  min-width: 400px;
+  transition: all 0.15s;
+}
+
+.audio-page-header {
+  background: #313244;
+  border-radius: 100px;
+  padding: 4px;
+}
+.audio-page-header button {
+  border-radius: 100px;
+  padding: 3px 60px;
+}
+.audio-page-header button label {
+  color: #6c7086;
+}
+
+.active-audio-page-header:nth-child(1) {
+  background: #a260f1;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.6666666667);
+}
+.active-audio-page-header:nth-child(1) label {
+  color: #cdd6f4;
+}
+
+.active-audio-page-header:nth-child(2) {
+  background: #4085f7;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.6666666667);
+}
+.active-audio-page-header:nth-child(2) label {
+  color: #cdd6f4;
+}
+
+.current-audio-stream-box {
+  font-weight: bold;
+}
+.current-audio-stream-box image {
+  font-size: 18px;
+}
+
+.audio-stream-selector {
+  background: #1e1e2e;
+  box-shadow: 0 0 4px black;
+  margin: 5px;
+  border-radius: 12px;
+  padding: 5px;
+}
+.audio-stream-selector button:hover {
+  background: #313244;
+  border-radius: 12px;
+}
+.audio-stream-selector button:active {
+  background: #313244;
+  border-radius: 12px;
+  opacity: 0.4;
+}
+
+/*# sourceMappingURL=style.css.map */

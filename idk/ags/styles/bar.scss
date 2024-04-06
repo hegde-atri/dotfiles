@@ -1,0 +1,198 @@
+@use "colors";
+@use "utils" as *;
+
+@mixin shadow($opacity: 0) {
+    box-shadow: 0px 0px 4px transparentize($color: black, $amount: $opacity);
+}
+
+$border-radius: 20px;
+$left-widgets-spacing: 15px;
+$right-widgets-spacing: 18px;
+$bar-padding: 2px;
+
+.bar-window {
+    font-size: 10px;
+
+    circular-progress {
+        $size: 24px;
+        min-width: $size;
+        min-height: $size;
+        font-size: 3px;
+        background: colors.$surface;
+        color: colors.$primary;
+
+        image {
+            color: colors.$text;
+            font-size: 8px;
+        }
+    }
+}
+
+.bar-box {
+    @include block-padding(5px);
+}
+
+.left-widget-container,
+.center-widget-container,
+.right-widget-container {
+    background: colors.$mantle;
+    border-radius: $border-radius;
+    min-height: 34px;
+    @include shadow(0.5);
+}
+
+.left-widget-container {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-left: $bar-padding;
+}
+
+.right-widget-container {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding-right: $bar-padding;
+}
+
+.control-button {
+    @include inline-padding($padding: 10px);
+    @include reactive-button();
+    font-size: 18px;
+}
+
+.workspace-widget {
+    margin-left: $left-widgets-spacing;
+    border-radius: $border-radius;
+    background: colors.$base;
+    @include inline-padding(10px);
+    @include shadow;
+    min-height: 30px;
+    margin-right: 2px;
+
+    .workspace-fill {
+        padding: 3px;
+        margin: 0 2px;
+        border-radius: $border-radius;
+        background: colors.$surface;
+        transition: all 0.2s;
+    }
+
+    .active-workspace {
+        .workspace-fill {
+            @include block-padding($padding: 4px);
+            @include inline-padding($padding: 4px);
+            background: colors.$primary;
+        }
+    }
+
+    .focused-workspace {
+        .workspace-fill {
+            @include inline-padding($padding: 8px);
+            @include block-padding($padding: 4px);
+        }
+    }
+}
+
+.player-widget {
+    margin-left: $left-widgets-spacing;
+    margin-right: 15px;
+}
+
+.clock-widget {
+    margin: 4px;
+    font-weight: bold;
+    @include inline-padding($padding: 18px);
+    border-radius: $border-radius;
+}
+
+.systray-widget {
+    background: colors.$base;
+    min-height: 30px;
+    border-radius: $border-radius;
+    margin-right: $right-widgets-spacing;
+    margin-left: 2px;
+    @include shadow;
+
+    image {
+        font-size: 13px;
+        padding: 4px 8px;
+
+        .systray-icons {
+            button {
+                border-radius: $border-radius;
+                @include reactive-button($background: colors.$surface);
+            }
+        }
+
+        .systray-button {
+            border-radius: $border-radius;
+            @include reactive-button($background: colors.$surface);
+
+            image {
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+.info-widget {
+    margin-right: $right-widgets-spacing;
+}
+
+.brightness-widget {
+    circular-progress {
+        color: colors.$warning;
+    }
+}
+
+.microphone-widget {
+    circular-progress {
+        color: colors.$secondary;
+    }
+}
+
+.battery-widget {
+    margin-right: $right-widgets-spacing;
+    background: colors.$base;
+    border-radius: $border-radius;
+    min-height: 30px;
+    font-weight: bold;
+    @include inline-padding($padding: 10px);
+    @include shadow;
+}
+
+.battery-red {
+    .battery-progress {
+        color: colors.$error;
+    }
+}
+
+.battery-yellow {
+    .battery-progress {
+        color: colors.$warning;
+    }
+}
+
+.battery-green {
+    .battery-progress {
+        color: colors.$success;
+    }
+}
+
+.battery-charging {
+    .battery-progress {
+        image {
+            color: colors.$success;
+            font-size: 15px;
+        }
+    }
+}
+
+.power-button {
+    font-size: 22px;
+    @include inline-padding($padding: 10px);
+    @include reactive-button;
+
+    image {
+        color: colors.$error;
+    }
+}

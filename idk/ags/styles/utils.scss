@@ -1,0 +1,26 @@
+@mixin inline-padding($padding) {
+  padding-left: $padding;
+  padding-right: $padding;
+}
+
+@mixin block-padding($padding) {
+  padding-top: $padding;
+  padding-bottom: $padding;
+}
+
+@mixin reactive-button($background: none, $focus: false) {
+  &:hover {
+    background: $background;
+    opacity: .8;
+  }
+  &:active {
+    background: $background;
+    opacity: .5;
+  }
+  @if $focus {
+    &:focus {
+      background: $background;
+      opacity: .8;
+    }
+  }
+}

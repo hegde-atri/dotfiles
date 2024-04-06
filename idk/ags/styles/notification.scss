@@ -1,0 +1,146 @@
+@use "colors";
+
+@mixin reactive($background: false) {
+  &:hover {
+    @if $background {
+      background: colors.$surface;
+    }
+
+    opacity: 0.8;
+  }
+
+  &:active {
+    @if $background {
+      background: colors.$surface;
+    }
+
+    opacity: 0.5;
+  }
+}
+
+.notif-image {
+  border-radius: 10px;
+  margin: 5px 15px 5px 0px;
+}
+
+.notif-box {
+  min-width: 370px;
+  min-height: 60px;
+  margin-right: 10px;
+  background: colors.$base;
+  border: 1px solid colors.$surface;
+
+  margin: 5px;
+  margin-right: 15px;
+
+  border-radius: 10px;
+  box-shadow: 0 0 5px transparentize($color: black, $amount: 0.7);
+}
+
+.notif-info-box {
+  padding: 2px 2px 2px 10px;
+}
+
+.notif-close-button {
+  padding: 0px 3px;
+  margin: 0 5px;
+  border-radius: 10px;
+  @include reactive($background: true);
+}
+
+.notif-popup-box {
+  margin-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background: colors.$mantle;
+  @include reactive;
+
+  &,
+  .urgent-notif {
+    border-right: 5px solid colors.$error;
+  }
+
+  &,
+  .normal-notif {
+    border-right: 5px solid colors.$primary;
+  }
+
+  &,
+  .low-notif {
+    border-right: 5px solid colors.$success;
+  }
+}
+
+.notif-action-button {
+  margin-top: 5px;
+  background: colors.$surface;
+  border-right: 1px solid colors.$mantle;
+  font-size: 0.9em;
+  padding: 2px;
+
+  @include reactive;
+
+  &:nth-child(1) {
+    border-bottom-left-radius: 10px;
+  }
+
+  &:nth-last-child(1) {
+    border-right: none;
+  }
+}
+
+.notif-title {
+  font-weight: bold;
+}
+
+.notif-time {
+  font-size: 0.8em;
+  color: colors.$subtext;
+}
+
+.notif-body {
+  font-size: 0.9em;
+  color: colors.$subtext;
+}
+
+// Panel
+
+.notif-panel-window {
+  background: transparent;
+}
+
+.notif-panel-box {
+  background: transparentize($color:colors.$mantle, $amount:.4);
+  border-radius: 10px;
+
+  .notif-panel-header {
+    padding: 10px 20px;
+  }
+
+  .notif-panel-header > label {
+    font-size: 1.3em;
+  }
+
+  .notif-panel-header button {
+    padding: 0.6em 0.8em;
+    border-radius: 10px;
+    background: colors.$surface;
+    @include reactive();
+  }
+
+  .notif-panel-region {
+    min-width: 400px;
+  }
+
+  trough {
+    border-radius: 20px;
+    padding: 5px;
+  }
+
+  slider {
+    min-width: 2px;
+    outline: none;
+    box-shadow: none;
+    border: none;
+  }
+}

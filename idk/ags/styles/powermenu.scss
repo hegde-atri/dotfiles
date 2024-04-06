@@ -1,0 +1,106 @@
+@use 'colors';
+@use 'utils' as *;
+
+$border-radius: 20px;
+
+@mixin shadow($margin) {
+  box-shadow: 0 0 ($margin - 4) transparentize($color: #000000, $amount: .4); 
+}
+
+.powermenu-window {
+
+  .powermenu-widget {
+    $margin: 12px;
+    $border: 1px solid colors.$surface;
+
+    margin-top: $margin;
+    margin-bottom: $margin;
+    margin-left: $margin;
+
+    border-top: $border;
+    border-bottom: $border;
+    border-left: $border;
+
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+    background: colors.$mantle;
+    padding: 10px;
+    
+    @include shadow($margin);
+  }
+
+
+  button {
+    border-radius: $border-radius;
+    padding: 45px;
+    @include reactive-button(colors.$base, true);
+
+    image {
+      font-size: 45px;
+    }
+  }
+
+  .poweroff-button image {
+    color: colors.$error;
+  }
+  .restart-button image {
+    color: colors.$warning;
+  }
+  .suspend-button image {
+    color: colors.$success;
+  }
+  .logout-button image {
+    color: colors.$secondary;
+  }
+  .lock-button image {
+    color: colors.$primary;
+  }
+}
+
+.confirm-window {
+  $padding: 20px;
+  font-size: 18px;
+  .confirm-box {
+    margin-bottom: 500px;
+    background: colors.$base;
+    border-radius: $border-radius;
+
+    $margin: 12px;
+    margin-left: $margin;
+    margin-top: $margin;
+    margin-right: $margin;
+
+
+    @include shadow($margin);
+  }
+
+  .confirm-text {
+    padding: $padding;
+    @include inline-padding(calc($padding*2));
+    background: colors.$surface;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+  }
+  
+  .confirm-button-container {
+    button {
+      @include block-padding(calc($padding/2));
+      @include reactive-button(colors.$surface, true);
+      
+      &:nth-child(1) {
+        border-bottom-left-radius: $border-radius;
+      }
+
+      &:nth-last-child(1) {
+        border-bottom-right-radius: $border-radius;
+      }
+
+
+      &:nth-child(1) label {
+        color: colors.$error;
+      }
+    }
+
+  }
+}
+

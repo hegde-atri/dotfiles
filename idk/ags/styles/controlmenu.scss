@@ -1,0 +1,30 @@
+@use "colors";
+@use "utils" as *;
+
+$border-radius: 20px;
+
+.selector-ribbon {
+    background: colors.$surface;
+    border-top-right-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+    min-width: 400px;
+    min-height: 36px;
+    button {
+        @include reactive-button($background: colors.$base);
+    }
+}
+
+.appmenu-box {
+    background: colors.$base;
+    margin: 20px;
+    box-shadow: 1px 1px 5px black;
+    button {
+        font-size: 16px;
+        @include reactive-button($background: colors.$base);
+
+        image {
+            font-size: 36px;
+        }
+    }
+}
+
